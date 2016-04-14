@@ -40,6 +40,7 @@ char TCP_CILENT_PORT[] = "50000";
 void WiFi_Config( void )
 {
 	WiFi_RST_INIT();
+    WiFi_led_INIT();
  	WiFi_USART1_INIT(); 
 	WiFi_USART2_INIT(); 
 	WiFi_NVIC_INIT();

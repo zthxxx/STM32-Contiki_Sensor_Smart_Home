@@ -71,7 +71,7 @@ void Delay_ms( __IO u32 nTime )
   */
 void TimingDelay_Decrement(void)
 {
-	if ( TimingDelay != 0x00 )
+	if ( TimingDelay > 0x00 )
 	{ 
 		TimingDelay --;
 	}

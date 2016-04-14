@@ -76,28 +76,28 @@ void ESP8266_AT_Test ( void )
  *         0，指令发送失败
  * 调用  ：被外部调用
  */
-bool ESP8266_Cmd ( char * cmd, char * reply1, char * reply2, u32 waittime )
+bool ESP8266_Cmd (char * cmd, char * reply1, char * reply2, u32 waittime)
 {    
 	strEsp8266_Fram_Record .InfBit .FramLength = 0;               //从新开始接收新的数据包
 
-	ESP8266_Usart ( "%s\r\n", cmd );
+	ESP8266_Usart("%s\r\n", cmd);
 
-	if ( ( reply1 == 0 ) && ( reply2 == 0 ) )                      //不需要接收数据
+	if((reply1 == 0) &&(reply2 == 0))                      //不需要接收数据
 		return true;
 	
-	Delay_ms ( waittime );                 //延时
+	Delay_ms(waittime);                 //延时
 	
 	strEsp8266_Fram_Record .Data_RX_BUF [ strEsp8266_Fram_Record .InfBit .FramLength ]  = '\0';
 
   
-	if ( ( reply1 != 0 ) && ( reply2 != 0 ) )
-		return ( ( bool ) strstr ( strEsp8266_Fram_Record .Data_RX_BUF, reply1 ) || ( bool ) strstr ( strEsp8266_Fram_Record .Data_RX_BUF, reply2 ) ); 
+	if((reply1 != 0) &&(reply2 != 0))
+		return((bool) strstr(strEsp8266_Fram_Record .Data_RX_BUF, reply1) ||(bool) strstr(strEsp8266_Fram_Record .Data_RX_BUF, reply2)); 
  	
-	else if ( reply1 != 0 )
-		return ( ( bool ) strstr ( strEsp8266_Fram_Record .Data_RX_BUF, reply1 ) );
+	else if(reply1 != 0)
+		return((bool) strstr(strEsp8266_Fram_Record .Data_RX_BUF, reply1));
 	
 	else
-		return ( ( bool ) strstr ( strEsp8266_Fram_Record .Data_RX_BUF, reply2 ) );
+		return((bool) strstr(strEsp8266_Fram_Record .Data_RX_BUF, reply2));
 	
 
 }
@@ -418,10 +418,12 @@ void ESP8266_STA_TCP_Client ( void )
     PC_Usart ( "Connected TCP Server\r\n");
     
     while(!ESP8266_TransparentTransmission());
-     /* 使能串口2接收中断 */
-    USART2ReceiveHandler = ReceiveUSART2PacketDelegate;
-	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+    // 关闭串口2空闲中断 //使能串口2接收中断
+    USART_ITConfig(USART2, USART_IT_IDLE, DISABLE);
+    USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
     SetUART2_NVIC_ISENABLE(1);
+    USART2ReceiveHandler = ReceiveUSART2PacketDelegate;
+
     
     PC_Usart ( "Change into Transparent Transmission\r\n");
 }

@@ -24,7 +24,6 @@ void ( * pNet_Test ) ( void );
   */
 int main(void)
 {	
-
     /* 初始化 */
     WiFi_Config();                                                                  //初始化WiFi模块使用的接口和外设
     SysTick_Init();                   /* 延时函数及时钟初始化 */
@@ -36,11 +35,15 @@ int main(void)
 
     while(1)
     {
-        Delay_ms(1000);
-        UART2_SendBuff = "asdfafasdf";
+        Delay_ms(500);
+        GPIO_SetBits(GPIOA, GPIO_Pin_8);
+        UART2_SendBuff = " asdfafasdf";
+        UART2_DMA_Send_Data(UART2_SendBuff, 11);
+        Delay_ms(500);
+        GPIO_ResetBits(GPIOA, GPIO_Pin_8);
+        UART2_SendBuff = " 21398416";
         UART2_DMA_Send_Data(UART2_SendBuff, 11);
     }
-	
 }
 
 
