@@ -45,7 +45,9 @@ void USART1_Config(void)
 	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 	USART_Init(USART1, &USART_InitStructure);
-
+    /* 使能串口2接收中断 */
+	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+    
 	USART_Cmd(USART1, ENABLE);
 }
 
@@ -70,4 +72,36 @@ int fgetc(FILE *f)
 
 		return (int)USART_ReceiveData(USART1);
 }
+
+
+
+void sendUart1OneByte(uint8_t byteData)//串口发送信息,通过查询方式发送一个字符
+{
+    USART_ClearFlag(USART1,USART_FLAG_TC);//先清除一下发送中断标志位，会解决第一个字节丢失的问题。
+	USART_SendData(USART1, byteData);
+	while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//等待发送结束
+}
+
+
+
+
+  /*******************************************************************************
+* Function Name  : USART1_IRQHandler
+* Description    : This function handles USART1 global interrupt request.
+* Input          : None
+* Output         : None
+* Return         : None
+*******************************************************************************/
+void USART1_IRQHandler(void)
+{
+	u8 receiveByte = 0;
+
+	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	{
+		receiveByte = USART_ReceiveData(USART1);//(USART1->DR);		//读取接收到的数据
+        sendUart2OneByte(receiveByte);
+	}
+}
+
+
 /*********************************************END OF FILE**********************/

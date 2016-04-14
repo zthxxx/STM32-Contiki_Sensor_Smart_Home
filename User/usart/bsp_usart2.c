@@ -6,6 +6,10 @@
 #include "wifi_config.h"
 
 
+
+USART2_Receive_Handler USART2ReceiveHandler;
+
+
 /*
  * 函数名：USART2_Config
  * 描述  ：USART2 GPIO 配置,工作模式配置
@@ -23,16 +27,16 @@ void USART2_Config( void )
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
 
 	/* USART2 GPIO config */
-  /* Configure USART2 Tx (PA.02) as alternate function push-pull */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
-	    
-  /* Configure USART2 Rx (PA.03) as input floating */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-  GPIO_Init(GPIOA, &GPIO_InitStructure);
+    /* Configure USART2 Tx (PA.02) as alternate function push-pull */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_2;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
+        
+    /* Configure USART2 Rx (PA.03) as input floating */
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_3;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    GPIO_Init(GPIOA, &GPIO_InitStructure);
 	  
 	/* USART2 mode config */
 	USART_InitStructure.USART_BaudRate = 115200;               
@@ -49,7 +53,8 @@ void USART2_Config( void )
 	USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
 	
 	USART_Cmd(USART2, ENABLE);
-	
+    SetUART2_NVIC_ISENABLE(0);
+	USART2ReceiveHandler = ReceiveUSART2WifiCmdDelegate;
 }
 
 
@@ -189,6 +194,79 @@ void USART2_printf( USART_TypeDef* USARTx, char *Data, ... )
 		while( USART_GetFlagStatus(USARTx, USART_FLAG_TXE) == RESET );
 	}
 }
+
+void SetUART2_NVIC_ISENABLE(uint8_t isEnable)
+{
+    NVIC_InitTypeDef NVIC_InitStructure;
+    
+    NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3 ;//抢占优先级3
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
+    if(isEnable == 1)
+    {
+        NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
+    }
+    else
+    {
+        NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;			//IRQ通道使能
+    }
+	
+	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
+}
+
+void sendUart2OneByte(uint8_t byteData)
+{
+	USART_ClearFlag(USART2,USART_FLAG_TC);//先清除一下发送中断标志位，会解决第一个字节丢失的问题。
+	USART_SendData(USART2, byteData);
+	while(USART_GetFlagStatus(USART2,USART_FLAG_TC)!=SET);//等待发送结束
+}
+
+void ReceiveUSART2PacketDelegate(void)                	//串口中断服务程序
+{
+	u8 receiveByte = 0;
+
+	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	{
+		receiveByte = USART_ReceiveData(USART2);//(USART1->DR);		//读取接收到的数据
+        sendUart1OneByte(receiveByte);
+	}
+}
+
+void ReceiveUSART2WifiCmdDelegate(void)
+{
+    char ch;
+    //pStr = ESP8266_ReceiveString ( DISABLE );
+    if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
+    {
+        ch  = USART_ReceiveData( USART2 );
+
+        if( strEsp8266_Fram_Record .InfBit .FramLength < ( RX_BUF_MAX_LEN - 1 ) )   //预留1个字节写结束符
+        {
+            strEsp8266_Fram_Record .Data_RX_BUF [ strEsp8266_Fram_Record .InfBit .FramLength ++ ]  = ch;
+        } 
+    }
+
+    if(USART_GetITStatus( USART2, USART_IT_IDLE ) == SET)    //数据帧接收完毕
+    {
+        strEsp8266_Fram_Record .InfBit .FramFinishFlag = 1;
+
+        ch = USART_ReceiveData( USART2 ); //由软件序列清除中断标志位(先读USART_SR，然后读USART_DR)
+    }	
+}
+
+/**
+  * @brief  This function handles USART2 Handler.
+  * @param  None
+  * @retval None
+  */
+void USART2_IRQHandler( void )
+{	
+    USART2ReceiveHandler();
+}
+
+
+
+
 /******************* (C) COPYRIGHT 2012 WildFire Team *****END OF FILE************/
 
 

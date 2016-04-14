@@ -24,6 +24,14 @@
 struct  STRUCT_USARTx_Fram strEsp8266_Fram_Record = { 0 };
 struct  STRUCT_USART1_1_Fram str1_1esp8266 = {0} ;
 
+char WIFI_SSID_NAME[] = "Signal_Process_PandoraBox2.4";
+char WIFI_PASSWORD[] = "zhanglaoshidianhuahaoma";
+char TCP_SERVER_IPADDRESS[] = "192.168.1.234";
+char TCP_SERVER_PORT[] = "31500";
+char TCP_CILENT_IPADDRESS[] = "192.168.1.203";
+char TCP_CILENT_PORT[] = "50000";
+
+
 /**
   * @brief  WiFi_Config wifi ≥ı ºªØ
   * @param  Œﬁ
@@ -32,11 +40,9 @@ struct  STRUCT_USART1_1_Fram str1_1esp8266 = {0} ;
 void WiFi_Config( void )
 {
 	WiFi_RST_INIT();
-	WiFi_led_INIT();
  	WiFi_USART1_INIT(); 
 	WiFi_USART2_INIT(); 
 	WiFi_NVIC_INIT();
-  
 }
 
 

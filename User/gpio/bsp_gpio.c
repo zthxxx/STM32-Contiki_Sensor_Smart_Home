@@ -70,17 +70,15 @@ void GPIO_Config( void )
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;   
 
 		/*设置引脚速率为50MHz */   
-		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz; 
 
 		/*调用库函数，初始化GPIOA*/
 		GPIO_Init( GPIOA, &GPIO_InitStructure );	 
 	
 
 		/*	*/
-		GPIO_ResetBits( GPIOA, GPIO_Pin_0 );		
-		 //GPIO_SetBits( GPIOA, GPIO_Pin_0 );
-		/* 拉高WiFi模块的复位重启引脚	*/
-		GPIO_SetBits( GPIOA, GPIO_Pin_1 );
+		GPIO_ResetBits( GPIOA, GPIO_Pin_1 );// 拉低WiFi模块的复位重启引脚	
+
 		
  
 }

@@ -150,82 +150,7 @@ void SysTick_Handler(void)
 }
 
 
-  /*******************************************************************************
-* Function Name  : USART1_IRQHandler
-* Description    : This function handles USART1 global interrupt request.
-* Input          : None
-* Output         : None
-* Return         : None
-*******************************************************************************/
-void USART1_IRQHandler(void)
-{
-/*			char ch;
-	//pStr = ESP8266_ReceiveString ( DISABLE );
-	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
-	{
-		
-		
-		ch  = USART_ReceiveData( USART1 );
-		
-		if( str1_1esp8266 .InfBit .FramLength < ( RX_BUF_MAX_LEN - 1 ) )   //预留1个字节写结束符
-		{
-				str1_1esp8266 .Data_RX_BUF [ strEsp8266_Fram_Record .InfBit .FramLength ++ ]  = ch;
 
-		} 
-
-	}
-	 	 
-	if ( USART_GetITStatus( USART1, USART_IT_IDLE ) == SET )    //数据帧接收完毕
-	{
-     	 str1_1esp8266 .InfBit .FramFinishFlag = 1;
-		
-		ch = USART_ReceiveData( USART1 ); //由软件序列清除中断标志位(先读USART_SR，然后读USART_DR)
-	
-  }	
-	*/
-
-//	  //确认是否接收到数据
-//       	//	uint8_t ch;
-//			u32 ul = 0;
-//		//	int stringvalue=0;
-//			char cstring;
-//			char cStrInput [100] = { 0 };
-//	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
-//	{ 	
-//	       //ch = USART1->DR;
-//			cstring = USART_ReceiveData(USART1);
-//	  	//	printf( "%c", ch );    //将接受到的数据直接返回打印
-//			
-//			if(){
-//				
-//			}		
-//
-//			ul = strlen ( cStrInput );
-//			ESP8266_SendString ( DISABLE, cStrInput, ul, ( ENUM_ID_NO_TypeDef ) 0 );
-//			PC_Usart ( "%s", strEsp8266_Fram_Record .Data_RX_BUF );
-//	} 
-//	  
-//       //接收到数据
-//       if(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) == SET)
-//       {
-//              //将数据回送至超级终端
-//          //    USART_SendData(USART1, USART_ReceiveData(USART1));
-////				ca  =	 USART_ReceiveData(USART1);	              
-////					 if(ca=="1"){
-////					  		GPIO_SetBits( GPIOA, GPIO_Pin_6 );	
-////					 }
-//			//	  GPIO_SetBits( GPIOA, ~GPIO_ReadInputDataBit(GPIOA,GPIO_Pin_6) );
-//			 	if(GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_6))  {//检测PB口的第10个管脚的电平
-//					GPIO_ResetBits(GPIOA,GPIO_Pin_6); //使第2个管脚为 0 
-//				}else{
-//					GPIO_SetBits(GPIOA,GPIO_Pin_6);	 //使第2个管脚为 1
-//			  }
-//			  //等待数据发送完毕
-//           //   while(USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
-//             
-//       }
-
-}
 
 /******************************************************************************/
 /*                 STM32F10x Peripherals Interrupt Handlers                   */
@@ -233,38 +158,6 @@ void USART1_IRQHandler(void)
 /*  available peripheral interrupt handler's name please refer to the startup */
 /*  file (startup_stm32f10x_xx.s).                                            */
 /******************************************************************************/
-/**
-  * @brief  This function handles USART2 Handler.
-  * @param  None
-  * @retval None
-  */
-void USART2_IRQHandler( void )
-{	
-	char ch;
-	//pStr = ESP8266_ReceiveString ( DISABLE );
-	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)
-	{
-		
-		
-		ch  = USART_ReceiveData( USART2 );
-		
-		if( strEsp8266_Fram_Record .InfBit .FramLength < ( RX_BUF_MAX_LEN - 1 ) )   //预留1个字节写结束符
-		{
-				strEsp8266_Fram_Record .Data_RX_BUF [ strEsp8266_Fram_Record .InfBit .FramLength ++ ]  = ch;
-
-		} 
-
-	}
-	 	 
-	if ( USART_GetITStatus( USART2, USART_IT_IDLE ) == SET )    //数据帧接收完毕
-	{
-     	 strEsp8266_Fram_Record .InfBit .FramFinishFlag = 1;
-		
-		ch = USART_ReceiveData( USART2 ); //由软件序列清除中断标志位(先读USART_SR，然后读USART_DR)
-	
-  }	
-
-}
 
 
 /**

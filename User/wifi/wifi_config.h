@@ -83,6 +83,11 @@ extern struct  STRUCT_USART1_1_Fram                                  //´®¿ÚÊý¾ÝÖ
 
 void WiFi_Config( void );
 void NVIC_Configuration( void );
-
+extern char WIFI_SSID_NAME[];
+extern char WIFI_PASSWORD[];
+extern char TCP_SERVER_IPADDRESS[];
+extern char TCP_SERVER_PORT[];
+extern char TCP_CILENT_IPADDRESS[];
+extern char TCP_CILENT_PORT[];
 
 #endif    /* __WIFI_CONFIG_H */
