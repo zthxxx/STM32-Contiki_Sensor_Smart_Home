@@ -95,11 +95,10 @@ void sendUart1OneByte(uint8_t byteData)//串口发送信息,通过查询方式发送一个字符
 void USART1_IRQHandler(void)
 {
 	u8 receiveByte = 0;
-
 	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 	{
 		receiveByte = USART_ReceiveData(USART1);//(USART1->DR);		//读取接收到的数据
-        sendUart2OneByte(receiveByte);
+        //sendUart2OneByte(receiveByte);
 	}
 }
 

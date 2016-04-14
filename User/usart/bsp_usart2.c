@@ -1,14 +1,13 @@
 /******************** (C) COPYRIGHT 2012 WildFire Team **************************
 
 **********************************************************************************/
-#include "bsp_usart2.h"
 #include <stdarg.h>
+#include "bsp_usart2.h"
 #include "wifi_config.h"
 
-
-
 USART2_Receive_Handler USART2ReceiveHandler;
-
+uint8_t UART2_DMA_SendBuff[UART_SEND_DMA_BUF_LENTH];
+uint8_t *UART2_SendBuff;
 
 /*
  * 函数名：USART2_Config
@@ -53,7 +52,7 @@ void USART2_Config( void )
 	USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
 	
 	USART_Cmd(USART2, ENABLE);
-    SetUART2_NVIC_ISENABLE(0);
+    SetUART2_NVIC_ISENABLE(1);
 	USART2ReceiveHandler = ReceiveUSART2WifiCmdDelegate;
 }
 
@@ -221,12 +220,21 @@ void sendUart2OneByte(uint8_t byteData)
 	while(USART_GetFlagStatus(USART2,USART_FLAG_TC)!=SET);//等待发送结束
 }
 
+void UART2_DMA_Send_Data(uint8_t *UART2_SendBuff, uint16_t DataSendLength)
+{
+    memcpy(UART2_DMA_SendBuff,UART2_SendBuff,DataSendLength);
+    USART_DMACmd(USART2,USART_DMAReq_Tx,ENABLE); //串口向dma发出请求
+    UART2_TXD_DMA_Enable(DataSendLength);
+}
+
+
 void ReceiveUSART2PacketDelegate(void)                	//串口中断服务程序
 {
 	u8 receiveByte = 0;
 
 	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 	{
+        USART_ClearITPendingBit(USART2,USART_IT_RXNE); //清除中断标志
 		receiveByte = USART_ReceiveData(USART2);//(USART1->DR);		//读取接收到的数据
         sendUart1OneByte(receiveByte);
 	}

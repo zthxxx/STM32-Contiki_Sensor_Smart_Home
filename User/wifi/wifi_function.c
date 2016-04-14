@@ -3,7 +3,6 @@
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
-#include "bsp_SysTick.h"
 #include <string.h> 
 #include <stdio.h>  
 #include <stdbool.h>
@@ -37,16 +36,13 @@ void ESP8266_Choose ( FunctionalState enumChoose )
  */
 void ESP8266_Rst ( void )
 {
-	#if 0
-	 ESP8266_Cmd ( "AT+RST", "OK", "ready", 2500 );   	
-	
-	#else
-	 ESP8266_RST_LOW_LEVEL();
-	 Delay_ms ( 500 ); 
-	 ESP8266_RST_HIGH_LEVEL();
-	 
-	#endif
 
+//    ESP8266_Cmd ( "AT+RST", "OK", "ready", 2500 );   	
+
+    ESP8266_RST_LOW_LEVEL();
+    Delay_ms(100); 
+    ESP8266_RST_HIGH_LEVEL();
+    Delay_ms(2000); 
 }
 
 
@@ -61,9 +57,11 @@ void ESP8266_AT_Test ( void )
 {
 	ESP8266_RST_HIGH_LEVEL();
 	
-	Delay_ms ( 1000 ); 
-	
-	while ( ! ESP8266_Cmd ( "AT", "OK", NULL, 200 ) )   ESP8266_Rst ();  	
+	Delay_ms(2000); 
+	while (!ESP8266_Cmd ("AT", "OK", NULL, 250))
+    {
+        ESP8266_Rst();
+    }
 
 }
 
@@ -377,9 +375,26 @@ char * ESP8266_ReceiveString ( FunctionalState enumEnUnvarnishTx )
 	}
 
 	return pRecStr;
-	
 }
 
+void ESP8266_TCP_Transparent_SendTest()
+{
+    PC_Usart ( "Send Date test\r\n");
+    
+    ESP8266_Usart("6345tsdf");
+    sendUart2OneByte(0x88);
+    sendUart2OneByte(0xEF);
+    sendUart2OneByte(0x00);
+    sendUart2OneByte(0xFF);
+    sendUart2OneByte(0x00);
+    sendUart2OneByte(0x2B);
+    sendUart2OneByte(0x2B);
+    sendUart2OneByte(0x2B);
+    sendUart2OneByte(0xCC);
+    ESP8266_Usart("fasdf+++fgh8468++a");
+    
+    
+}
 
 /*
  * º¯ÊýÃû£ºESP8266_STA_TCP_Client
@@ -409,21 +424,6 @@ void ESP8266_STA_TCP_Client ( void )
     SetUART2_NVIC_ISENABLE(1);
     
     PC_Usart ( "Change into Transparent Transmission\r\n");
-    
-//    PC_Usart ( "Send Date test\r\n");
-//    
-//    ESP8266_Usart("6345tsdf");
-//    sendUart2OneByte(0x88);
-//    sendUart2OneByte(0xEF);
-//    sendUart2OneByte(0x00);
-//    sendUart2OneByte(0xFF);
-//    sendUart2OneByte(0x00);
-//    sendUart2OneByte(0x2B);
-//    sendUart2OneByte(0x2B);
-//    sendUart2OneByte(0x2B);
-//    sendUart2OneByte(0xCC);
-//    ESP8266_Usart("fasdf+++fgh8468++a");
-   
 }
 
 
@@ -440,7 +440,7 @@ void ESP8266_AP_TCP_Server ( void )
 	u8 uc = 0;
  	 u32 ul = 0;
 
-  ESP8266_Choose ( ENABLE );
+    ESP8266_Choose ( ENABLE );
 
 	ESP8266_AT_Test ();
 	

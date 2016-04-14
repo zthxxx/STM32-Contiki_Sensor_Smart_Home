@@ -81,6 +81,7 @@ extern struct  STRUCT_USART1_1_Fram                                  //´®¿ÚÊý¾ÝÖ
 #define WiFi_USART2_INIT               USART2_Config              //WiFiÊ¹ÓÃµÄ´®¿Ú2³õÊ¼»¯º¯Êý£¬²¨ÌØÂÊ9600 
 #define WiFi_NVIC_INIT                 NVIC_Configuration         //NVICÖÐ¶ÏÅäÖÃ
 
+
 void WiFi_Config( void );
 void NVIC_Configuration( void );
 extern char WIFI_SSID_NAME[];

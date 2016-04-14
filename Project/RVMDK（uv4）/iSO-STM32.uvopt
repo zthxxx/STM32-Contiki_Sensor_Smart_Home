@@ -161,50 +161,50 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>389</LineNumber>
+          <LineNumber>228</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134224614</Address>
+          <Address>134222670</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\rxtx_esp_tcp鏃犳搷浣滅増2015.8.1\Project\User\wifi\wifi_function.c</Filename>
+          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\Project\User\usart\bsp_usart2.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\Template\../../User/usart/bsp_usart2.c\228</Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>62</LineNumber>
+          <LineNumber>99</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134223422</Address>
+          <Address>134221920</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\rxtx_esp_tcp鏃犳搷浣滅増2015.8.1\Project\User\wifi\wifi_function.c</Filename>
+          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\Project\User\usart\bsp_usart1.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\Template\../../User/usart/bsp_usart1.c\99</Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>393</LineNumber>
+          <LineNumber>233</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134224624</Address>
+          <Address>134222696</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\rxtx_esp_tcp鏃犳搷浣滅増2015.8.1\Project\User\wifi\wifi_function.c</Filename>
+          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\Project\User\usart\bsp_usart2.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression></Expression>
+          <Expression>\\Template\../../User/usart/bsp_usart2.c\233</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
@@ -716,7 +716,7 @@
       <GroupNumber>4</GroupNumber>
       <FileNumber>34</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
@@ -729,7 +729,7 @@
       <GroupNumber>4</GroupNumber>
       <FileNumber>35</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
@@ -768,7 +768,7 @@
       <GroupNumber>4</GroupNumber>
       <FileNumber>38</FileNumber>
       <FileType>1</FileType>
-      <tvExp>1</tvExp>
+      <tvExp>0</tvExp>
       <Focus>0</Focus>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>

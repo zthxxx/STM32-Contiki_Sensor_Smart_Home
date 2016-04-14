@@ -26,14 +26,11 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f10x_it.h"
 #include <stdio.h>
-#include "bsp_SysTick.h"
+#include <string.h>
 #include "bsp_usart2.h"
 #include "wifi_config.h"
 #include "wifi_function.h"
-  #include <string.h>
-
-//extern void TimingDelay_Decrement(void);
-//extern void USART2_printf(USART_TypeDef* USARTx, char *Data,...);
+#include "bsp_SysTick.h"
 
 
 /** @addtogroup STM32F10x_StdPeriph_Template
@@ -146,7 +143,7 @@ void PendSV_Handler(void)
   */
 void SysTick_Handler(void)
 {
-	TimingDelay_Decrement();	
+    TimingDelay_Decrement();
 }
 
 

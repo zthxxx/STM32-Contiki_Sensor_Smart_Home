@@ -1,5 +1,6 @@
 !*.c 
 !*.h
+!startup_stm32f10x_hd.s
 *.log
 *.plg
 *.bak

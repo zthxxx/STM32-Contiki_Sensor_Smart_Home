@@ -70,7 +70,7 @@ void GPIO_Config( void )
 		GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;   
 
 		/*设置引脚速率为50MHz */   
-		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_2MHz; 
+		GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
 
 		/*调用库函数，初始化GPIOA*/
 		GPIO_Init( GPIOA, &GPIO_InitStructure );	 
