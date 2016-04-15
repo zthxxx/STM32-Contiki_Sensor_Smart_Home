@@ -24,11 +24,13 @@
 struct  STRUCT_USARTx_Fram strEsp8266_Fram_Record = { 0 };
 struct  STRUCT_USART1_1_Fram str1_1esp8266 = {0} ;
 
+bool IS_WIFI_LOG_DEBUG = true;
+
 char WIFI_SSID_NAME[] = "Signal_Process_PandoraBox2.4";
-char WIFI_PASSWORD[] = "zhanglaoshidianhuahaoma";
-char TCP_SERVER_IPADDRESS[] = "192.168.1.234";
+char WIFI_PASSWORD[] = "zhanglaoshidianhuahaoma";//此处可使用主机名和ip
+char TCP_SERVER_IPADDRESS[] = "TIAN";
 char TCP_SERVER_PORT[] = "31500";
-char TCP_CILENT_IPADDRESS[] = "192.168.1.203";
+char TCP_CILENT_IPADDRESS[] = "ESP_113AFD";
 char TCP_CILENT_PORT[] = "50000";
 
 

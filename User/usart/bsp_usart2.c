@@ -54,6 +54,7 @@ void USART2_Config( void )
 	USART_Cmd(USART2, ENABLE);
     SetUART2_NVIC_ISENABLE(1);
 	USART2ReceiveHandler = ReceiveUSART2WifiCmdDelegate;
+    MYDMA_Config(DMA1_Channel7,(u32)&USART2->DR,(u32)UART2_DMA_SendBuff,UART_SEND_DMA_BUF_LENTH);
 }
 
 
@@ -232,10 +233,6 @@ void ReceiveUSART2PacketDelegate(void)                	//串口中断服务程序
 {
 	u8 receiveByte = 0;
 
-    if (USART_GetFlagStatus(USART2, USART_FLAG_ORE) != RESET)
-    {
-        USART_ReceiveData(USART2);
-    }
 	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 	{
         USART_ClearITPendingBit(USART2,USART_IT_RXNE); //清除中断标志
@@ -273,6 +270,10 @@ void ReceiveUSART2WifiCmdDelegate(void)
   */
 void USART2_IRQHandler( void )
 {	
+    if (USART_GetFlagStatus(USART2, USART_FLAG_ORE) != RESET)//放置ORE中断导致无数据也中断的假死
+    {
+        USART_ReceiveData(USART2);
+    }
     USART2ReceiveHandler();   
 }
 

@@ -3,7 +3,7 @@
 
 
 #include "stm32f10x.h"
-
+#include <stdbool.h>
 
 #if defined ( __CC_ARM   )
 #pragma anon_unions
@@ -84,6 +84,8 @@ extern struct  STRUCT_USART1_1_Fram                                  //´®¿ÚÊý¾ÝÖ
 
 void WiFi_Config( void );
 void NVIC_Configuration( void );
+
+extern bool IS_WIFI_LOG_DEBUG;
 extern char WIFI_SSID_NAME[];
 extern char WIFI_PASSWORD[];
 extern char TCP_SERVER_IPADDRESS[];

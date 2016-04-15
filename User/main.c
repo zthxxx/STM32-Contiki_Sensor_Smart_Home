@@ -27,10 +27,7 @@ int main(void)
     /* 初始化 */
     WiFi_Config();                                                                  //初始化WiFi模块使用的接口和外设
     SysTick_Init();                   /* 延时函数及时钟初始化 */
-    MYDMA_Config(DMA1_Channel7,(u32)&USART2->DR,(u32)UART2_DMA_SendBuff,UART_SEND_DMA_BUF_LENTH);
-    PC_Usart("\r\nESP8266 WiFi模块测试\r\n");                            //打印测试例程提示信息
-
-
+    
     ESP8266_STA_TCP_Client();
 
     while(1)

@@ -405,27 +405,27 @@ void ESP8266_TCP_Transparent_SendTest()
  */
 void ESP8266_STA_TCP_Client ( void )
 {
-	
+	IS_WIFI_LOG_DEBUG && PC_Usart("\r\nESP8266 WiFi模块测试\r\n");     //打印测试例程提示信息
 	ESP8266_AT_Test ();
 	ESP8266_Net_Mode_Choose ( STA );
 
 	ESP8266_WIFIAP_join();
-    PC_Usart ( "Linked Wifi\r\n");
+    IS_WIFI_LOG_DEBUG && PC_Usart ( "Linked Wifi\r\n");
 
 	ESP8266_Enable_MultipleId ( DISABLE );
-    PC_Usart ( "Config module\r\n");
-	ESP8266_linkTCP_join();//处理  tcp 服务连接的函数
-    PC_Usart ( "Connected TCP Server\r\n");
+    IS_WIFI_LOG_DEBUG && PC_Usart ( "Config module into TCP Client\r\n");
     
+	ESP8266_linkTCP_join();//处理  tcp 服务连接的函数
+    IS_WIFI_LOG_DEBUG && PC_Usart ( "Connected TCP Server\r\n");
+    
+    // 关闭串口2空闲中断 使能串口2接收中断 配置相关设置  进入透传模式
     while(!ESP8266_TransparentTransmission());
-    // 关闭串口2空闲中断 //使能串口2接收中断
     USART_ITConfig(USART2, USART_IT_IDLE, DISABLE);
     USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
     SetUART2_NVIC_ISENABLE(1);
     USART2ReceiveHandler = ReceiveUSART2PacketDelegate;
-
     
-    PC_Usart ( "Change into Transparent Transmission\r\n");
+    IS_WIFI_LOG_DEBUG && PC_Usart ( "Change into Transparent Transmission\r\n");
 }
 
 
