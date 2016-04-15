@@ -232,9 +232,13 @@ void ReceiveUSART2PacketDelegate(void)                	//串口中断服务程序
 {
 	u8 receiveByte = 0;
 
+    if (USART_GetFlagStatus(USART2, USART_FLAG_ORE) != RESET)
+    {
+        USART_ReceiveData(USART2);
+    }
 	if(USART_GetITStatus(USART2, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
 	{
-        //USART_ClearITPendingBit(USART2,USART_IT_RXNE); //清除中断标志
+        USART_ClearITPendingBit(USART2,USART_IT_RXNE); //清除中断标志
 		receiveByte = USART_ReceiveData(USART2);//(USART1->DR);		//读取接收到的数据
         sendUart1OneByte(receiveByte);
 	}
