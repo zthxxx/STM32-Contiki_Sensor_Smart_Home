@@ -345,7 +345,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>1</Optim>
+            <Optim>4</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>0</OneElfS>
@@ -363,7 +363,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\wifi;..\..\User\DMA</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\wifi;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -621,6 +621,21 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\DMA\dma.c</FilePath>
             </File>
+            <File>
+              <FileName>clock.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\contiki-code\cpu\arm\stm32f103\clock.c</FilePath>
+            </File>
+            <File>
+              <FileName>debug-uart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\contiki-code\cpu\arm\stm32f103\debug-uart.c</FilePath>
+            </File>
+            <File>
+              <FileName>iwdg.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\IWDG\iwdg.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -630,6 +645,41 @@
               <FileName>readme.txt</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Doc\readme.txt</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>contik_core_sys</GroupName>
+          <Files>
+            <File>
+              <FileName>autostart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\contiki-code\core\sys\autostart.c</FilePath>
+            </File>
+            <File>
+              <FileName>etimer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\contiki-code\core\sys\etimer.c</FilePath>
+            </File>
+            <File>
+              <FileName>process.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\contiki-code\core\sys\process.c</FilePath>
+            </File>
+            <File>
+              <FileName>procinit.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\contiki-code\core\sys\procinit.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\contiki-code\core\sys\timer.c</FilePath>
+            </File>
+            <File>
+              <FileName>contiki_delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\SysTick\contiki_delay.c</FilePath>
             </File>
           </Files>
         </Group>
