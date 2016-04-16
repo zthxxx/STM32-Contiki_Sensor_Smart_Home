@@ -12,7 +12,7 @@
 #include "wifi_function.h"
 #include "bsp_SysTick.h"
 #include "dma.h"
-#include "contiki_delay.h"
+#include "iwdg.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -23,12 +23,13 @@
 #include <etimer.h>
 #include <autostart.h>
 #include <clock.h>
- 
+#include "contiki_delay.h"
 
 
-PROCESS(red_blink_process, "Red_Blink");
-PROCESS(green_blink_process, "Green_Blink");
-AUTOSTART_PROCESSES(NULL);
+PROCESS(red_blink_process, "Red Blink");
+PROCESS(green_blink_process, "Green Blink");
+PROCESS(IWDG_Feed_process, "Timing to feed dog");
+AUTOSTART_PROCESSES(&IWDG_Feed_process);
 //AUTOSTART_PROCESSES(&red_blink_process, &green_blink_process);
 
 PROCESS_THREAD(red_blink_process, ev, data)
@@ -67,6 +68,19 @@ PROCESS_THREAD(green_blink_process, ev, data)
     PROCESS_END();
 }
 
+PROCESS_THREAD(IWDG_Feed_process, ev, data)
+{
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        IWDG_Feed();
+        Contiki_etimer_DelayMS(1000);
+    }
+    PROCESS_END();
+}
+
+
 /**
   * @brief  主函数
   * @param  无
@@ -79,7 +93,8 @@ int main(void)
     WiFi_Config();                       //初始化WiFi模块使用的接口和外设
     clock_init(); 
     ESP8266_STA_TCP_Client();
-
+    IWDG_Start(2);  //wifi模块透传之后开启看门狗
+    
     process_init();
     process_start(&etimer_process,NULL);
     autostart_start(autostart_processes);
