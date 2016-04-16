@@ -4,6 +4,7 @@
   */ 
  
 #include "stm32f10x.h"
+#include <string.h>
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
@@ -11,8 +12,17 @@
 #include "wifi_function.h"
 #include "bsp_SysTick.h"
 #include "dma.h"
-#include <string.h>
- 
+#include "contiki-conf.h"
+
+
+#include <stdint.h>
+#include <stdio.h>
+#include <debug-uart.h>
+#include <process.h>
+#include <procinit.h>
+#include <etimer.h>
+#include <autostart.h>
+#include <clock.h>
  
 void ( * pNet_Test ) ( void );
 
@@ -25,9 +35,10 @@ void ( * pNet_Test ) ( void );
 int main(void)
 {	
     /* 初始化 */
-    WiFi_Config();                                                                  //初始化WiFi模块使用的接口和外设
-    SysTick_Init();                   /* 延时函数及时钟初始化 */
-    
+
+    WiFi_Config();                       //初始化WiFi模块使用的接口和外设
+//    SysTick_Init();                   /* 延时函数及时钟初始化 */
+    clock_init(); 
     ESP8266_STA_TCP_Client();
 
     while(1)

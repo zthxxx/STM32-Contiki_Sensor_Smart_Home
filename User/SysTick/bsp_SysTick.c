@@ -53,10 +53,10 @@ void SysTick_Init( void )
   */
 void Delay_ms( __IO u32 nTime )
 { 
-	TimingDelay = nTime;	
+	TimingDelay = nTime/10;	
 
-	// 使能滴答定时器  
-	SysTick->CTRL |=  SysTick_CTRL_ENABLE_Msk;
+//	// 使能滴答定时器  
+//	SysTick->CTRL |=  SysTick_CTRL_ENABLE_Msk;
 
 	while( TimingDelay != 0 );
 	

@@ -161,62 +161,110 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>228</LineNumber>
+          <LineNumber>61</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134222670</Address>
+          <Address>134222494</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\Project\User\usart\bsp_usart2.c</Filename>
+          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\User\SysTick\bsp_SysTick.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Template\../../User/usart/bsp_usart2.c\228</Expression>
+          <Expression></Expression>
         </Bp>
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>99</LineNumber>
+          <LineNumber>56</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134221920</Address>
+          <Address>134222476</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\Project\User\usart\bsp_usart1.c</Filename>
+          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\User\SysTick\bsp_SysTick.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Template\../../User/usart/bsp_usart1.c\99</Expression>
+          <Expression></Expression>
         </Bp>
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>233</LineNumber>
+          <LineNumber>409</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134222696</Address>
+          <Address>134223524</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\Project\User\usart\bsp_usart2.c</Filename>
+          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\User\wifi\wifi_function.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\Template\../../User/usart/bsp_usart2.c\233</Expression>
+          <Expression>\\Template\../../User/wifi/wifi_function.c\409</Expression>
+        </Bp>
+        <Bp>
+          <Number>3</Number>
+          <Type>0</Type>
+          <LineNumber>410</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134223528</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\User\wifi\wifi_function.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Template\../../User/wifi/wifi_function.c\410</Expression>
+        </Bp>
+        <Bp>
+          <Number>4</Number>
+          <Type>0</Type>
+          <LineNumber>412</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134223534</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\User\wifi\wifi_function.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Template\../../User/wifi/wifi_function.c\412</Expression>
+        </Bp>
+        <Bp>
+          <Number>5</Number>
+          <Type>0</Type>
+          <LineNumber>413</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134223538</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>I:\Project\鍗曠墖鏈?STM32\STM32 Mini\MyProject\wifi\STM32_ESP8266椹卞姩\User\wifi\wifi_function.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\Template\../../User/wifi/wifi_function.c\413</Expression>
         </Bp>
       </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>strUSART2_Fram_Record</ItemText>
+          <ItemText>TimingDelay</ItemText>
         </Ww>
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>strx</ItemText>
+          <ItemText>TimingDelay</ItemText>
         </Ww>
       </WatchWindow1>
       <Tracepoint>
@@ -255,7 +303,7 @@
 
   <Group>
     <GroupName>STARTUP</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -803,6 +851,32 @@
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
+    <File>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>41</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\contiki-code\cpu\arm\stm32f103\clock.c</PathWithFileName>
+      <FilenameWithoutPath>clock.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>4</GroupNumber>
+      <FileNumber>42</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>1</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\contiki-code\cpu\arm\stm32f103\debug-uart.c</PathWithFileName>
+      <FilenameWithoutPath>debug-uart.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
   </Group>
 
   <Group>
@@ -813,7 +887,7 @@
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>5</GroupNumber>
-      <FileNumber>41</FileNumber>
+      <FileNumber>43</FileNumber>
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -821,6 +895,79 @@
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\Doc\readme.txt</PathWithFileName>
       <FilenameWithoutPath>readme.txt</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+  </Group>
+
+  <Group>
+    <GroupName>contik_core_sys</GroupName>
+    <tvExp>0</tvExp>
+    <tvExpOptDlg>0</tvExpOptDlg>
+    <cbSel>0</cbSel>
+    <RteFlg>0</RteFlg>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>44</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\contiki-code\core\sys\autostart.c</PathWithFileName>
+      <FilenameWithoutPath>autostart.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>45</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\contiki-code\core\sys\etimer.c</PathWithFileName>
+      <FilenameWithoutPath>etimer.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>46</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\contiki-code\core\sys\process.c</PathWithFileName>
+      <FilenameWithoutPath>process.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>47</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>1</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\contiki-code\core\sys\procinit.c</PathWithFileName>
+      <FilenameWithoutPath>procinit.c</FilenameWithoutPath>
+      <RteFlg>0</RteFlg>
+      <bShared>0</bShared>
+    </File>
+    <File>
+      <GroupNumber>6</GroupNumber>
+      <FileNumber>48</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <bDave2>0</bDave2>
+      <PathWithFileName>..\..\User\contiki-code\core\sys\timer.c</PathWithFileName>
+      <FilenameWithoutPath>timer.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>
