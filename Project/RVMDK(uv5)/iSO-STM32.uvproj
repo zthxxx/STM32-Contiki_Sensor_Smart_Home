@@ -671,6 +671,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\contiki-code\core\sys\timer.c</FilePath>
             </File>
+            <File>
+              <FileName>contiki_delay.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\SysTick\contiki_delay.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

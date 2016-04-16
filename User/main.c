@@ -12,9 +12,9 @@
 #include "wifi_function.h"
 #include "bsp_SysTick.h"
 #include "dma.h"
+#include "contiki_delay.h"
+
 #include "contiki-conf.h"
-
-
 #include <stdint.h>
 #include <stdio.h>
 #include <debug-uart.h>
@@ -24,8 +24,48 @@
 #include <autostart.h>
 #include <clock.h>
  
-void ( * pNet_Test ) ( void );
 
+
+PROCESS(red_blink_process, "Red_Blink");
+PROCESS(green_blink_process, "Green_Blink");
+AUTOSTART_PROCESSES(NULL);
+//AUTOSTART_PROCESSES(&red_blink_process, &green_blink_process);
+
+PROCESS_THREAD(red_blink_process, ev, data)
+{
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        
+        Contiki_etimer_DelayMS(500);
+    
+        GPIO_SetBits(GPIOA, GPIO_Pin_8);
+        UART2_SendBuff = " asdfafasdf";
+        UART2_DMA_Send_Data(UART2_SendBuff, 11);
+        
+        Contiki_etimer_DelayMS(500);
+        
+        GPIO_ResetBits(GPIOA, GPIO_Pin_8);
+        UART2_SendBuff = " 21398416";
+        UART2_DMA_Send_Data(UART2_SendBuff, 11);
+    }
+    PROCESS_END();
+}
+
+PROCESS_THREAD(green_blink_process, ev, data)
+{
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        Contiki_etimer_DelayMS(200);
+        GPIO_SetBits(GPIOD, GPIO_Pin_2);
+        Contiki_etimer_DelayMS(200);
+        GPIO_ResetBits(GPIOD, GPIO_Pin_2);
+    }
+    PROCESS_END();
+}
 
 /**
   * @brief  主函数
@@ -37,20 +77,20 @@ int main(void)
     /* 初始化 */
 
     WiFi_Config();                       //初始化WiFi模块使用的接口和外设
-//    SysTick_Init();                   /* 延时函数及时钟初始化 */
     clock_init(); 
     ESP8266_STA_TCP_Client();
 
-    while(1)
+    process_init();
+    process_start(&etimer_process,NULL);
+    autostart_start(autostart_processes);
+    process_start(&red_blink_process,NULL);
+    process_start(&green_blink_process,NULL);
+    
+    while (1)
     {
-        Delay_ms(500);
-        GPIO_SetBits(GPIOA, GPIO_Pin_8);
-        UART2_SendBuff = " asdfafasdf";
-        UART2_DMA_Send_Data(UART2_SendBuff, 11);
-        Delay_ms(500);
-        GPIO_ResetBits(GPIOA, GPIO_Pin_8);
-        UART2_SendBuff = " 21398416";
-        UART2_DMA_Send_Data(UART2_SendBuff, 11);
+        do
+        {
+        }while (process_run()>0);
     }
 }
 
