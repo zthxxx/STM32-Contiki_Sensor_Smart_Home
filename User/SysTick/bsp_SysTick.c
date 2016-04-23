@@ -18,7 +18,7 @@
   
 	
 #include "bsp_SysTick.h"
-
+#include "clock.h"
 
 static __IO u32 TimingDelay = 0;
  
@@ -53,7 +53,7 @@ void SysTick_Init( void )
   */
 void Delay_ms( __IO u32 nTime )
 { 
-	TimingDelay = nTime/10;	
+	TimingDelay = nTime/(1000/CLOCK_SECOND);	
 
 //	// 使能滴答定时器  
 //	SysTick->CTRL |=  SysTick_CTRL_ENABLE_Msk;
