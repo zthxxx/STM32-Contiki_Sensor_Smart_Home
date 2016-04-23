@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "bsp_usart2.h"
 
-void USART1_Config(void);
+void USART1_Config(uint32_t BaudRate);
 int fputc(int ch, FILE *f);
 int fgetc(FILE *f);
 void sendUart1OneByte(uint8_t byteData);

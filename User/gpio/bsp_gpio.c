@@ -60,5 +60,12 @@ void GPIO_Config( void )
 
     /*	*/
     GPIO_ResetBits( GPIOA, GPIO_Pin_1 );// 拉低WiFi模块的复位重启引脚	
+    
+    /* DC <--> PB0   RST <--> PB10 */
+    RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOB, ENABLE);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_10 ;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
 /*********************************************END OF FILE**********************/

@@ -16,7 +16,7 @@ extern USART2_Receive_Handler USART2ReceiveHandler;
 extern uint8_t UART2_DMA_SendBuff[UART_SEND_DMA_BUF_LENTH];
 extern uint8_t *UART2_SendBuff;
 
-void USART2_Config( void );
+void USART2_Config(uint32_t BaudRate);
 void USART2_printf(USART_TypeDef* USARTx, char *Data, ...);
 void sendUart2OneByte(uint8_t byteData);
 void SetUART2_NVIC_ISENABLE(uint8_t isEnable);

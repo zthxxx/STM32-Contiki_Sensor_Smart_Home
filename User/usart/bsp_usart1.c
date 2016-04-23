@@ -17,7 +17,7 @@
   * @param  нч
   * @retval нч
   */
-void USART1_Config(void)
+void USART1_Config(uint32_t BaudRate)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	USART_InitTypeDef USART_InitStructure;
@@ -38,7 +38,7 @@ void USART1_Config(void)
 	GPIO_Init(GPIOA, &GPIO_InitStructure);
 	
 	/* USART1 mode config */
-	USART_InitStructure.USART_BaudRate = 115200;
+	USART_InitStructure.USART_BaudRate = BaudRate;
 	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
 	USART_InitStructure.USART_StopBits = USART_StopBits_1;
 	USART_InitStructure.USART_Parity = USART_Parity_No ;

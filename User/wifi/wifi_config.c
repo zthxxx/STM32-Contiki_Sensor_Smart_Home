@@ -19,7 +19,8 @@
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
-
+#include "SPI.h"
+#include "oled.h"
 
 struct  STRUCT_USARTx_Fram strEsp8266_Fram_Record = { 0 };
 struct  STRUCT_USART1_1_Fram str1_1esp8266 = {0} ;
@@ -43,9 +44,16 @@ void WiFi_Config( void )
 {
 	WiFi_RST_INIT();
     WiFi_led_INIT();
- 	WiFi_USART1_INIT(); 
-	WiFi_USART2_INIT(); 
+ 	WiFi_USART1_INIT(115200); 
+	WiFi_USART2_INIT(115200); 
 	WiFi_NVIC_INIT();
+    SPI1_Initialization();
+    
+    OLED_Init();
+    
+	OLED_ShowString(0,0,"SPI OLED");
+	OLED_ShowString(0,32,"Start OK!");
+	OLED_Refresh_Gram();//¸üÐÂÏÔÊ¾
 }
 
 
