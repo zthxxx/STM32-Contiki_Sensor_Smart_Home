@@ -144,7 +144,11 @@ uint8_t SPI2ReceiveOneByte(void)
 void SPI1_IRQHandler(void)
 {
     uint8_t receiveByte=0;
-  
+    if(SPI_I2S_GetITStatus(SPI1, SPI_I2S_IT_TXE) == RESET)
+    {
+        SPI_I2S_ReceiveData(SPI1); 
+        return;
+    }
     if(SPI_I2S_GetITStatus(SPI1, SPI_I2S_IT_RXNE) == SET)/* Loop while DR register in not emplty */
     {
         receiveByte = (uint8_t)SPI_I2S_ReceiveData(SPI1);  
@@ -161,6 +165,11 @@ void SPI2_IRQHandler(void)
 {
     uint8_t receiveByte=0;
   
+    if(SPI_I2S_GetITStatus(SPI2, SPI_I2S_IT_TXE) == RESET)
+    {
+        SPI_I2S_ReceiveData(SPI2); 
+        return;
+    }
     if(SPI_I2S_GetITStatus(SPI2, SPI_I2S_IT_RXNE) == SET)/* Loop while DR register in not emplty */
     {
         receiveByte = (uint8_t)SPI_I2S_ReceiveData(SPI2);  

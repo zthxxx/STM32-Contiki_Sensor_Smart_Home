@@ -54,11 +54,15 @@ void WiFi_Config( void )
 
     SPI1SendOneByte(0xcd);
     SPI2SendOneByte(0xff);
-//    Delay_ms(2); 
-//    sendUart1OneByte(0x01);
-//    sendUart1OneByte(0x02);
-//    sendUart1OneByte(0x03);
-//    while(1);
+    SPI1SendOneByte(0xcd);
+    SPI2SendOneByte(0xff);
+    SPI1SendOneByte(0xcd);
+    SPI2SendOneByte(0xff);
+    Delay_ms(2); 
+    sendUart1OneByte(0x01);
+    sendUart1OneByte(0x02);
+    sendUart1OneByte(0x03);
+    
     OLED_Init();
     
 	OLED_ShowString(0,0,"SPI OLED");
