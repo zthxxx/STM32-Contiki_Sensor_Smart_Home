@@ -11,5 +11,6 @@
 void SPI1_Initialization(void);
 void SPI2_Initialization(void);
 void SPI1SendOneByte(uint8_t byteData);
+uint8_t SPI1ReceiveOneByte(uint8_t byteData);
 
 #endif

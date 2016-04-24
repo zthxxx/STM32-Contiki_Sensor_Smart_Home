@@ -52,7 +52,7 @@ void WiFi_Config( void )
     OLED_Init();
     
 	OLED_ShowString(0,0,"SPI OLED");
-	OLED_ShowString(0,32,"Start OK!");
+	OLED_ShowString(0,32,"Start OK!!");
 	OLED_Refresh_Gram();//¸üÐÂÏÔÊ¾
 }
 
