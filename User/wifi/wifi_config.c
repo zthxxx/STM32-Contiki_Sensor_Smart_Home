@@ -16,6 +16,7 @@
 	*/
 
 #include "wifi_config.h"
+#include "bsp_SysTick.h"
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
@@ -48,11 +49,20 @@ void WiFi_Config( void )
 	WiFi_USART2_INIT(115200); 
 	WiFi_NVIC_INIT();
     SPI1_Initialization();
+    SPI2_Initialization();
     
+
+    SPI1SendOneByte(0xcd);
+    SPI2SendOneByte(0xff);
+//    Delay_ms(2); 
+//    sendUart1OneByte(0x01);
+//    sendUart1OneByte(0x02);
+//    sendUart1OneByte(0x03);
+//    while(1);
     OLED_Init();
     
 	OLED_ShowString(0,0,"SPI OLED");
-	OLED_ShowString(0,32,"Start OK!!");
+	OLED_ShowString(0,32,"Start OK!");
 	OLED_Refresh_Gram();//¸üÐÂÏÔÊ¾
 }
 
