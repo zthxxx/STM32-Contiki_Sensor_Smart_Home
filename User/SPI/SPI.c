@@ -111,13 +111,31 @@ void SPI1SendOneByte(uint8_t byteData)
 //    SPI_I2S_ClearFlag(SPI1, SPI_I2S_FLAG_TXE);
 //    SPI_I2S_SendData(SPI1, byteData);    /* Send byte through the SPI peripheral */
 //    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);    /* Loop while DR register in not emplty */
+    int count = 0;
+    int COUNT_MAX = 50;
     
      /* ÅÐ¶Ï·¢ËÍ»º³åÊÇ·ñÎª¿Õ */ 
-    while(SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);
+    while(SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET)
+    {
+        count++;
+        if(count>COUNT_MAX)
+        {
+            count = 0;
+            break;
+        }
+    }
     /* ·¢ËÍ×Ö½Ú */
     SPI_I2S_SendData(SPI1, byteData);  
     /* ÅÐ¶Ï½ÓÊÕ»º³åÊÇ·ñÎª¿Õ*/
-    while(SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);
+    while(SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET)
+    {
+        count++;
+        if(count>COUNT_MAX)
+        {
+            count = 0;
+            break;
+        }
+    }
     /* flush data read during the write */ 
     SPI_I2S_ReceiveData(SPI1); 
 }

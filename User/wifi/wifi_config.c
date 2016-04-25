@@ -64,16 +64,16 @@ void WiFi_Config( void )
     while(1)
     {
         SPI1SendOneByte(0x01);
-        Delay_ms(5);
+//        Delay_ms(10);
         SPI1SendOneByte(0x02);
-        Delay_ms(5);
+//        Delay_ms(10);
         SPI1SendOneByte(0x03);
-        Delay_ms(5);
+//        Delay_ms(10);
         SPI1SendOneByte(0x04);
-        Delay_ms(5);
+//        Delay_ms(10);
         SPI1SendOneByte(0x04);
-        Delay_ms(200);
-        GPIO_WriteBit(GPIOD, GPIO_Pin_2, (BitAction)!GPIO_ReadOutputDataBit(GPIOD, GPIO_Pin_2));
+//        Delay_ms(10);
+//        GPIO_WriteBit(GPIOD, GPIO_Pin_2, (BitAction)!GPIO_ReadOutputDataBit(GPIOD, GPIO_Pin_2));
     }
     
     OLED_Init();
