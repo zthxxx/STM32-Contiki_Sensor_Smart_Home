@@ -266,7 +266,7 @@ void OLED_WB(uint8_t data)
 
 
 /*************    OLED函数使用
-			// 测试开关，OK
+//          测试开关，OK
 //			OLED_Display_Off();	
 //			OLED_Display_On();
 //			OLED_CLS();
