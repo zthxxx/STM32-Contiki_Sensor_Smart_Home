@@ -43,6 +43,7 @@ char TCP_CILENT_PORT[] = "50000";
   */
 void WiFi_Config( void )
 {
+    uint16_t delaytime = 50;
 	WiFi_RST_INIT();
     WiFi_led_INIT();
  	WiFi_USART1_INIT(115200); 
@@ -64,16 +65,16 @@ void WiFi_Config( void )
     while(1)
     {
         SPI1SendOneByte(0x01);
-//        Delay_ms(10);
+        delay_us(delaytime);
         SPI1SendOneByte(0x02);
-//        Delay_ms(10);
+        delay_us(delaytime);
         SPI1SendOneByte(0x03);
-//        Delay_ms(10);
+        delay_us(delaytime);
         SPI1SendOneByte(0x04);
-//        Delay_ms(10);
+        delay_us(delaytime);
         SPI1SendOneByte(0x04);
-//        Delay_ms(10);
-//        GPIO_WriteBit(GPIOD, GPIO_Pin_2, (BitAction)!GPIO_ReadOutputDataBit(GPIOD, GPIO_Pin_2));
+        delay_us(delaytime);
+        GPIO_WriteBit(GPIOD, GPIO_Pin_2, (BitAction)!GPIO_ReadOutputDataBit(GPIOD, GPIO_Pin_2));
     }
     
     OLED_Init();
