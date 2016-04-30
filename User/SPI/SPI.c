@@ -52,7 +52,7 @@ void SPI1_Initialization(void)
     SPI_Cmd(SPI1, ENABLE);
     SPI_I2S_ClearITPendingBit(SPI1, SPI_I2S_IT_TXE);
     SPI_I2S_ClearITPendingBit(SPI1, SPI_I2S_IT_RXNE);
-    SPI_I2S_SendData(SPI1, 0xFF); 
+
 }
 
 
@@ -108,9 +108,6 @@ void SPI2_Initialization(void)
 
 void SPI1SendOneByte(uint8_t byteData)
 {
-//    SPI_I2S_ClearFlag(SPI1, SPI_I2S_FLAG_TXE);
-//    SPI_I2S_SendData(SPI1, byteData);    /* Send byte through the SPI peripheral */
-//    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_TXE) == RESET);    /* Loop while DR register in not emplty */
     int count = 0;
     int COUNT_MAX = 50;
     
@@ -185,44 +182,41 @@ void SPI1_IRQHandler(void)
 }
 
 
-/**
-* @brief This function handles SPI1 global interrupt.
-*/
-//void SPI2_IRQHandler(void)
-//{
-//    uint8_t receiveByte=0;
-////    if(SPI_I2S_GetITStatus(SPI2, SPI_I2S_IT_TXE) == RESET)
-////    {
-////        SPI_I2S_ReceiveData(SPI2); 
-////        return;
-////    }
-//    if(SPI_I2S_GetITStatus(SPI2, SPI_I2S_IT_TXE) == SET)
-//    {
-//        SPI_I2S_SendData(SPI2, 0xFF);
-//    }
-//    if(SPI_I2S_GetITStatus(SPI2, SPI_I2S_IT_RXNE) == SET)/* Loop while DR register in not emplty */
-//    {
-//        GPIO_SetBits(GPIOA, GPIO_Pin_8);
-//        receiveByte = (uint8_t)SPI_I2S_ReceiveData(SPI2);  
-//        sendUart1OneByte(receiveByte);
-//        
-//    }
-//}
+
 
 
 void SPI2_IRQHandler(void)
 {   
     uint8_t SPI_Value;
 
-    if( SPI_I2S_GetITStatus(SPI2, SPI_I2S_IT_TXE) == SET )
+   int count = 0;
+    int COUNT_MAX = 50;
+    
+     /* ÅÐ¶Ï·¢ËÍ»º³åÊÇ·ñÎª¿Õ */ 
+    while(SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TXE) == RESET)
     {
-        SPI_I2S_SendData(SPI2,0xFF);      
+        count++;
+        if(count>COUNT_MAX)
+        {
+            count = 0;
+            return;
+        }
     }
-    if( SPI_I2S_GetITStatus(SPI2, SPI_I2S_IT_RXNE) == SET )   
-    {     
-       SPI_Value = SPI_I2S_ReceiveData(SPI2);    
+    /* ·¢ËÍ×Ö½Ú */
+    SPI_I2S_SendData(SPI2, 0xFF);  
+    /* ÅÐ¶Ï½ÓÊÕ»º³åÊÇ·ñÎª¿Õ*/
+    while(SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_RXNE) == RESET)
+    {
+        count++;
+        if(count>COUNT_MAX)
+        {
+            count = 0;
+            return;
+        }
     }
-	
+    /* flush data read during the write */ 
+    SPI_Value = SPI_I2S_ReceiveData(SPI2); 
+    
     switch(SPI_Value)
     {
         case 0x01:

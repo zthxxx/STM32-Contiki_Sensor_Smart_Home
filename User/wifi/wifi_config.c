@@ -43,7 +43,7 @@ char TCP_CILENT_PORT[] = "50000";
   */
 void WiFi_Config( void )
 {
-    uint16_t delaytime = 50;
+    uint16_t delaytime = 00;
 	WiFi_RST_INIT();
     WiFi_led_INIT();
  	WiFi_USART1_INIT(115200); 
@@ -56,8 +56,7 @@ void WiFi_Config( void )
     SPI1SendOneByte(0xcd);
     SPI1SendOneByte(0xff);
 
-    
-    Delay_ms(2); 
+
     sendUart1OneByte(0x01);
     sendUart1OneByte(0x02);
     sendUart1OneByte(0x03);
