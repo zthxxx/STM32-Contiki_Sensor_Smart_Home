@@ -90,7 +90,7 @@ void ESP8266_WIFI_GPIO_Config( void )
 
     /* 配置WiFi模块的片选（CH）引脚	复位重启（RST）引脚*/
     /*选择要控制的GPIOA0（CH）引脚和GPIOA1（RST）引脚*/															   
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;	
+    GPIO_InitStructure.GPIO_Pin = WIFI_RST_GPIO_Pin;	
 
     /*设置引脚模式为通用推挽输出*/
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;   
@@ -99,10 +99,10 @@ void ESP8266_WIFI_GPIO_Config( void )
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
 
     /*调用库函数，初始化GPIOA*/
-    GPIO_Init( GPIOA, &GPIO_InitStructure );	 
+    GPIO_Init( WIFI_RST_GPIO_Side, &GPIO_InitStructure );	 
 
     /*	*/
-    GPIO_ResetBits( GPIOA, GPIO_Pin_1 );// 拉低WiFi模块的复位重启引脚	
+    GPIO_ResetBits( WIFI_RST_GPIO_Side, WIFI_RST_GPIO_Pin );// 拉低WiFi模块的复位重启引脚	
 }
 
 /*********************************************************end of file**************************************************/

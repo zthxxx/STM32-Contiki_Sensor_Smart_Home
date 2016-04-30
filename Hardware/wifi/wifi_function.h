@@ -7,17 +7,14 @@
 #include "bsp_SysTick.h"
 #include "wifi_config.h"
 
+
 #define     ESP8266_Usart( fmt, ... )           USART2_printf ( USART2, fmt, ##__VA_ARGS__ ) 
 #define     PC_Usart( fmt, ... )                printf ( fmt, ##__VA_ARGS__ )
 
-#define     ESP8266_CH_HIGH_LEVEL()             GPIO_SetBits( GPIOA, GPIO_Pin_0 )
-#define     ESP8266_CH_LOW_LEVEL()              GPIO_ResetBits( GPIOA, GPIO_Pin_0 )
-
-#define     ESP8266_RST_HIGH_LEVEL()            GPIO_SetBits( GPIOA, GPIO_Pin_1 )
-#define     ESP8266_RST_LOW_LEVEL()             GPIO_ResetBits( GPIOA, GPIO_Pin_1 )
+#define     ESP8266_RST_HIGH_LEVEL()            GPIO_SetBits( WIFI_RST_GPIO_Side, WIFI_RST_GPIO_Pin )
+#define     ESP8266_RST_LOW_LEVEL()             GPIO_ResetBits( WIFI_RST_GPIO_Side, WIFI_RST_GPIO_Pin )
 
 
-void        ESP8266_Choose                      ( FunctionalState enumChoose );
 void        ESP8266_Rst                         ( void );
 void        ESP8266_AT_Test                     ( void );
 bool        ESP8266_Cmd                         ( char * cmd, char * reply1, char * reply2, u32 waittime );
@@ -34,8 +31,7 @@ char *      ESP8266_ReceiveString               ( FunctionalState enumEnUnvarnis
 void        ESP8266_STA_TCP_Client              ( void );
 void        ESP8266_AP_TCP_Server               ( void );
 void        ESP8266_StaTcpClient_ApTcpServer    ( void );
-void        Linktcp_LED_ON                      (void);
-void        LED_all_OFF                         (void);
+
 
 #endif    /* __WIFI_FUNCTION_H */
 

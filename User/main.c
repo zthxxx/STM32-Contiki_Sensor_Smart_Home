@@ -4,6 +4,7 @@
   */ 
  
 #include "stm32f10x.h"
+#include "stm32f10x_conf.h"
 #include <string.h>
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"

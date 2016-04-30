@@ -8,24 +8,6 @@
 #include <stdbool.h>
 
 
-/*
- * 函数名：ESP8266_Choose
- * 描述  ：使能/禁用WF-ESP8266模块
- * 输入  ：enumChoose = ENABLE，使能模块
- *         enumChoose = DISABLE，禁用模块
- * 返回  : 无
- * 调用  ：被外部调用
- */
-void ESP8266_Choose ( FunctionalState enumChoose )
-{
-	if ( enumChoose == ENABLE )
-		ESP8266_CH_HIGH_LEVEL();
-	
-	else
-		ESP8266_CH_LOW_LEVEL();
-	
-}
-
 
 /*
  * 函数名：ESP8266_Rst
@@ -56,7 +38,7 @@ void ESP8266_Rst ( void )
 void ESP8266_AT_Test ( void )
 {
 	//ESP8266_RST_HIGH_LEVEL();
-	GPIO_SetBits( GPIOA, GPIO_Pin_1);
+	ESP8266_RST_HIGH_LEVEL();
 	Delay_ms(2000); 
 	while (!ESP8266_Cmd ("AT", "OK", NULL, 250))
     {
@@ -442,7 +424,6 @@ void ESP8266_AP_TCP_Server ( void )
 	u8 uc = 0;
  	 u32 ul = 0;
 
-    ESP8266_Choose ( ENABLE );
 
 	ESP8266_AT_Test ();
 	
@@ -535,7 +516,6 @@ void ESP8266_StaTcpClient_ApTcpServer ( void )
 	u8 uc = 0;
   u32 ul = 0;
 
-  ESP8266_Choose ( ENABLE );
 
 	ESP8266_AT_Test ();
 	
@@ -669,18 +649,4 @@ void ESP8266_StaTcpClient_ApTcpServer ( void )
 	
 }
 
- void Linktcp_LED_ON()
-{
-	Delay_ms(500);
-	GPIO_SetBits( GPIOB, GPIO_Pin_0 );
-	GPIO_SetBits(GPIOC, GPIO_Pin_4|GPIO_Pin_3);	
-	Delay_ms(500);
-	GPIO_ResetBits(GPIOC, GPIO_Pin_4|GPIO_Pin_3);
-	GPIO_ResetBits( GPIOB, GPIO_Pin_0 );	 
-}
-void LED_all_OFF()
-{
-    GPIO_SetBits( GPIOB, GPIO_Pin_0 );
-    GPIO_SetBits(GPIOC, GPIO_Pin_4|GPIO_Pin_3);	
-}
 
