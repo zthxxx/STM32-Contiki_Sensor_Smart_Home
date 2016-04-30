@@ -134,9 +134,10 @@ u8 DHT11_Init(void)
  	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
  	GPIO_Init(DHT11_GPIO_Side, &GPIO_InitStructure);				 //初始化IO口
     
- 	GPIO_SetBits(DHT11_GPIO_Side,DHT11_GPIO_Pin);						 //PB11 输出高		    
-	DHT11_Rst();  //复位DHT11
-	return DHT11_Check();//等待DHT11的回应
+ 	GPIO_SetBits(DHT11_GPIO_Side,DHT11_GPIO_Pin);						 //PB11 输出高	
+    return 1;
+//	DHT11_Rst();  //复位DHT11
+//	return DHT11_Check();//等待DHT11的回应
 } 
 
 

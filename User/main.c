@@ -31,8 +31,8 @@
 #include "contiki_delay.h"
 
 
-//#define __WIFI_MODULE_ON__
-//#define __OLED_MODULE_ON__
+#define __WIFI_MODULE_ON__
+#define __OLED_MODULE_ON__
 #define __DHT11_MODULE_ON__
 
 
@@ -178,10 +178,11 @@ PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
     {
         OLED_ShowNum(0,32,count++,5,16);
         
-#ifdef __DHT11_MODULE_ON__
-        DHT11_Read_Data(&temperature,&temperature0,&humidity,&humidity0);
-        OLED_ShowNum(0,48,humidity,5,16);
-#endif
+//#ifdef __DHT11_MODULE_ON__
+//        DHT11_Read_Data(&temperature,&temperature0,&humidity,&humidity0);
+//        OLED_ShowNum(90,48,temperature,5,16);
+//        OLED_ShowNum(0,48,humidity,5,16);
+//#endif
         
         OLED_Refresh_Gram();//∏¸–¬œ‘ æ
         Contiki_etimer_DelayMS(500);
@@ -201,7 +202,7 @@ PROCESS_THREAD(DHT11_Read_Data_process, ev, data)
     {
         DHT11_Read_Data(&temperature,&temperature0,&humidity,&humidity0);
         printf("temperature: %.2f°„C  humidity: %.2f \r\n",(float)temperature+(float)temperature0*0.01,(float)humidity+(float)humidity0*0.01);	
-        Contiki_etimer_DelayMS(500);
+        Contiki_etimer_DelayMS(1000);
     }
     PROCESS_END();
 }
