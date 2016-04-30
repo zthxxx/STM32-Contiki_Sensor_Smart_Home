@@ -363,7 +363,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC;..\..\Hardware\MQ_2</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -637,6 +637,11 @@
           <GroupName>Documents</GroupName>
           <Files>
             <File>
+              <FileName>MQ-2_GPIO.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Hardware\MQ_2\MQ-2_GPIO.txt</FilePath>
+            </File>
+            <File>
               <FileName>readme.txt</FileName>
               <FileType>5</FileType>
               <FilePath>..\..\Documents\readme.txt</FilePath>
@@ -680,6 +685,11 @@
               <FileName>wifi_config.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Hardware\wifi\wifi_config.c</FilePath>
+            </File>
+            <File>
+              <FileName>MQ-2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Hardware\MQ_2\MQ-2.c</FilePath>
             </File>
           </Files>
         </Group>

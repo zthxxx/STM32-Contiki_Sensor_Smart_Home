@@ -73,7 +73,7 @@ extern struct  STRUCT_USART1_1_Fram                                  //´®¿ÚÊý¾ÝÖ
 	
 } strPc1_1_Fram_Record, str1_1esp8266;
 
-#define WIFI_RST_GPIO_Pin GPIO_Pin_0
+#define WIFI_RST_GPIO_Pin GPIO_Pin_1
 #define WIFI_RST_GPIO_Side GPIOA
 //* º¯Êý */
 #define WiFi_RST_INIT                  ESP8266_WIFI_GPIO_Config                //WiFiÊ¹ÓÃµÄESÒý½Å³õÊ¼»¯º¯Êý£¬ÍÆÍìÊä³ö 

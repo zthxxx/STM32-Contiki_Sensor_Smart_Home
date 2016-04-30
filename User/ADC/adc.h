@@ -13,8 +13,8 @@
 //All rights reserved									  
 ////////////////////////////////////////////////////////////////////////////////// 
 
-void ADC_GPIO_Init(void);
-u16  Get_ADC1(u8 ch); 
-u16 Get_ADC1_Average(u8 ch,u8 times); 
+void ADC1_GPIO_Init(void);
+uint16_t Get_ADC1(uint8_t ch); 
+uint16_t Get_ADC1_Average(uint8_t ch,uint8_t times); 
  
 #endif 

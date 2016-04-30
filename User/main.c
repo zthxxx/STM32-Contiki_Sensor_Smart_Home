@@ -17,6 +17,8 @@
 #include "SPI.h"
 #include "oled.h"
 #include "dht11.h"
+#include "adc.h"
+#include "MQ-2.h"
 #include "delay.h"
 
 #include "contiki-conf.h"
@@ -31,10 +33,10 @@
 #include "contiki_delay.h"
 
 
-#define __WIFI_MODULE_ON__
+//#define __WIFI_MODULE_ON__
 #define __OLED_MODULE_ON__
 #define __DHT11_MODULE_ON__
-
+#define __MQ02_MODULE_ON__
 
 PROCESS(red_blink_process, "Red Blink");
 PROCESS(green_blink_process, "Green Blink");
@@ -44,6 +46,7 @@ PROCESS(clock_test_process, "Test system delay");
 PROCESS(wifi_send_test_process, "Wifi module send data test");
 PROCESS(OLED_Show_Increment_process, "Show a increment num in OLED");
 PROCESS(DHT11_Read_Data_process, "DHT11 read temperature and humidity test");
+PROCESS(MQ02_Read_Value_process, "ADC read MQ02 value and print test");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -56,18 +59,27 @@ void BSP_Config(void)
     clock_init();
     LED_GPIO_Config();
     USART1_Config(115200);
-    
-#ifdef __WIFI_MODULE_ON__
-    WiFi_Config(); //初始化WiFi模块使用的接口和外设
-#endif
-    
+
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
+    OLED_ShowString(0,0,"SPI OLED");
+    OLED_ShowString(0,16,"Start OK!");
+    OLED_Refresh_Gram();//更新显示
 #endif         
     
 #ifdef __DHT11_MODULE_ON__
     DHT11_Init(); //初始化OLED模块使用的接口和外设
-#endif     
+#endif   
+
+#ifdef __MQ02_MODULE_ON__
+    MQ02_Init(); //初始化OLED模块使用的接口和外设
+#endif
+    
+#ifdef __WIFI_MODULE_ON__
+    WiFi_Config(); //初始化WiFi模块使用的接口和外设
+    ESP8266_STA_TCP_Client();
+#endif    
+    
     
 }
 
@@ -75,18 +87,6 @@ void BSP_Config(void)
 int main(void)
 {	
     BSP_Config();    
-    
-#ifdef __OLED_MODULE_ON__
-    {
-        OLED_ShowString(0,0,"SPI OLED");
-        OLED_ShowString(0,16,"Start OK!");
-        OLED_Refresh_Gram();//更新显示
-    }
-#endif 
-
-#ifdef __WIFI_MODULE_ON__    
-    ESP8266_STA_TCP_Client();
-#endif
     
     IWDG_Start(2);  //wifi模块透传之后开启看门狗
     
@@ -105,6 +105,10 @@ int main(void)
     
 #ifdef __WIFI_MODULE_ON__     
     process_start(&wifi_send_test_process,NULL);
+#endif
+    
+#ifdef __MQ02_MODULE_ON__     
+    process_start(&MQ02_Read_Value_process,NULL);
 #endif
 
     while (1)
@@ -169,21 +173,10 @@ PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
 {
     static struct etimer et;
     static int count;
-    uint8_t temperature;
-    uint8_t temperature0;	 
-	uint8_t humidity;    
-    uint8_t humidity0;
     PROCESS_BEGIN();
     while(1)
     {
-        OLED_ShowNum(0,32,count++,5,16);
-        
-//#ifdef __DHT11_MODULE_ON__
-//        DHT11_Read_Data(&temperature,&temperature0,&humidity,&humidity0);
-//        OLED_ShowNum(90,48,temperature,5,16);
-//        OLED_ShowNum(0,48,humidity,5,16);
-//#endif
-        
+        OLED_ShowNum(0,32,count++,5,16);   
         OLED_Refresh_Gram();//更新显示
         Contiki_etimer_DelayMS(500);
     }
@@ -203,6 +196,18 @@ PROCESS_THREAD(DHT11_Read_Data_process, ev, data)
         DHT11_Read_Data(&temperature,&temperature0,&humidity,&humidity0);
         printf("temperature: %.2f°C  humidity: %.2f \r\n",(float)temperature+(float)temperature0*0.01,(float)humidity+(float)humidity0*0.01);	
         Contiki_etimer_DelayMS(1000);
+    }
+    PROCESS_END();
+}
+
+PROCESS_THREAD(MQ02_Read_Value_process, ev, data)
+{
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        printf("MQ02 Sensor Percentage: %.2f \r\n",MQ02_Get_Percentage());	
+        Contiki_etimer_DelayMS(500);
     }
     PROCESS_END();
 }

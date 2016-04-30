@@ -37,14 +37,12 @@ void ESP8266_Rst ( void )
  */
 void ESP8266_AT_Test ( void )
 {
-	//ESP8266_RST_HIGH_LEVEL();
 	ESP8266_RST_HIGH_LEVEL();
 	Delay_ms(2000); 
 	while (!ESP8266_Cmd ("AT", "OK", NULL, 250))
     {
         ESP8266_Rst();
     }
-
 }
 
 
