@@ -27,7 +27,7 @@
 /* OLED_WriteByte */
 void OLED_WB(uint8_t data);
 void OLED_DLY_ms(unsigned int ms);
-void delay_us(u16 time);
+void OLED_DLY_us(u16 time);
 void LCD_Init(void);
 void OLED_CLS(void);
 void LCD_Fill(unsigned char dat);

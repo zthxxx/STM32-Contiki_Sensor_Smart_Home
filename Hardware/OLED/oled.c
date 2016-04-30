@@ -102,7 +102,7 @@ void OLED_DLY_ms(unsigned int ms)
     return;
 }
 
-void delay_us(u16 time)
+void OLED_DLY_us(u16 time)
 {
 	u16 i = 0;
 	while(time -- )
@@ -277,7 +277,7 @@ void OLED_Set_Pos(unsigned char x, unsigned char y)
 void OLED_WB(uint8_t data)
 {
     SPI1SendOneByte(data);
-	delay_us(2);//这个延时是必要的，在STM32f103RC上8M晶振，低于1us会导致显存更新出错，绘屏会花，延时最短是2us（粗略延时）
+	OLED_DLY_us(2);//这个延时是必要的，在STM32f103RC上8M晶振，低于1us会导致显存更新出错，绘屏会花，延时最短是2us（粗略延时）
 }
 
 
