@@ -15,11 +15,12 @@
 #include "dma.h"
 #include "iwdg.h"
 #include "SPI.h"
+#include "delay.h"
 #include "oled.h"
 #include "dht11.h"
 #include "adc.h"
 #include "MQ-2.h"
-#include "delay.h"
+#include "HC-SR501.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -33,10 +34,11 @@
 #include "contiki_delay.h"
 
 
-//#define __WIFI_MODULE_ON__
+#define __WIFI_MODULE_ON__
 #define __OLED_MODULE_ON__
 #define __DHT11_MODULE_ON__
 #define __MQ02_MODULE_ON__
+#define __HCSR501_MODULE_ON__
 
 PROCESS(red_blink_process, "Red Blink");
 PROCESS(green_blink_process, "Green Blink");
@@ -47,6 +49,7 @@ PROCESS(wifi_send_test_process, "Wifi module send data test");
 PROCESS(OLED_Show_Increment_process, "Show a increment num in OLED");
 PROCESS(DHT11_Read_Data_process, "DHT11 read temperature and humidity test");
 PROCESS(MQ02_Read_Value_process, "ADC read MQ02 value and print test");
+PROCESS(HCSR501_Read_Status_process, "Read status of is anyone here");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -75,11 +78,14 @@ void BSP_Config(void)
     MQ02_Init(); //初始化OLED模块使用的接口和外设
 #endif
     
+#ifdef __HCSR501_MODULE_ON__
+    HCSR501_Init(); //初始化OLED模块使用的接口和外设
+#endif
+
 #ifdef __WIFI_MODULE_ON__
     WiFi_Config(); //初始化WiFi模块使用的接口和外设
     ESP8266_STA_TCP_Client();
 #endif    
-    
     
 }
 
@@ -109,6 +115,10 @@ int main(void)
     
 #ifdef __MQ02_MODULE_ON__     
     process_start(&MQ02_Read_Value_process,NULL);
+#endif
+
+#ifdef __HCSR501_MODULE_ON__     
+    process_start(&HCSR501_Read_Status_process,NULL);
 #endif
 
     while (1)
@@ -195,7 +205,7 @@ PROCESS_THREAD(DHT11_Read_Data_process, ev, data)
     {
         DHT11_Read_Data(&temperature,&temperature0,&humidity,&humidity0);
         printf("temperature: %.2f°C  humidity: %.2f \r\n",(float)temperature+(float)temperature0*0.01,(float)humidity+(float)humidity0*0.01);	
-        Contiki_etimer_DelayMS(1000);
+        Contiki_etimer_DelayMS(500);
     }
     PROCESS_END();
 }
@@ -207,6 +217,27 @@ PROCESS_THREAD(MQ02_Read_Value_process, ev, data)
     while(1)
     {
         printf("MQ02 Sensor Percentage: %.2f \r\n",MQ02_Get_Percentage());	
+        Contiki_etimer_DelayMS(500);
+    }
+    PROCESS_END();
+}
+
+PROCESS_THREAD(HCSR501_Read_Status_process, ev, data)
+{
+    static struct etimer et;
+    bool someoneStatus;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        someoneStatus = HCSR501_Read_Data();
+        if(someoneStatus)
+        {
+            printf("HCSR501 monitor people.\r\n");
+        }
+        else
+        {
+            printf("HCSR501 haven't monitor people.\r\n");
+        }
         Contiki_etimer_DelayMS(500);
     }
     PROCESS_END();
