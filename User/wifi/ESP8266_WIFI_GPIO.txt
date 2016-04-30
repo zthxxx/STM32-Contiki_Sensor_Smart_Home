@@ -13,21 +13,3 @@ PC连接UART1，通信链路如下：
 UART1 <--> UART2 <--> ESP8266 <--> 路由器 <--> TCP server
 通信数据收发及显示均正常。
 *************************************************/
-
-
-/*************************************************
-STM32 SPI1驱动微雪OLED模块 4线SPI模式
-
-引脚连接：
-OLED_VCC  --- STM32_3V3
-OLED_DIN  --- STM32_A7(SPI1_MOSI)
-OLED_CLK  --- STM32_A5(SPI1_SCK)
-OLED_CS   --- STM32_A4(SPI1_NSS)
-OLED_DC   --- STM32_B0
-OLED_RES  --- STM32_B10
-
-SPI_DataSize_8b
-SPI_CPOL_High
-SPI_CPHA_2Edge
-SPI_FirstBit_MSB
-*************************************************/

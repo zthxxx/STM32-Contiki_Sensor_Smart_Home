@@ -23,7 +23,7 @@
 
 #define  	OLED_SCK_PIN					GPIO_Pin_5//对应SLK
 #define		OLED_SDA_PIN					GPIO_Pin_7
-   
+#define     OLED_SPI_CONFIG                 SPI1_Initialization
 /* OLED_WriteByte */
 void OLED_WB(uint8_t data);
 void OLED_DLY_ms(unsigned int ms);
@@ -31,6 +31,7 @@ void delay_us(u16 time);
 void LCD_Init(void);
 void OLED_CLS(void);
 void LCD_Fill(unsigned char dat);
+void OLED_GPIO_Config(void);
 
 //SSD1306 OLED 驱动IC驱动代码
 //驱动方式:SPI

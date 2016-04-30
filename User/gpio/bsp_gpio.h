@@ -5,8 +5,9 @@
 #include "stm32f10x.h"
 
 
-void GPIO_Config( void );
+
 void LED_GPIO_Config(void);
+
 
 
 #endif /* __GPIO_H */

@@ -75,7 +75,7 @@ extern struct  STRUCT_USART1_1_Fram                                  //´®¿ÚÊý¾ÝÖ
 
 
 //* º¯Êý */
-#define WiFi_RST_INIT                  GPIO_Config                //WiFiÊ¹ÓÃµÄESÒý½Å³õÊ¼»¯º¯Êý£¬ÍÆÍìÊä³ö 
+#define WiFi_RST_INIT                  ESP8266_WIFI_GPIO_Config                //WiFiÊ¹ÓÃµÄESÒý½Å³õÊ¼»¯º¯Êý£¬ÍÆÍìÊä³ö 
 #define WiFi_led_INIT				   LED_GPIO_Config			  //LEDÊ±ÐòÏÔÊ¾£¬
 #define WiFi_USART1_INIT               USART1_Config              //WiFiÊ¹ÓÃµÄ´®¿Ú1³õÊ¼»¯º¯Êý£¬²¨ÌØÂÊ9600
 #define WiFi_USART2_INIT               USART2_Config              //WiFiÊ¹ÓÃµÄ´®¿Ú2³õÊ¼»¯º¯Êý£¬²¨ÌØÂÊ9600 
@@ -84,6 +84,7 @@ extern struct  STRUCT_USART1_1_Fram                                  //´®¿ÚÊý¾ÝÖ
 
 void WiFi_Config( void );
 void NVIC_Configuration( void );
+void ESP8266_WIFI_GPIO_Config( void );
 
 extern bool IS_WIFI_LOG_DEBUG;
 extern char WIFI_SSID_NAME[];

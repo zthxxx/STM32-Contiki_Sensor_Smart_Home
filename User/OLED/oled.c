@@ -20,6 +20,22 @@
 
 u8 OLED_GRAM [128][8];	 
 
+
+
+
+void OLED_GPIO_Config( void )
+{		
+    /*定义一个GPIO_InitTypeDef类型的结构体*/
+    GPIO_InitTypeDef GPIO_InitStructure;
+    
+    /* DC <--> PB0   RST <--> PB10 */
+    RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOB, ENABLE);
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_10 ;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+}
+
 /*******************一个字节数据写入***********************/
 void OLED_WrDat(unsigned char dat)
 {
@@ -111,44 +127,46 @@ void OLED_Fill(u8 x1,u8 y1,u8 x2,u8 y2,u8 dot)
 /*********************12864初始化***********************/
 void OLED_Init(void)
 {
-	OLED_RST_L;
-	OLED_DLY_ms(50);
-	OLED_RST_H;
-	//从上电到下面开始初始化要有足够的时间，即等待RC复位完毕
-  OLED_WrCmd(0xae);//关闭显示
+    OLED_GPIO_Config();
+    OLED_SPI_CONFIG();
+    OLED_RST_L;
+    OLED_DLY_ms(50);
+    OLED_RST_H;
+    //从上电到下面开始初始化要有足够的时间，即等待RC复位完毕
+    OLED_WrCmd(0xae);//关闭显示
 
-	OLED_WrCmd(0xD5); //设置时钟分频因子,震荡频率
-  OLED_WrCmd(0x80);   //[3:0],分频因子;[7:4],震荡频率, 默认100分频
-  OLED_WrCmd(0xA8); //设置驱动路数(1 to 64)
-  OLED_WrCmd(0X3F); //默认0X3F(1/64) 
-  OLED_WrCmd(0xD3); //设置显示偏移
-  OLED_WrCmd(0X00); //默认为0
+    OLED_WrCmd(0xD5); //设置时钟分频因子,震荡频率
+    OLED_WrCmd(0x80);   //[3:0],分频因子;[7:4],震荡频率, 默认100分频
+    OLED_WrCmd(0xA8); //设置驱动路数(1 to 64)
+    OLED_WrCmd(0X3F); //默认0X3F(1/64) 
+    OLED_WrCmd(0xD3); //设置显示偏移
+    OLED_WrCmd(0X00); //默认为0
 
-  OLED_WrCmd(0x40); //设置显示开始行 [5:0],行数(0x00~0x3F).
-  OLED_WrCmd(0xA1); //段重定义设置,bit0:0,0->0;1,0->127;0xa0左右反置 0xa1正常
-  OLED_WrCmd(0xC0); //设置COM扫描方向;bit3:0,普通模式;1,重定义模式 COM[N-1]->COM0;N:驱动路数0xc0上下反置 0xc8正常
-													    
-  OLED_WrCmd(0x8D); //电荷泵设置
-  OLED_WrCmd(0x14); //bit2，开启/关闭set(0x10) disable
-  OLED_WrCmd(0x20); //设置内存地址模式
-  OLED_WrCmd(0x02); //[1:0],00，列地址模式;01，行地址模式;10,页地址模式;默认10;
-  OLED_WrCmd(0xDA); //设置COM硬件引脚配置
-  OLED_WrCmd(0x12); //[5:4]配置
-		 
-  OLED_WrCmd(0x81); //对比度设置
-  OLED_WrCmd(BRIGHTNESS); //1~255;默认0X7F (亮度设置,越大越亮)
-  OLED_WrCmd(0xD9); //设置预充电周期
-  OLED_WrCmd(0xf1); //[3:0],PHASE 1;[7:4],PHASE 2;
-  OLED_WrCmd(0xDB); //设置VCOMH 电压倍率
-  OLED_WrCmd(0x30); //[6:4] 000,0.65*vcc;001,0.77*vcc;011,0.83*vcc;
+    OLED_WrCmd(0x40); //设置显示开始行 [5:0],行数(0x00~0x3F).
+    OLED_WrCmd(0xA1); //段重定义设置,bit0:0,0->0;1,0->127;0xa0左右反置 0xa1正常
+    OLED_WrCmd(0xC0); //设置COM扫描方向;bit3:0,普通模式;1,重定义模式 COM[N-1]->COM0;N:驱动路数0xc0上下反置 0xc8正常
 
-  OLED_WrCmd(0xA4); //全局显示开启;bit0:1,开启;0,关闭;(白屏/黑屏)
-  OLED_WrCmd(0xA6); //设置显示方式;bit0:1,反相显示;0,正常显示	    						   
-  OLED_WrCmd(0xAF); //开启显示	 
-	
-  OLED_Fill(0,0,127,63, 0x00);  //初始清屏,不清会有意想不到的问题
-  OLED_Display_On();
-  OLED_CLS();
+    OLED_WrCmd(0x8D); //电荷泵设置
+    OLED_WrCmd(0x14); //bit2，开启/关闭set(0x10) disable
+    OLED_WrCmd(0x20); //设置内存地址模式
+    OLED_WrCmd(0x02); //[1:0],00，列地址模式;01，行地址模式;10,页地址模式;默认10;
+    OLED_WrCmd(0xDA); //设置COM硬件引脚配置
+    OLED_WrCmd(0x12); //[5:4]配置
+
+    OLED_WrCmd(0x81); //对比度设置
+    OLED_WrCmd(BRIGHTNESS); //1~255;默认0X7F (亮度设置,越大越亮)
+    OLED_WrCmd(0xD9); //设置预充电周期
+    OLED_WrCmd(0xf1); //[3:0],PHASE 1;[7:4],PHASE 2;
+    OLED_WrCmd(0xDB); //设置VCOMH 电压倍率
+    OLED_WrCmd(0x30); //[6:4] 000,0.65*vcc;001,0.77*vcc;011,0.83*vcc;
+
+    OLED_WrCmd(0xA4); //全局显示开启;bit0:1,开启;0,关闭;(白屏/黑屏)
+    OLED_WrCmd(0xA6); //设置显示方式;bit0:1,反相显示;0,正常显示	    						   
+    OLED_WrCmd(0xAF); //开启显示	 
+
+    OLED_Fill(0,0,127,63, 0x00);  //初始清屏,不清会有意想不到的问题
+    OLED_Display_On();
+    OLED_CLS();
 }
 
 //画点 

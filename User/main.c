@@ -32,7 +32,45 @@ PROCESS(red_blink_process, "Red Blink");
 PROCESS(green_blink_process, "Green Blink");
 PROCESS(IWDG_Feed_process, "Timing to feed dog");
 AUTOSTART_PROCESSES(&IWDG_Feed_process);
-//AUTOSTART_PROCESSES(&red_blink_process, &green_blink_process);
+
+void BSP_Config(void)
+{
+    /* 初始化 */
+    clock_init();
+    USART1_Config(115200);
+    WiFi_Config();                       //初始化WiFi模块使用的接口和外设
+    OLED_Init();
+}
+
+
+int main(void)
+{	
+    BSP_Config();    
+    
+    OLED_ShowString(0,0,"SPI OLED");
+	OLED_ShowString(0,32,"Start OK!");
+	OLED_Refresh_Gram();//更新显示
+    ESP8266_STA_TCP_Client();
+    
+    IWDG_Start(2);  //wifi模块透传之后开启看门狗
+    
+    process_init();
+    process_start(&etimer_process,NULL);
+    autostart_start(autostart_processes);
+    process_start(&red_blink_process,NULL);
+    process_start(&green_blink_process,NULL);
+    
+    while (1)
+    {
+        do
+        {
+        }while (process_run()>0);
+    }
+}
+
+
+
+
 
 PROCESS_THREAD(red_blink_process, ev, data)
 {
@@ -82,36 +120,3 @@ PROCESS_THREAD(IWDG_Feed_process, ev, data)
     PROCESS_END();
 }
 
-
-/**
-  * @brief  主函数
-  * @param  无
-  * @retval 无
-  */
-int main(void)
-{	
-    /* 初始化 */
-    clock_init();
-    WiFi_Config();                       //初始化WiFi模块使用的接口和外设
-   
-    while(1);
-    
-    ESP8266_STA_TCP_Client();
-    IWDG_Start(2);  //wifi模块透传之后开启看门狗
-    
-    process_init();
-    process_start(&etimer_process,NULL);
-    autostart_start(autostart_processes);
-    process_start(&red_blink_process,NULL);
-    process_start(&green_blink_process,NULL);
-    
-    while (1)
-    {
-        do
-        {
-        }while (process_run()>0);
-    }
-}
-
-
-/*********************************************END OF FILE**********************/

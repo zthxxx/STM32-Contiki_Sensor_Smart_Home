@@ -43,43 +43,10 @@ char TCP_CILENT_PORT[] = "50000";
   */
 void WiFi_Config( void )
 {
-    uint16_t delaytime = 00;
 	WiFi_RST_INIT();
     WiFi_led_INIT();
- 	WiFi_USART1_INIT(115200); 
 	WiFi_USART2_INIT(115200); 
 	WiFi_NVIC_INIT();
-    SPI1_Initialization();
-    SPI2_Initialization();
-    
-
-    SPI1SendOneByte(0xcd);
-    SPI1SendOneByte(0xff);
-
-
-    sendUart1OneByte(0x01);
-    sendUart1OneByte(0x02);
-    sendUart1OneByte(0x03);
-    
-    while(1)
-    {
-        SPI1SendOneByte(0x01);
-        delay_us(delaytime);
-        SPI1SendOneByte(0x02);
-        delay_us(delaytime);
-        SPI1SendOneByte(0x03);
-        delay_us(delaytime);
-        SPI1SendOneByte(0x04);
-        delay_us(delaytime);
-        SPI1SendOneByte(0x04);
-        delay_us(delaytime);
-        GPIO_WriteBit(GPIOD, GPIO_Pin_2, (BitAction)!GPIO_ReadOutputDataBit(GPIOD, GPIO_Pin_2));
-    }
-    
-    OLED_Init();
-	OLED_ShowString(0,0,"SPI OLED");
-	OLED_ShowString(0,32,"Start OK!");
-	OLED_Refresh_Gram();//更新显示
 }
 
 
@@ -114,6 +81,29 @@ void NVIC_Configuration( void )
 	NVIC_Init(&NVIC_InitStructure);
 
 }
+void ESP8266_WIFI_GPIO_Config( void )
+{		
+    /*定义一个GPIO_InitTypeDef类型的结构体*/
+    GPIO_InitTypeDef GPIO_InitStructure;
 
+    /*开启GPIOA的外设时钟*/
+    RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOA, ENABLE ); 
+
+    /* 配置WiFi模块的片选（CH）引脚	复位重启（RST）引脚*/
+    /*选择要控制的GPIOA0（CH）引脚和GPIOA1（RST）引脚*/															   
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;	
+
+    /*设置引脚模式为通用推挽输出*/
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;   
+
+    /*设置引脚速率为50MHz */   
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
+
+    /*调用库函数，初始化GPIOA*/
+    GPIO_Init( GPIOA, &GPIO_InitStructure );	 
+
+    /*	*/
+    GPIO_ResetBits( GPIOA, GPIO_Pin_1 );// 拉低WiFi模块的复位重启引脚	
+}
 
 /*********************************************************end of file**************************************************/

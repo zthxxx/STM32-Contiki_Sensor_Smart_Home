@@ -3,7 +3,6 @@
 #include "wifi_config.h"
 
 
-
 /**
 *@brief SPI Initialization
 **/
@@ -29,10 +28,10 @@ void SPI1_Initialization(void)
     SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;//全双工通信
     SPI_InitStructure.SPI_Mode = SPI_Mode_Master;//做主机
     SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;//8位数据帧
-    SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;//空闲时为低电平
+    SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;//空闲时为低电平
     SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;//数据在第1个跳变沿被采集
     SPI_InitStructure.SPI_NSS = SPI_NSS_Hard;//CS脚为软件模式
-    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;//64分频
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;//64分频
     SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;//高字节在前
     SPI_InitStructure.SPI_CRCPolynomial = 7;
     SPI_Init(SPI1, &SPI_InitStructure);
@@ -81,10 +80,10 @@ void SPI2_Initialization(void)
     SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;//做从机只接收
     SPI_InitStructure.SPI_Mode = SPI_Mode_Slave;//做主机
     SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;//8位数据帧
-    SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;//空闲时为低电平
+    SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;//空闲时为低电平
     SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;//数据在第1个跳变沿被采集
     SPI_InitStructure.SPI_NSS = SPI_NSS_Hard;//CS脚为软件模式
-    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_64;//64分频
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;//64分频
     SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;//高字节在前
     SPI_InitStructure.SPI_CRCPolynomial = 7;
     SPI_Init(SPI2, &SPI_InitStructure);
@@ -104,7 +103,6 @@ void SPI2_Initialization(void)
     SPI_I2S_ClearITPendingBit(SPI2, SPI_I2S_IT_TXE);
     SPI_I2S_ClearITPendingBit(SPI2, SPI_I2S_IT_RXNE);
 }
-
 
 void SPI1SendOneByte(uint8_t byteData)
 {
