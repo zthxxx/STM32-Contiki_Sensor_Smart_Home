@@ -363,7 +363,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC;..\..\Hardware\MQ_2;..\..\Hardware\HC-SR501</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC;..\..\Hardware\MQ_2;..\..\Hardware\HC-SR501;..\..\Hardware\HC-SR04;..\..\User\TIMER;..\..\User\EXTI</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -596,6 +596,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\ADC\adc.c</FilePath>
             </File>
+            <File>
+              <FileName>timers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\TIMER\timers.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -666,6 +671,11 @@
               <FileType>5</FileType>
               <FilePath>..\..\Hardware\HC-SR501\HC-SR501_GPIO.txt</FilePath>
             </File>
+            <File>
+              <FileName>HC-SR04_GPIO.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Hardware\HC-SR04\HC-SR04_GPIO.txt</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -700,6 +710,11 @@
               <FileName>HC-SR501.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Hardware\HC-SR501\HC-SR501.c</FilePath>
+            </File>
+            <File>
+              <FileName>HC-SR04.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Hardware\HC-SR04\HC-SR04.c</FilePath>
             </File>
           </Files>
         </Group>

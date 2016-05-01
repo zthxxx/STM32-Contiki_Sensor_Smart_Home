@@ -11,8 +11,8 @@
 #define     ESP8266_Usart( fmt, ... )           USART2_printf ( USART2, fmt, ##__VA_ARGS__ ) 
 #define     PC_Usart( fmt, ... )                printf ( fmt, ##__VA_ARGS__ )
 
-#define     ESP8266_RST_HIGH_LEVEL()            GPIO_SetBits( WIFI_RST_GPIO_Side, WIFI_RST_GPIO_Pin )
-#define     ESP8266_RST_LOW_LEVEL()             GPIO_ResetBits( WIFI_RST_GPIO_Side, WIFI_RST_GPIO_Pin )
+#define     ESP8266_RST_HIGH_LEVEL()            GPIO_SetBits( WIFI_RST_GPIO_Port, WIFI_RST_GPIO_Pin )
+#define     ESP8266_RST_LOW_LEVEL()             GPIO_ResetBits( WIFI_RST_GPIO_Port, WIFI_RST_GPIO_Pin )
 
 
 void        ESP8266_Rst                         ( void );

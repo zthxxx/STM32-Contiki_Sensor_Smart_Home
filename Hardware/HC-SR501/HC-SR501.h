@@ -15,7 +15,7 @@
 //All rights reserved									  
 //////////////////////////////////////////////////////////////////////////////////
 #define HCSR501_GPIO_Pin  GPIO_Pin_5
-#define HCSR501_GPIO_Side GPIOB
+#define HCSR501_GPIO_Port GPIOB
 
 #define HCSR501_GPIO_Read() PBin(5)// PB5
 

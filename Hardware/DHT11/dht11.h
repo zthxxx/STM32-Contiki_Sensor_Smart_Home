@@ -21,7 +21,7 @@
 #define	DHT11_DQ_OUT    PBout(11) //数据端口	PA0 
 #define	DHT11_DQ_IN     PBin(11)  //数据端口	PA0 
 #define DHT11_GPIO_Pin  GPIO_Pin_11
-#define DHT11_GPIO_Side GPIOB
+#define DHT11_GPIO_Port GPIOB
 
 u8 DHT11_Init(void);//初始化DHT11
 u8 DHT11_Read_Data(u8 *temp,u8 *temp0,u8 *humi,u8 *humi0);//读取温湿度

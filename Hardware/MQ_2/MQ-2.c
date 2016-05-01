@@ -16,7 +16,7 @@ void MQ02_GPIO_Config()
 	//PA1 作为模拟通道输入引脚                         
 	GPIO_InitStructure.GPIO_Pin = MQ02_AO_GPIO_Pin;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AIN;		//模拟输入引脚
-	GPIO_Init(MQ02_AO_GPIO_Side, &GPIO_InitStructure);	
+	GPIO_Init(MQ02_AO_GPIO_Port, &GPIO_InitStructure);	
 }
 
 uint16_t MQ02_Read_Value()

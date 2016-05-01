@@ -99,10 +99,10 @@ void ESP8266_WIFI_GPIO_Config( void )
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz; 
 
     /*调用库函数，初始化GPIOA*/
-    GPIO_Init( WIFI_RST_GPIO_Side, &GPIO_InitStructure );	 
+    GPIO_Init( WIFI_RST_GPIO_Port, &GPIO_InitStructure );	 
 
     /*	*/
-    GPIO_ResetBits( WIFI_RST_GPIO_Side, WIFI_RST_GPIO_Pin );// 拉低WiFi模块的复位重启引脚	
+    GPIO_ResetBits( WIFI_RST_GPIO_Port, WIFI_RST_GPIO_Pin );// 拉低WiFi模块的复位重启引脚	
 }
 
 /*********************************************************end of file**************************************************/

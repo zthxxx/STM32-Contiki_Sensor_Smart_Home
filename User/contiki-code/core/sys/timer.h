@@ -75,7 +75,7 @@
 #define __TIMER_H__
 
 #include "sys/clock.h"
-
+#include "sys.h"
 /**
  * A timer.
  *

@@ -16,11 +16,14 @@
 #include "iwdg.h"
 #include "SPI.h"
 #include "delay.h"
+#include "timers.h"
+
 #include "oled.h"
 #include "dht11.h"
 #include "adc.h"
 #include "MQ-2.h"
 #include "HC-SR501.h"
+#include "HC-SR04.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -34,11 +37,12 @@
 #include "contiki_delay.h"
 
 
-#define __WIFI_MODULE_ON__
-#define __OLED_MODULE_ON__
-#define __DHT11_MODULE_ON__
-#define __MQ02_MODULE_ON__
+//#define __WIFI_MODULE_ON__
+//#define __OLED_MODULE_ON__
+//#define __DHT11_MODULE_ON__
+//#define __MQ02_MODULE_ON__
 #define __HCSR501_MODULE_ON__
+#define __HCSR04_MODULE_ON__
 
 PROCESS(red_blink_process, "Red Blink");
 PROCESS(green_blink_process, "Green Blink");
@@ -50,6 +54,7 @@ PROCESS(OLED_Show_Increment_process, "Show a increment num in OLED");
 PROCESS(DHT11_Read_Data_process, "DHT11 read temperature and humidity test");
 PROCESS(MQ02_Read_Value_process, "ADC read MQ02 value and print test");
 PROCESS(HCSR501_Read_Status_process, "Read status of is anyone here");
+PROCESS(HCSR04_Measure_Distance_process, "Measure distance with HC-SR04 UltrasonicWave rangefinder");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -71,19 +76,24 @@ void BSP_Config(void)
 #endif         
     
 #ifdef __DHT11_MODULE_ON__
-    DHT11_Init(); //初始化OLED模块使用的接口和外设
+    DHT11_Init(); 
 #endif   
 
 #ifdef __MQ02_MODULE_ON__
-    MQ02_Init(); //初始化OLED模块使用的接口和外设
+    MQ02_Init();
 #endif
     
 #ifdef __HCSR501_MODULE_ON__
-    HCSR501_Init(); //初始化OLED模块使用的接口和外设
+    HCSR501_Init();
+#endif
+
+#ifdef __HCSR04_MODULE_ON__
+    Timer2_Init(5000,(7200-1));   //10Khz的计数频率，计数到5000为500ms 
+	UltrasonicWave_Configuration();               //对超声波模块初始化
 #endif
 
 #ifdef __WIFI_MODULE_ON__
-    WiFi_Config(); //初始化WiFi模块使用的接口和外设
+    WiFi_Config(); 
     ESP8266_STA_TCP_Client();
 #endif    
     
@@ -119,6 +129,10 @@ int main(void)
 
 #ifdef __HCSR501_MODULE_ON__     
     process_start(&HCSR501_Read_Status_process,NULL);
+#endif
+
+#ifdef __HCSR04_MODULE_ON__     
+    process_start(&HCSR04_Measure_Distance_process,NULL);
 #endif
 
     while (1)
@@ -243,25 +257,38 @@ PROCESS_THREAD(HCSR501_Read_Status_process, ev, data)
     PROCESS_END();
 }
 
+PROCESS_THREAD(HCSR04_Measure_Distance_process, ev, data)
+{
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        UltrasonicWave_StartMeasure();
+        Contiki_etimer_DelayMS(800);
+    }
+    PROCESS_END();
+}
+
 PROCESS_THREAD(clock_test_process, ev, data)
 {
     static uint16_t i,start_count,end_count,diff;
-  PROCESS_BEGIN();
+    PROCESS_BEGIN();
 
-  printf("Clock delay test, (10,000 x i) cycles:\n");
-  i = 1;
-  while(i < 16) {
-    start_count = clock_time();                   // 记录开始timer
-    Delay_NOP_ms(10 * i);                       // 软件延时
-    end_count = clock_time();                     // 记录结束timer
-    diff = end_count - start_count;               // 计算差值，单位为tick
-    printf("Delayed %u \n%u ticks =~ %u ms\n", 10 * i, diff, diff * 10);
-    i++;
-  }
+    printf("Clock delay test, (10,000 x i) cycles:\n");
+    i = 1;
+    while(i<16)
+    {
+        start_count = clock_time();                   // 记录开始timer
+        Delay_NOP_ms(10 * i);                       // 软件延时
+        end_count = clock_time();                     // 记录结束timer
+        diff = end_count - start_count;               // 计算差值，单位为tick
+        printf("Delayed %u \n%u ticks =~ %u ms\n", 10 * i, diff, diff * 10);
+        i++;
+    }
 
-  printf("Done!\n");
+    printf("Done!\n");
 
-  PROCESS_END();
+    PROCESS_END();
 }
 
 PROCESS_THREAD(IWDG_Feed_process, ev, data)
