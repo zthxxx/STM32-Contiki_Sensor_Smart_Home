@@ -40,9 +40,9 @@ void DHT11_Rst(void)
 //等待DHT11的回应
 //返回1:未检测到DHT11的存在
 //返回0:存在
-u8 DHT11_Check(void) 	   
+uint8_t DHT11_Check(void) 	   
 {   
-	u8 retry=0;
+	uint8_t retry=0;
 	DHT11_IN();//SET INPUT	 
     while (DHT11_DQ_IN&&retry<100)//DHT11会拉低40~80us
 	{
@@ -61,9 +61,9 @@ u8 DHT11_Check(void)
 }
 //从DHT11读取一个位
 //返回值：1/0
-u8 DHT11_Read_Bit(void) 			 
+uint8_t DHT11_Read_Bit(void) 			 
 {
- 	u8 retry=0;
+ 	uint8_t retry=0;
 	while(DHT11_DQ_IN&&retry<100)//等待变为低电平
 	{
 		retry++;
@@ -81,9 +81,9 @@ u8 DHT11_Read_Bit(void)
 }
 //从DHT11读取一个字节
 //返回值：读到的数据
-u8 DHT11_Read_Byte(void)    
+uint8_t DHT11_Read_Byte(void)    
 {        
-    u8 i,dat;
+    uint8_t i,dat;
     dat=0;
 	for (i=0;i<8;i++) 
 	{
@@ -96,10 +96,10 @@ u8 DHT11_Read_Byte(void)
 //temp:温度值(范围:0~50°)
 //humi:湿度值(范围:20%~90%)
 //返回值：0,正常;1,读取失败
-u8 DHT11_Read_Data(u8 *temp,u8 *temp0,u8 *humi,u8 *humi0)    
+uint8_t DHT11_Read_Data(uint8_t *temp,uint8_t *temp0,uint8_t *humi,uint8_t *humi0)    
 {        
- 	u8 buf[5];
-	u8 i;
+ 	uint8_t buf[5];
+	uint8_t i;
     
     DHT11_Init();
     
@@ -123,7 +123,7 @@ u8 DHT11_Read_Data(u8 *temp,u8 *temp0,u8 *humi,u8 *humi0)
 //初始化DHT11的IO口 DQ 同时检测DHT11的存在
 //返回1:不存在
 //返回0:存在    	 
-u8 DHT11_Init(void)
+uint8_t DHT11_Init(void)
 {	 
  	GPIO_InitTypeDef  GPIO_InitStructure;
  	

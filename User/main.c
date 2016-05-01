@@ -9,8 +9,6 @@
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
-#include "wifi_config.h"
-#include "wifi_function.h"
 #include "bsp_SysTick.h"
 #include "dma.h"
 #include "iwdg.h"
@@ -19,12 +17,15 @@
 #include "timers.h"
 #include "timer4_cap.h"
 
+#include "wifi_config.h"
+#include "wifi_function.h"
 #include "oled.h"
 #include "dht11.h"
 #include "adc.h"
 #include "MQ-2.h"
 #include "HC-SR501.h"
 #include "HC-SR04.h"
+#include "BH1750.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -44,6 +45,7 @@
 #define __MQ02_MODULE_ON__
 #define __HCSR501_MODULE_ON__
 #define __HCSR04_MODULE_ON__
+#define __BH1750_MODULE_ON__
 
 PROCESS(red_blink_process, "Red Blink");
 PROCESS(green_blink_process, "Green Blink");
@@ -56,6 +58,7 @@ PROCESS(DHT11_Read_Data_process, "DHT11 read temperature and humidity test");
 PROCESS(MQ02_Read_Value_process, "ADC read MQ02 value and print test");
 PROCESS(HCSR501_Read_Status_process, "Read status of is anyone here");
 PROCESS(HCSR04_Measure_Distance_process, "Measure distance with HC-SR04 UltrasonicWave rangefinder");
+PROCESS(BH1750_Measure_Lumen_process, "Measure lumen with BH1750 Light Sensor");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -90,6 +93,11 @@ void BSP_Config(void)
 
 #ifdef __HCSR04_MODULE_ON__
 	UltrasonicWave_Configuration();               //对超声波模块初始化
+#endif
+
+#ifdef __BH1750_MODULE_ON__
+	BH1750_Init();               //对超声波模块初始化
+    BH1750_Start();
 #endif
 
 #ifdef __WIFI_MODULE_ON__
@@ -133,6 +141,10 @@ int main(void)
 
 #ifdef __HCSR04_MODULE_ON__     
     process_start(&HCSR04_Measure_Distance_process,NULL);
+#endif
+
+#ifdef __BH1750_MODULE_ON__     
+    process_start(&BH1750_Measure_Lumen_process,NULL);
 #endif
 
     while (1)
@@ -266,6 +278,18 @@ PROCESS_THREAD(HCSR04_Measure_Distance_process, ev, data)
         UltrasonicWave_StartMeasure();
         Contiki_etimer_DelayMS(200);
         printf("Ultrasonic distance : %d cm\r\n",UltrasonicWave_GetDistance());	//计算距离
+    }
+    PROCESS_END();
+}
+
+PROCESS_THREAD(BH1750_Measure_Lumen_process, ev, data)
+{
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        Contiki_etimer_DelayMS(500);
+        printf("Light sensor Lumen is : %.2f lx\r\n",BH1750_GetLumen());	//计算距离
     }
     PROCESS_END();
 }

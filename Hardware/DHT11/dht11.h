@@ -23,11 +23,11 @@
 #define DHT11_GPIO_Pin  GPIO_Pin_11
 #define DHT11_GPIO_Port GPIOB
 
-u8 DHT11_Init(void);//初始化DHT11
-u8 DHT11_Read_Data(u8 *temp,u8 *temp0,u8 *humi,u8 *humi0);//读取温湿度
-u8 DHT11_Read_Byte(void);//读出一个字节
-u8 DHT11_Read_Bit(void);//读出一个位
-u8 DHT11_Check(void);//检测是否存在DHT11
+uint8_t DHT11_Init(void);//初始化DHT11
+uint8_t DHT11_Read_Data(uint8_t *temp,uint8_t *temp0,uint8_t *humi,uint8_t *humi0);//读取温湿度
+uint8_t DHT11_Read_Byte(void);//读出一个字节
+uint8_t DHT11_Read_Bit(void);//读出一个位
+uint8_t DHT11_Check(void);//检测是否存在DHT11
 void DHT11_Rst(void);//复位DHT11    
 #endif
 
