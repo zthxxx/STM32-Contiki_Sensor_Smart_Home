@@ -68,7 +68,7 @@ HC-SR501_GND  <---> STM32_GND
 STM32 计时器中断驱动HC-SR04模块
 
 HC-SR04_Targ <---> STM32_A11
-HC-SR04_Echo <---> STM32_A12
+HC-SR04_Echo <---> STM32_B6
 HC-SR04_VCC  <---> STM32_5V
 HC-SR04_GND  <---> STM32_GND
 

@@ -363,7 +363,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC;..\..\Hardware\MQ_2;..\..\Hardware\HC-SR501;..\..\Hardware\HC-SR04;..\..\User\TIMER;..\..\User\EXTI</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC;..\..\Hardware\MQ_2;..\..\Hardware\HC-SR501;..\..\Hardware\HC-SR04;..\..\User\TIMER;..\..\User\EXTI;..\..\User\TIMER\TIM4-capture</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -600,6 +600,11 @@
               <FileName>timers.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\TIMER\timers.c</FilePath>
+            </File>
+            <File>
+              <FileName>timer4_cap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\TIMER\TIM4-capture\timer4_cap.c</FilePath>
             </File>
           </Files>
         </Group>

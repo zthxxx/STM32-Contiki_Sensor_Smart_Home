@@ -16,5 +16,6 @@
 
 
 void Timer2_Init(u16 autoReload,u16 psc); 
- 
+void Timer5_Init(u16 autoReload,u16 psc); 
+
 #endif

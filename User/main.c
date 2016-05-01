@@ -17,6 +17,7 @@
 #include "SPI.h"
 #include "delay.h"
 #include "timers.h"
+#include "timer4_cap.h"
 
 #include "oled.h"
 #include "dht11.h"
@@ -37,10 +38,10 @@
 #include "contiki_delay.h"
 
 
-//#define __WIFI_MODULE_ON__
-//#define __OLED_MODULE_ON__
-//#define __DHT11_MODULE_ON__
-//#define __MQ02_MODULE_ON__
+#define __WIFI_MODULE_ON__
+#define __OLED_MODULE_ON__
+#define __DHT11_MODULE_ON__
+#define __MQ02_MODULE_ON__
 #define __HCSR501_MODULE_ON__
 #define __HCSR04_MODULE_ON__
 
@@ -88,7 +89,6 @@ void BSP_Config(void)
 #endif
 
 #ifdef __HCSR04_MODULE_ON__
-    Timer2_Init(5000,(7200-1));   //10Khz的计数频率，计数到5000为500ms 
 	UltrasonicWave_Configuration();               //对超声波模块初始化
 #endif
 
@@ -264,7 +264,8 @@ PROCESS_THREAD(HCSR04_Measure_Distance_process, ev, data)
     while(1)
     {
         UltrasonicWave_StartMeasure();
-        Contiki_etimer_DelayMS(800);
+        Contiki_etimer_DelayMS(200);
+        printf("Ultrasonic distance : %d cm\r\n",UltrasonicWave_GetDistance());	//计算距离
     }
     PROCESS_END();
 }
