@@ -13,6 +13,7 @@ PROCESS(MQ02_Read_Value_process, "ADC read MQ02 value and print test");
 PROCESS(HCSR501_Read_Status_process, "Read status of is anyone here");
 PROCESS(HCSR04_Measure_Distance_process, "Measure distance with HC-SR04 UltrasonicWave rangefinder");
 PROCESS(BH1750_Measure_Lumen_process, "Measure lumen with BH1750 Light Sensor");
+PROCESS(RC522_Read_Card_process, "Read card ID and data with RC522 RFID");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -151,6 +152,44 @@ PROCESS_THREAD(BH1750_Measure_Lumen_process, ev, data)
     {
         Contiki_etimer_DelayMS(500);
         printf("Light sensor Lumen is : %.2f lx\r\n",BH1750_GetLumen());	//º∆À„æ‡¿Î
+    }
+    PROCESS_END();
+}
+
+PROCESS_THREAD(RC522_Read_Card_process, ev, data)
+{
+    unsigned char status,i;
+    unsigned int temp;
+    unsigned char g_ucTempbuf[20]; 
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        status = PcdRequest(PICC_REQALL,g_ucTempbuf);/*…®√Ëø®*/
+        if(status!=0)
+        {	
+            continue;
+        }
+        printf("ø®µƒ¿‡–Õ:");
+        for(i=0;i<2;i++)
+        {	
+            temp=g_ucTempbuf[i];
+            printf("%X",temp);					
+        }
+        printf("\r\n");
+        status = PcdAnticoll(g_ucTempbuf);/*∑¿≥Â◊≤*/ 
+        if(status!=0)
+        { 
+            continue;
+        }
+        printf("ø®µƒ–Ú∫≈");
+        for(i=0;i<4;i++)
+        {
+            temp=g_ucTempbuf[i];
+            printf("%X",temp);
+        }
+        printf("\r\n");
+        Contiki_etimer_DelayMS(500);
     }
     PROCESS_END();
 }

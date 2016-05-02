@@ -24,6 +24,7 @@
 #include "HC-SR501.h"
 #include "HC-SR04.h"
 #include "BH1750.h"
+#include "RC522.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -36,13 +37,7 @@
 #include <clock.h>
 #include "contiki_delay.h"
 
-#define __WIFI_MODULE_ON__          //WIFI模块
-#define __OLED_MODULE_ON__          //OLED显示屏
-#define __DHT11_MODULE_ON__         //温湿度传感器
-#define __MQ02_MODULE_ON__          //烟雾传感器
-#define __HCSR501_MODULE_ON__       //红外热释电人体传感器
-#define __HCSR04_MODULE_ON__        //超声波测距模块
-#define __BH1750_MODULE_ON__        //关照传感器
+
 
 
 PROCESS_NAME(red_blink_process);
@@ -57,7 +52,7 @@ PROCESS_NAME(MQ02_Read_Value_process);
 PROCESS_NAME(HCSR501_Read_Status_process);
 PROCESS_NAME(HCSR04_Measure_Distance_process);
 PROCESS_NAME(BH1750_Measure_Lumen_process);
-
+PROCESS_NAME(RC522_Read_Card_process);
 
 
 

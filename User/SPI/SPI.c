@@ -58,39 +58,35 @@ void SPI2_Initialization(void)
 {
     SPI_InitTypeDef  SPI_InitStructure;
     GPIO_InitTypeDef GPIO_InitStructure;
-    NVIC_InitTypeDef NVIC_InitStructure;
-    
+
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB | RCC_APB2Periph_AFIO, ENABLE);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
-    
-    /* NSS---->GPIO(LED) */
-    SPI_SSOutputCmd(SPI2, ENABLE);
 
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_14 | GPIO_Pin_15 ;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12 | GPIO_Pin_13 | GPIO_Pin_15 ;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 
-
-    /* SPI2 Config -------------------------------------------------------------*/
-    SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;//做从机只接收
-    SPI_InitStructure.SPI_Mode = SPI_Mode_Slave;//做主机
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_14 ;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    
+    SPI_SSOutputCmd(SPI2, ENABLE);
+    SPI_InitStructure.SPI_Direction = SPI_Direction_2Lines_FullDuplex;//全双工通信
+    SPI_InitStructure.SPI_Mode = SPI_Mode_Master;//做主机
     SPI_InitStructure.SPI_DataSize = SPI_DataSize_8b;//8位数据帧
-    SPI_InitStructure.SPI_CPOL = SPI_CPOL_High;//空闲时为低电平
-    SPI_InitStructure.SPI_CPHA = SPI_CPHA_2Edge;//数据在第1个跳变沿被采集
+    SPI_InitStructure.SPI_CPOL = SPI_CPOL_Low;//空闲时为低电平
+    SPI_InitStructure.SPI_CPHA = SPI_CPHA_1Edge;//数据在第1个跳变沿被采集
     SPI_InitStructure.SPI_NSS = SPI_NSS_Hard;//CS脚为软件模式
-    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_4;//64分频
+    SPI_InitStructure.SPI_BaudRatePrescaler = SPI_BaudRatePrescaler_16;//16分频
     SPI_InitStructure.SPI_FirstBit = SPI_FirstBit_MSB;//高字节在前
     SPI_InitStructure.SPI_CRCPolynomial = 7;
     SPI_Init(SPI2, &SPI_InitStructure);
 
-    NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
-    SPI_I2S_ITConfig(SPI2,SPI_I2S_IT_TXE,DISABLE);
-    SPI_I2S_ITConfig(SPI2,SPI_I2S_IT_RXNE,ENABLE);
+//    NVIC_IRQChannel_Configuration_Set(SPI2_IRQn, 0, 2, ENABLE);
+//    SPI_I2S_ITConfig(SPI2,SPI_I2S_IT_TXE,DISABLE);
+//    SPI_I2S_ITConfig(SPI2,SPI_I2S_IT_RXNE,ENABLE);
 
 
     /* Enable SPI2 */
@@ -155,6 +151,16 @@ uint8_t SPI2ReceiveOneByte(void)
     receiveByte = (uint8_t)SPI_I2S_ReceiveData(SPI2);
     return receiveByte;
 }
+
+
+uint8_t SPI2_WriteReadOneByte(uint8_t byteData)
+{
+	while((SPI2->SR&0X02)==0);		//等待发送区空	  
+	SPI2->DR=byteData;	 	//发送一个byte   
+	while((SPI2->SR&0X01)==0);//等待接收完一个byte  
+	return SPI2->DR;          	     //返回收到的数据			
+}
+
 
 /**
 * @brief This function handles SPI1 global interrupt.
