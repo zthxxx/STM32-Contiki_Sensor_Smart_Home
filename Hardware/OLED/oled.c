@@ -30,10 +30,15 @@ void OLED_GPIO_Config( void )
     
     /* DC <--> PB0   RST <--> PB10 */
     RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOB, ENABLE);
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_10 ;
+    GPIO_InitStructure.GPIO_Pin = OLED_RST_PIN;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-    GPIO_Init(GPIOB, &GPIO_InitStructure);
+    GPIO_Init(OLED_RST_PORT, &GPIO_InitStructure);
+    
+    GPIO_InitStructure.GPIO_Pin = OLED_DC_PIN;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+    GPIO_Init(OLED_DC_PORT, &GPIO_InitStructure);
 }
 
 /*******************一个字节数据写入***********************/

@@ -12,6 +12,20 @@
   
 #include "bsp_usart1.h"
 
+void USART1_NVIC_Configuration()
+{
+    NVIC_InitTypeDef NVIC_InitStructure; 
+
+	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;	 
+	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
+	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+	NVIC_Init(&NVIC_InitStructure);
+    
+}
+
+
+
  /**
   * @brief  USART1 GPIO 配置,工作模式配置。115200 8-N-1
   * @param  无
@@ -46,6 +60,7 @@ void USART1_Config(uint32_t BaudRate)
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 	USART_Init(USART1, &USART_InitStructure);
     /* 使能串口2接收中断 */
+    NVIC_IRQChannel_Configuration_Set(USART1_IRQn, 0, 0, ENABLE);
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
     
 	USART_Cmd(USART1, ENABLE);

@@ -2,6 +2,7 @@
 #define __TIMER4_CAP_H
 #include "sys.h"
 #include <stdio.h>
+#include "NVIC_CONFIG.H"
 
 extern uint32_t Channel_1_UpTime;	//捕获总高电平的时间
 

@@ -77,9 +77,7 @@ extern struct  STRUCT_USART1_1_Fram                                  //´®¿ÚÊý¾ÝÖ
 #define WIFI_RST_GPIO_Port GPIOA
 //* º¯Êý */
 #define WiFi_RST_INIT                  ESP8266_WIFI_GPIO_Config                //WiFiÊ¹ÓÃµÄESÒý½Å³õÊ¼»¯º¯Êý£¬ÍÆÍìÊä³ö 
-#define WiFi_USART1_INIT               USART1_Config              //WiFiÊ¹ÓÃµÄ´®¿Ú1³õÊ¼»¯º¯Êý£¬²¨ÌØÂÊ9600
-#define WiFi_USART2_INIT               USART2_Config              //WiFiÊ¹ÓÃµÄ´®¿Ú2³õÊ¼»¯º¯Êý£¬²¨ÌØÂÊ9600 
-#define WiFi_NVIC_INIT                 NVIC_Configuration         //NVICÖÐ¶ÏÅäÖÃ
+
 
 
 void WiFi_Config( void );

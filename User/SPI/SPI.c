@@ -10,7 +10,7 @@ void SPI1_Initialization(void)
 {
     SPI_InitTypeDef  SPI_InitStructure;
     GPIO_InitTypeDef GPIO_InitStructure;
-    NVIC_InitTypeDef NVIC_InitStructure;
+
     
     RCC_APB2PeriphClockCmd( RCC_APB2Periph_SPI1 | RCC_APB2Periph_GPIOA, ENABLE);
 
@@ -36,12 +36,8 @@ void SPI1_Initialization(void)
     SPI_InitStructure.SPI_CRCPolynomial = 7;
     SPI_Init(SPI1, &SPI_InitStructure);
 
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-    NVIC_InitStructure.NVIC_IRQChannel = SPI1_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 8;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_Init(&NVIC_InitStructure);
+
+    NVIC_IRQChannel_Configuration_Set(SPI1_IRQn, 8, 0, ENABLE);
     SPI_I2S_ITConfig(SPI1,SPI_I2S_IT_TXE,DISABLE);
     SPI_I2S_ITConfig(SPI1,SPI_I2S_IT_ERR,DISABLE);
     SPI_I2S_ITConfig(SPI1,SPI_I2S_IT_RXNE,DISABLE);
@@ -88,7 +84,6 @@ void SPI2_Initialization(void)
     SPI_InitStructure.SPI_CRCPolynomial = 7;
     SPI_Init(SPI2, &SPI_InitStructure);
 
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
     NVIC_InitStructure.NVIC_IRQChannel = SPI2_IRQn;
     NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
     NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;

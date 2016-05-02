@@ -18,7 +18,6 @@ void TIM4_Cap_Channel_1_Init(uint16_t arr, uint16_t psc)
 {
 	GPIO_InitTypeDef GPIO_InitStructure;
 	TIM_TimeBaseInitTypeDef TIM_TimeBaseStructure;
-	NVIC_InitTypeDef NVIC_InitStructure;
 
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);	//使能TIM4时钟
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);  //使能GPIOB时钟
@@ -44,13 +43,7 @@ void TIM4_Cap_Channel_1_Init(uint16_t arr, uint16_t psc)
 	TIM_ICInit(TIM4, &TIM4_ICInitStructure);
 
 	//中断分组初始化
-	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2); 
-	NVIC_InitStructure.NVIC_IRQChannel = TIM4_IRQn;  //TIM4中断
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;  //先占优先级1级
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;  //从优先级0级
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE; //IRQ通道被使能
-	NVIC_Init(&NVIC_InitStructure);   //根据NVIC_InitStruct中指定的参数初始化外设NVIC寄存器 
-
+    NVIC_IRQChannel_Configuration_Set(TIM4_IRQn, 0, 0, ENABLE);
 	TIM_ITConfig(TIM4, TIM_IT_CC1,ENABLE);   //不允许更新中断，允许CC1IE,CC2IE,CC3IE,CC4IE捕获中断	
 
 	TIM_Cmd(TIM4, ENABLE); 		//使能定时器4

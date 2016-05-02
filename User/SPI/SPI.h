@@ -9,7 +9,7 @@
 #include "dma.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
-
+#include "NVIC_CONFIG.H"
 
 void SPI1_Initialization(void);
 void SPI2_Initialization(void);

@@ -13,15 +13,17 @@
 //Copyright(C) 广州市星翼电子科技有限公司 2009-2019
 //All rights reserved									  
 //////////////////////////////////////////////////////////////////////////////////
- 
+
+#define DHT11_GPIO_Pin  GPIO_Pin_11
+#define DHT11_GPIO_Port GPIOB
 //IO方向设置
 //#define DHT11_IO_IN()  {GPIOB->CRH&=0XFFFF0FFF;GPIOB->CRH|=8<<12;}
 //#define DHT11_IO_OUT() {GPIOB->CRH&=0XFFFF0FFF;GPIOB->CRH|=3<<12;}
+
 ////IO操作函数											   
 #define	DHT11_DQ_OUT    PBout(11) //数据端口	PA0 
 #define	DHT11_DQ_IN     PBin(11)  //数据端口	PA0 
-#define DHT11_GPIO_Pin  GPIO_Pin_11
-#define DHT11_GPIO_Port GPIOB
+
 
 uint8_t DHT11_Init(void);//初始化DHT11
 uint8_t DHT11_Read_Data(uint8_t *temp,uint8_t *temp0,uint8_t *humi,uint8_t *humi0);//读取温湿度

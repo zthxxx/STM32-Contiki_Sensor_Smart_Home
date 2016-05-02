@@ -52,7 +52,7 @@ void USART2_Config(uint32_t BaudRate)
 	USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
 	
 	USART_Cmd(USART2, ENABLE);
-    SetUART2_NVIC_ISENABLE(1);
+    SetUART2_NVIC_ISENABLE(ENABLE);
 	USART2ReceiveHandler = ReceiveUSART2WifiCmdDelegate;
     MYDMA_Config(DMA1_Channel7,(u32)&USART2->DR,(u32)UART2_DMA_SendBuff,UART_SEND_DMA_BUF_LENTH);
 }
@@ -195,23 +195,9 @@ void USART2_printf( USART_TypeDef* USARTx, char *Data, ... )
 	}
 }
 
-void SetUART2_NVIC_ISENABLE(uint8_t isEnable)
+void SetUART2_NVIC_ISENABLE(FunctionalState isEnable)
 {
-    NVIC_InitTypeDef NVIC_InitStructure;
-    
-    NVIC_InitStructure.NVIC_IRQChannel = USART2_IRQn;
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority=3 ;//抢占优先级3
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 3;		//子优先级3
-    if(isEnable == 1)
-    {
-        NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;			//IRQ通道使能
-    }
-    else
-    {
-        NVIC_InitStructure.NVIC_IRQChannelCmd = DISABLE;			//IRQ通道使能
-    }
-	
-	NVIC_Init(&NVIC_InitStructure);	//根据指定的参数初始化VIC寄存器
+    NVIC_IRQChannel_Configuration_Set(USART2_IRQn, 3, 3, isEnable);
 }
 
 void sendUart2OneByte(uint8_t byteData)

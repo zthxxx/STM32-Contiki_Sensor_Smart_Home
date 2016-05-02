@@ -5,6 +5,7 @@
 #include "stdlib.h"
 #include <string.h>
 #include "stm32f10x.h"
+#include "NVIC_CONFIG.H"
 #include "bsp_usart1.h"
 #include "dma.h"
 
@@ -19,7 +20,7 @@ extern uint8_t *UART2_SendBuff;
 void USART2_Config(uint32_t BaudRate);
 void USART2_printf(USART_TypeDef* USARTx, char *Data, ...);
 void sendUart2OneByte(uint8_t byteData);
-void SetUART2_NVIC_ISENABLE(uint8_t isEnable);
+void SetUART2_NVIC_ISENABLE(FunctionalState isEnable);
 void ReceiveUSART2PacketDelegate(void);                	//串口中断服务程序
 void ReceiveUSART2WifiCmdDelegate(void);                //wifi串口中断服务程序
 void UART2_DMA_Send_Data(uint8_t *UART2_SendBuff, uint16_t DataSendLength);//UART2 DMA发送串

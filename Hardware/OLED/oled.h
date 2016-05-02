@@ -7,19 +7,18 @@
 #include "SPI.h"
 
 /* defines */
-#define     RCC_APB2Periph_OLED_PORT        RCC_APB2Periph_GPIOA
 
-#define     OLED_PORT                       GPIOA
-#define     OLED_DC_RES_PORT                GPIOB
+#define     OLED_RST_PORT                   GPIOB
 #define     OLED_RST_PIN                    GPIO_Pin_10
 
-#define     OLED_RST_L                      GPIO_ResetBits(GPIOB, OLED_RST_PIN)
-#define     OLED_RST_H                      GPIO_SetBits(GPIOB, OLED_RST_PIN)
+#define     OLED_RST_L                      GPIO_ResetBits(OLED_RST_PORT, OLED_RST_PIN)
+#define     OLED_RST_H                      GPIO_SetBits(OLED_RST_PORT, OLED_RST_PIN)
 
+#define     OLED_DC_PORT                    GPIOB
 #define     OLED_DC_PIN                     GPIO_Pin_0
 
-#define	    OLED_DC_L                       GPIO_ResetBits(GPIOB, OLED_DC_PIN);
-#define     OLED_DC_H                       GPIO_SetBits(GPIOB, OLED_DC_PIN);
+#define	    OLED_DC_L                       GPIO_ResetBits(OLED_DC_PORT, OLED_DC_PIN);
+#define     OLED_DC_H                       GPIO_SetBits(OLED_DC_PORT, OLED_DC_PIN);
 
 #define  	OLED_SCK_PIN					GPIO_Pin_5//对应SLK
 #define		OLED_SDA_PIN					GPIO_Pin_7
