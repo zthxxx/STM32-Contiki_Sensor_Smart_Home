@@ -158,38 +158,47 @@ PROCESS_THREAD(BH1750_Measure_Lumen_process, ev, data)
 
 PROCESS_THREAD(RC522_Read_Card_process, ev, data)
 {
-    unsigned char status,i;
-    unsigned int temp;
-    unsigned char g_ucTempbuf[20]; 
+    int8_t status;
+    uint8_t CardClassAndIDBuf[4];
+    uint32_t CardID;
+    static uint32_t LastCardID;
     static struct etimer et;
     PROCESS_BEGIN();
     while(1)
     {
-        status = PcdRequest(PICC_REQALL,g_ucTempbuf);/*…®√Ëø®*/
-        if(status!=0)
-        {	
-            continue;
-        }
-        printf("ø®µƒ¿‡–Õ:");
-        for(i=0;i<2;i++)
-        {	
-            temp=g_ucTempbuf[i];
-            printf("%X",temp);					
-        }
-        printf("\r\n");
-        status = PcdAnticoll(g_ucTempbuf);/*∑¿≥Â◊≤*/ 
-        if(status!=0)
-        { 
-            continue;
-        }
-        printf("ø®µƒ–Ú∫≈");
-        for(i=0;i<4;i++)
+        status = PcdRequest(PICC_REQALL,CardClassAndIDBuf);/*…®√Ëø®*/
+        if(status!=MI_OK)
         {
-            temp=g_ucTempbuf[i];
-            printf("%X",temp);
+            status = PcdRequest(PICC_REQALL,CardClassAndIDBuf);/*…®√Ëø®*/
         }
-        printf("\r\n");
-        Contiki_etimer_DelayMS(500);
+        if(status==MI_OK)
+        {            
+            status = PcdAnticoll(CardClassAndIDBuf);/*∑¿≥Â◊≤*/ 
+            if(status==MI_OK)
+            {
+                CardID = (uint32_t)CardClassAndIDBuf[0];
+                CardID += (uint32_t)CardClassAndIDBuf[1]<<8;
+                CardID += (uint32_t)CardClassAndIDBuf[2]<<16;
+                CardID += (uint32_t)CardClassAndIDBuf[3]<<24;
+                if(LastCardID != CardID)
+                {
+                    LastCardID = CardID;
+                    
+                    printf("ø®µƒ–Ú∫≈:");
+                    printf("%8X",CardID);					
+                    printf("\r\n");
+                }
+            }
+            else
+            {
+                LastCardID = 0;
+            }
+        }
+        else
+        {
+            LastCardID = 0;
+        }
+        Contiki_etimer_DelayMS(200);
     }
     PROCESS_END();
 }

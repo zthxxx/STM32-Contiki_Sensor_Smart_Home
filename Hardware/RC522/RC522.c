@@ -2,16 +2,21 @@
 #include <string.h> 
 #include "spi.h"
 #define MAXRLEN 18  
-extern unsigned char RevBuffer[30];                 
+              
+
+unsigned char  DefaultKey[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; 
+unsigned char g_ucTempbuf[20];    
+unsigned char RevBuffer[30];  
+unsigned char SerBuffer[20]; 
 
 void RC522_Init(void)
 {
-    RC522_GPIO_Config();
-    SPI2_Initialization();
-    PcdReset();
-    PcdAntennaOff(); 
-    PcdAntennaOn();  
-    M500PcdConfigISOType( 'A' );
+    RC522_GPIO_Config();        //引脚初始化
+    SPI2_Initialization();      //SPI初始化
+    PcdReset();                 //复位模块   
+    PcdAntennaOff();            //关闭天线
+    PcdAntennaOn();             //打开天线
+    M500PcdConfigISOType( 'A' );//设置工作方式
 }
 
 
@@ -47,25 +52,19 @@ void RC522_GPIO_Config(void)
 /////////////////////////////////////////////////////////////////////
 char PcdRequest(unsigned char req_code,unsigned char *pTagType)
 {
-   char status;  
+   signed char status;  
    unsigned int  unLen;
    unsigned char ucComMF522Buf[MAXRLEN]; 
-//  unsigned char xTest ;
+    
    ClearBitMask(Status2Reg,0x08);
    WriteRawRC(BitFramingReg,0x07);
 
-//  xTest = ReadRawRC(BitFramingReg);
-//  if(xTest == 0x07 )
- //   { LED_GREEN  =0 ;}
- // else {LED_GREEN =1 ;while(1){}}
    SetBitMask(TxControlReg,0x03);
  
    ucComMF522Buf[0] = req_code;
 
    status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,1,ucComMF522Buf,&unLen);
-//     if(status  == MI_OK )
-//   { LED_GREEN  =0 ;}
-//   else {LED_GREEN =1 ;}
+
    if ((status == MI_OK) && (unLen == 0x10))
    {    
        *pTagType     = ucComMF522Buf[0];
@@ -84,7 +83,7 @@ char PcdRequest(unsigned char req_code,unsigned char *pTagType)
 /////////////////////////////////////////////////////////////////////  
 char PcdAnticoll(unsigned char *pSnr)
 {
-    char status;
+    signed char status;
     unsigned char i,snr_check=0;
     unsigned int  unLen;
     unsigned char ucComMF522Buf[MAXRLEN]; 
@@ -121,7 +120,7 @@ char PcdAnticoll(unsigned char *pSnr)
 /////////////////////////////////////////////////////////////////////
 char PcdSelect(unsigned char *pSnr)
 {
-    char status;
+    signed char status;
     unsigned char i;
     unsigned int  unLen;
     unsigned char ucComMF522Buf[MAXRLEN]; 
@@ -160,7 +159,7 @@ char PcdSelect(unsigned char *pSnr)
 /////////////////////////////////////////////////////////////////////               
 char PcdAuthState(unsigned char auth_mode,unsigned char addr,unsigned char *pKey,unsigned char *pSnr)
 {
-    char status;
+    signed char status;
     unsigned int  unLen;
     unsigned char i,ucComMF522Buf[MAXRLEN]; 
 
@@ -188,7 +187,7 @@ char PcdAuthState(unsigned char auth_mode,unsigned char addr,unsigned char *pKey
 ///////////////////////////////////////////////////////////////////// 
 char PcdRead(unsigned char addr,unsigned char *pData)
 {
-    char status;
+    signed char status;
     unsigned int  unLen;
     unsigned char i,ucComMF522Buf[MAXRLEN]; 
 
@@ -217,7 +216,7 @@ char PcdRead(unsigned char addr,unsigned char *pData)
 /////////////////////////////////////////////////////////////////////                  
 char PcdWrite(unsigned char addr,unsigned char *pData)
 {
-    char status;
+    signed char status;
     unsigned int  unLen;
     unsigned char i,ucComMF522Buf[MAXRLEN]; 
     
@@ -313,48 +312,25 @@ char PcdReset(void)
     return MI_OK;
 }
 //////////////////////////////////////////////////////////////////////
-//设置RC632的工作方式 
+//设置RC522的工作方式 
 //////////////////////////////////////////////////////////////////////
-char M500PcdConfigISOType(unsigned char type)
+signed char M500PcdConfigISOType(unsigned char type)
 {
    if (type == 'A')                     //ISO14443_A
    { 
        ClearBitMask(Status2Reg,0x08);
 
- /*     WriteRawRC(CommandReg,0x20);    //as default   
-       WriteRawRC(ComIEnReg,0x80);     //as default
-       WriteRawRC(DivlEnReg,0x0);      //as default
-	   WriteRawRC(ComIrqReg,0x04);     //as default
-	   WriteRawRC(DivIrqReg,0x0);      //as default
-	   WriteRawRC(Status2Reg,0x0);//80    //trun off temperature sensor
-	   WriteRawRC(WaterLevelReg,0x08); //as default
-       WriteRawRC(ControlReg,0x20);    //as default
-	   WriteRawRC(CollReg,0x80);    //as default
-*/
        WriteRawRC(ModeReg,0x3D);//3F
-/*	   WriteRawRC(TxModeReg,0x0);      //as default???
-	   WriteRawRC(RxModeReg,0x0);      //as default???
-	   WriteRawRC(TxControlReg,0x80);  //as default???
 
-	   WriteRawRC(TxSelReg,0x10);      //as default???
-   */
        WriteRawRC(RxSelReg,0x86);//84
- //      WriteRawRC(RxThresholdReg,0x84);//as default
- //      WriteRawRC(DemodReg,0x4D);      //as default
 
- //      WriteRawRC(ModWidthReg,0x13);//26
        WriteRawRC(RFCfgReg,0x7F);   //4F
-	/*   WriteRawRC(GsNReg,0x88);        //as default???
-	   WriteRawRC(CWGsCfgReg,0x20);    //as default???
-       WriteRawRC(ModGsCfgReg,0x20);   //as default???
-*/
+
    	   WriteRawRC(TReloadRegL,30);//tmoLength);// TReloadVal = 'h6a =tmoLength(dec) 
 	   WriteRawRC(TReloadRegH,0);
        WriteRawRC(TModeReg,0x8D);
 	   WriteRawRC(TPrescalerReg,0x3E);
-	   
 
-  //     PcdSetTmo(106);
 	   Delay_NOP_ms(10);
        PcdAntennaOn();
    }
@@ -388,7 +364,6 @@ u8 ReadRawRC(unsigned char Address)
 void WriteRawRC(unsigned char Address, unsigned char value)
 {  
     u8   ucAddr;
-//	u8 tmp;
 
 	CLR_SPI_CS;
     ucAddr = ((Address<<1)&0x7E);
@@ -436,7 +411,7 @@ char PcdComMF522(unsigned char Command,
                  unsigned char *pOutData, 
                  unsigned int  *pOutLenBit)
 {
-    char status = MI_ERR;
+    signed char status = MI_ERR;
     unsigned char irqEn   = 0x00;
     unsigned char waitFor = 0x00;
     unsigned char lastBits;
@@ -468,9 +443,8 @@ char PcdComMF522(unsigned char Command,
     
     if (Command == PCD_TRANSCEIVE)
     {    SetBitMask(BitFramingReg,0x80);  }
-    
-//    i = 600;//根据时钟频率调整，操作M1卡最大等待时间25ms
-    i = 2000;
+
+    i = 2000;//根据时钟频率调整，操作M1卡最大等待时间25ms
     do 
     {
          n = ReadRawRC(ComIrqReg);
@@ -552,7 +526,7 @@ void PcdAntennaOff()
 /////////////////////////////////////////////////////////////////////                 
 char PcdValue(unsigned char dd_mode,unsigned char addr,unsigned char *pValue)
 {
-    char status;
+    signed char status;
     unsigned int  unLen;
     unsigned char ucComMF522Buf[MAXRLEN]; 
     
@@ -568,8 +542,7 @@ char PcdValue(unsigned char dd_mode,unsigned char addr,unsigned char *pValue)
     if (status == MI_OK)
     {
         memcpy(ucComMF522Buf, pValue, 4);
- //       for (i=0; i<16; i++)
- //       {    ucComMF522Buf[i] = *(pValue+i);   }
+
         CalulateCRC(ucComMF522Buf,4,&ucComMF522Buf[4]);
         unLen = 0;
         status = PcdComMF522(PCD_TRANSCEIVE,ucComMF522Buf,6,ucComMF522Buf,&unLen);
@@ -600,9 +573,9 @@ char PcdValue(unsigned char dd_mode,unsigned char addr,unsigned char *pValue)
 //          goaladdr[IN]：目标地址
 //返    回: 成功返回MI_OK
 /////////////////////////////////////////////////////////////////////
-char PcdBakValue(unsigned char sourceaddr, unsigned char goaladdr)
+signed char PcdBakValue(unsigned char sourceaddr, unsigned char goaladdr)
 {
-    char status;
+    signed char status;
     unsigned int  unLen;
     unsigned char ucComMF522Buf[MAXRLEN]; 
 

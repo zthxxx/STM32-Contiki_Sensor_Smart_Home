@@ -42,27 +42,21 @@
 #include "ProcessTask.h"
 
 
-#define __WIFI_MODULE_ON__          //WIFI模块
-#define __OLED_MODULE_ON__          //OLED显示屏
-#define __DHT11_MODULE_ON__         //温湿度传感器
-#define __MQ02_MODULE_ON__          //烟雾传感器
-#define __HCSR501_MODULE_ON__       //红外热释电人体传感器
-#define __HCSR04_MODULE_ON__        //超声波测距模块
-#define __BH1750_MODULE_ON__        //关照传感器
+//#define __WIFI_MODULE_ON__          //WIFI模块
+//#define __OLED_MODULE_ON__          //OLED显示屏
+//#define __DHT11_MODULE_ON__         //温湿度传感器
+//#define __MQ02_MODULE_ON__          //烟雾传感器
+//#define __HCSR501_MODULE_ON__       //红外热释电人体传感器
+//#define __HCSR04_MODULE_ON__        //超声波测距模块
+//#define __BH1750_MODULE_ON__        //关照传感器
 #define __RC522_MODULE_ON__         //RFID读卡器
 
 
 
 
 
-unsigned char  DefaultKey[6] = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}; 
-unsigned char g_ucTempbuf[20];    
-unsigned char MLastSelectedSnr[4];
-unsigned char RevBuffer[30];  
-unsigned char SerBuffer[20]; 
 
-unsigned char  da1[16] = {0x12,0x34,0x56,0x78,0xED,0xCB,0xA9,0x87,0x12,0x34,0x56,0x78,0x01,0xFE,0x01,0xFE};
-unsigned char  da2[4]  = {0x00,0,0,0x01};
+
 
 
 
@@ -78,6 +72,7 @@ void BSP_Config(void)
     LED_GPIO_Config();
     USART1_Config(115200);
     USART2_Config(115200);
+    printf("Start Contiki OS\r\n");
     
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设

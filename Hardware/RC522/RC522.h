@@ -17,7 +17,7 @@ char PcdAuthState(unsigned char auth_mode,unsigned char addr,unsigned char *pKey
 char PcdRead(unsigned char addr,unsigned char *pData);     
 char PcdWrite(unsigned char addr,unsigned char *pData);    
 char PcdValue(unsigned char dd_mode,unsigned char addr,unsigned char *pValue);   
-char PcdBakValue(unsigned char sourceaddr, unsigned char goaladdr);                                 
+signed char PcdBakValue(unsigned char sourceaddr, unsigned char goaladdr);                             
 char PcdHalt(void);
 char PcdComMF522(unsigned char Command, 
                  unsigned char *pInData, 
@@ -29,11 +29,10 @@ void WriteRawRC(unsigned char Address,unsigned char value);
 unsigned char ReadRawRC(unsigned char Address); 
 void SetBitMask(unsigned char reg,unsigned char mask); 
 void ClearBitMask(unsigned char reg,unsigned char mask); 
-char M500PcdConfigISOType(unsigned char type);
+signed char M500PcdConfigISOType(unsigned char type);
 void CALL_isr_UART(void);
 void iccardcode(void);
-char PcdBakValue(unsigned char sourceaddr, unsigned char goaladdr);
-char PcdValue(unsigned char dd_mode,unsigned char addr,unsigned char *pValue);
+
 /////////////////////////////////////////////////////////////////////
 //MF522ÃüÁî×Ö
 /////////////////////////////////////////////////////////////////////
