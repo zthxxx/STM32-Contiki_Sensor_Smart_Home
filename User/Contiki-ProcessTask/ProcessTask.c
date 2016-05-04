@@ -235,7 +235,7 @@ PROCESS_THREAD(cJSON_test_process, ev, data)
 
     /* Our "Video" datatype: */
 	root=cJSON_CreateObject();	
-
+    
 	cJSON_AddItemToObject(root, "Device", cJSON_CreateString("ContikiOS on STM32F103"));
     cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0xFFFF));
     cJSON_AddItemToObject(root, "InfoType", cJSON_CreateString("Information"));
