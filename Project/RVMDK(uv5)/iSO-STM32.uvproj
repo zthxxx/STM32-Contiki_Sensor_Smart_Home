@@ -10,6 +10,7 @@
       <TargetName>WF-ESP8266</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
+      <pArmCC>5050106::V5.05 update 1 (build 106)::ARMCC</pArmCC>
       <TargetOption>
         <TargetCommonOption>
           <Device>STM32F103ZE</Device>
@@ -363,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC;..\..\Hardware\MQ_2;..\..\Hardware\HC-SR501;..\..\Hardware\HC-SR04;..\..\User\TIMER;..\..\User\EXTI;..\..\User\TIMER\TIM4-capture;..\..\User\I2C;..\..\Hardware\BH1750;..\..\User\NVIC;..\..\User\Contiki-ProcessTask;..\..\Hardware\RC522</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC;..\..\Hardware\MQ_2;..\..\Hardware\HC-SR501;..\..\Hardware\HC-SR04;..\..\User\TIMER;..\..\User\EXTI;..\..\User\TIMER\TIM4-capture;..\..\User\I2C;..\..\Hardware\BH1750;..\..\User\NVIC;..\..\User\Contiki-ProcessTask;..\..\Hardware\RC522;..\..\Libraries\cJSON;..\..\Libraries\Malloc</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -605,6 +606,11 @@
               <FileName>NVIC_CONFIG.C</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\NVIC\NVIC_CONFIG.C</FilePath>
+            </File>
+            <File>
+              <FileName>cJSON.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Libraries\cJSON\cJSON.c</FilePath>
             </File>
           </Files>
         </Group>

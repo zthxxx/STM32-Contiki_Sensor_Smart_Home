@@ -17,6 +17,7 @@
 #include "timers.h"
 #include "timer4_cap.h"
 #include "NVIC_CONFIG.H"
+#include "cJSON.h"
 
 #include "wifi_config.h"
 #include "wifi_function.h"
@@ -42,6 +43,8 @@
 #include "ProcessTask.h"
 
 
+#define __CJSON_LIB_TEST__          //cJSON lib 输出测试
+//#define __CLOCK_TICK_TEST__         //NOP 与 TCIK 数量测试
 //#define __WIFI_MODULE_ON__          //WIFI模块
 //#define __OLED_MODULE_ON__          //OLED显示屏
 //#define __DHT11_MODULE_ON__         //温湿度传感器
@@ -49,16 +52,7 @@
 //#define __HCSR501_MODULE_ON__       //红外热释电人体传感器
 //#define __HCSR04_MODULE_ON__        //超声波测距模块
 //#define __BH1750_MODULE_ON__        //关照传感器
-#define __RC522_MODULE_ON__         //RFID读卡器
-
-
-
-
-
-
-
-
-
+//#define __RC522_MODULE_ON__         //RFID读卡器
 
 
 
@@ -68,12 +62,13 @@ void BSP_Config(void)
     /* 初始化 */
     delay_init();
     clock_init();
+
     NVIC_Configuration_Init();
     LED_GPIO_Config();
     USART1_Config(115200);
     USART2_Config(115200);
     printf("Start Contiki OS\r\n");
-    
+
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
     OLED_ShowString(0,0,"SPI OLED");
@@ -116,6 +111,7 @@ void BSP_Config(void)
 
 int main(void)
 {	
+
     BSP_Config();    
     
     IWDG_Start(2);  //wifi模块透传之后开启看门狗
@@ -124,7 +120,15 @@ int main(void)
     autostart_start(autostart_processes);
     process_start(&red_blink_process,NULL);
     process_start(&green_blink_process,NULL);
-    //process_start(&clock_test_process,NULL);
+    
+#ifdef __CJSON_LIB_TEST__
+    process_start(&cJSON_test_process,NULL);
+#endif
+    
+#ifdef __CLOCK_TICK_TEST__
+    process_start(&clock_test_process,NULL);
+#endif    
+
 #ifdef __OLED_MODULE_ON__
     process_start(&OLED_Show_Increment_process,NULL);
 #endif

@@ -5,6 +5,7 @@ PROCESS(red_blink_process, "Red Blink");
 PROCESS(green_blink_process, "Green Blink");
 PROCESS(IWDG_Feed_process, "Timing to feed dog");
 PROCESS(clock_test_process, "Test system delay");
+PROCESS(cJSON_test_process, "Test cJSON Lib");
 
 PROCESS(wifi_send_test_process, "Wifi module send data test");
 PROCESS(OLED_Show_Increment_process, "Show a increment num in OLED");
@@ -224,6 +225,28 @@ PROCESS_THREAD(clock_test_process, ev, data)
 
     PROCESS_END();
 }
+
+PROCESS_THREAD(cJSON_test_process, ev, data)
+{
+
+    cJSON *root;
+//    static struct etimer et;
+    PROCESS_BEGIN();
+
+    /* Our "Video" datatype: */
+	root=cJSON_CreateObject();	
+
+	cJSON_AddItemToObject(root, "Device", cJSON_CreateString("ContikiOS on STM32F103"));
+    cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0xFFFF));
+    cJSON_AddItemToObject(root, "InfoType", cJSON_CreateString("Information"));
+	cJSON_AddItemToObject(root, "DataName", cJSON_CreateNull());
+    
+    printf("%s\n",cJSON_PrintUnformatted(root));
+    cJSON_Delete(root);	
+
+    PROCESS_END();
+}
+
 
 PROCESS_THREAD(IWDG_Feed_process, ev, data)
 {
