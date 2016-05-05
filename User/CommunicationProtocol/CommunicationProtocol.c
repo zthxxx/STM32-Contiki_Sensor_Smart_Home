@@ -84,7 +84,7 @@ void SendOneCommunicationPacket(Uint8PacketNode* uint8PacketNodePointer)
     protocol_PacketLength = packet[5];      //长度所在位置
     protocol_PacketLength += packet[6]>>8;
     
-    sendUart1BytesBuf(protocol_PacketLength + PROTOCOL_PACKET_CONSISTENT_LENGTH, packet);
+    sendUartByteBuf(packet, protocol_PacketLength + PROTOCOL_PACKET_CONSISTENT_LENGTH);
 }
 
 

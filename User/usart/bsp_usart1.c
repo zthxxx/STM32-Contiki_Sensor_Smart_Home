@@ -97,7 +97,7 @@ void sendUart1OneByte(uint8_t byteData)//串口发送信息,通过查询方式发送一个字符
 	while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//等待发送结束
 }
 
-void sendUart1BytesBuf(uint16_t bytesBufLength,uint8_t* bytesBuf)
+void sendUart1BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 {    
 	while(bytesBufLength--)
 	{

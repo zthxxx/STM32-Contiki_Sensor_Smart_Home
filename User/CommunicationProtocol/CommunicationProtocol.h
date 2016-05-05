@@ -12,9 +12,13 @@
 #include "bsp_usart2.h"
 #include "FIFO.h"
 
+
+
 #define PROTOCOL_PACKET_CONSISTENT_LENGTH   8
 #define PROTOCOL_PACKET_RESENT_COUNT_MAX    2
 #define PROTOCOL_PACKET_RESENT_TIME_MAX     1
+
+#define sendUartByteBuf   sendUart1BytesBuf
 
 typedef enum
 { 

@@ -69,7 +69,7 @@ void BSP_Config(void)
     LED_GPIO_Config();
     USART1_Config(115200);
     USART2_Config(115200);
-    printf("Start Contiki OS\r\n");
+//    printf("Start Contiki OS\r\n");
     
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
