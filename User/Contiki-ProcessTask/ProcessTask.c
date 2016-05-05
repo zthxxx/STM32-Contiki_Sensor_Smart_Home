@@ -6,6 +6,7 @@ PROCESS(green_blink_process, "Green Blink");
 PROCESS(IWDG_Feed_process, "Timing to feed dog");
 PROCESS(clock_test_process, "Test system delay");
 PROCESS(cJSON_test_process, "Test cJSON Lib");
+PROCESS(Communication_Protocol_Send_process, "Communication Protocol Send packet data");
 
 PROCESS(wifi_send_test_process, "Wifi module send data test");
 PROCESS(OLED_Show_Increment_process, "Show a increment num in OLED");
@@ -230,6 +231,7 @@ PROCESS_THREAD(cJSON_test_process, ev, data)
 {
 
     cJSON *root;
+    char* out;
 //    static struct etimer et;
     PROCESS_BEGIN();
 
@@ -240,13 +242,29 @@ PROCESS_THREAD(cJSON_test_process, ev, data)
     cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0xFFFF));
     cJSON_AddItemToObject(root, "InfoType", cJSON_CreateString("Information"));
 	cJSON_AddItemToObject(root, "DataName", cJSON_CreateNull());
-    
-    printf("%s\n",cJSON_PrintUnformatted(root));
-    cJSON_Delete(root);	
 
+    out = cJSON_PrintUnformatted(root);
+    cJSON_Delete(root);	
+    //printf("%s", out);
+    AssembleCommunicationPacket(FunctionWord_StartUP, strlen(out), (uint8_t*)out);
+    
     PROCESS_END();
 }
 
+
+PROCESS_THREAD(Communication_Protocol_Send_process, ev, data)
+{
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        SendUnsentPacketQueue();
+        SendUnackedPacketQueue();
+        IncreaseUnackedPacketQueueResendTime();
+        Contiki_etimer_DelayMS(50);
+    }
+    PROCESS_END();
+}
 
 PROCESS_THREAD(IWDG_Feed_process, ev, data)
 {

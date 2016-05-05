@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC;..\..\Hardware\MQ_2;..\..\Hardware\HC-SR501;..\..\Hardware\HC-SR04;..\..\User\TIMER;..\..\User\EXTI;..\..\User\TIMER\TIM4-capture;..\..\User\I2C;..\..\Hardware\BH1750;..\..\User\NVIC;..\..\User\Contiki-ProcessTask;..\..\Hardware\RC522;..\..\Libraries\cJSON;..\..\Libraries\Malloc</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC;..\..\Hardware\MQ_2;..\..\Hardware\HC-SR501;..\..\Hardware\HC-SR04;..\..\User\TIMER;..\..\User\EXTI;..\..\User\TIMER\TIM4-capture;..\..\User\I2C;..\..\Hardware\BH1750;..\..\User\NVIC;..\..\User\Contiki-ProcessTask;..\..\Hardware\RC522;..\..\Libraries\cJSON;..\..\Libraries\Malloc;..\..\User\CommunicationProtocol;..\..\User\FIFO</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -611,6 +611,16 @@
               <FileName>cJSON.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Libraries\cJSON\cJSON.c</FilePath>
+            </File>
+            <File>
+              <FileName>CommunicationProtocol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\CommunicationProtocol\CommunicationProtocol.c</FilePath>
+            </File>
+            <File>
+              <FileName>FIFO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\FIFO\FIFO.c</FilePath>
             </File>
           </Files>
         </Group>

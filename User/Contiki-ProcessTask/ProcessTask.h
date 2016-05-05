@@ -15,6 +15,7 @@
 #include "timer4_cap.h"
 #include "NVIC_CONFIG.H"
 #include "cJSON.h"
+#include "CommunicationProtocol.h"
 
 #include "wifi_config.h"
 #include "wifi_function.h"
@@ -44,6 +45,7 @@
 PROCESS_NAME(red_blink_process);
 PROCESS_NAME(green_blink_process);
 PROCESS_NAME(IWDG_Feed_process);
+PROCESS_NAME(Communication_Protocol_Send_process);
 PROCESS_NAME(clock_test_process);
 PROCESS_NAME(cJSON_test_process);
 

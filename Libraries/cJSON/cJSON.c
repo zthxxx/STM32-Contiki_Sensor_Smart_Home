@@ -52,7 +52,7 @@ static char* cJSON_strdup(const char* str)
       char* copy;
 
       len = strlen(str) + 1;
-      if (!(copy = (char*)cJSON_malloc(len))) return 0;
+      if ((copy = (char*)cJSON_malloc(len))==false) return 0;
       memcpy(copy,str,len);
       return copy;
 }
@@ -275,7 +275,7 @@ static char *print_string_ptr(const char *str,printbuffer *p)
 		strcpy(out,"\"\"");
 		return out;
 	}
-	ptr=str;while ((token=*ptr) && ++len) {if (strchr("\"\\\b\f\n\r\t",token)) len++; else if (token<32) len+=5;ptr++;}
+	ptr=str;while (((token=*ptr)==true) && ++len) {if (strchr("\"\\\b\f\n\r\t",token)) len++; else if (token<32) len+=5;ptr++;}
 	
 	if (p)	out=ensure(p,len+3);
 	else	out=(char*)cJSON_malloc(len+3);
@@ -420,7 +420,7 @@ static const char *parse_array(cJSON *item,const char *value)
 	while (*value==',')
 	{
 		cJSON *new_item;
-		if (!(new_item=cJSON_New_Item())) return 0; 	/* memory fail */
+		if ((new_item=cJSON_New_Item())==false) return 0; 	/* memory fail */
 		child->next=new_item;new_item->prev=child;child=new_item;
 		value=skip(parse_value(child,skip(value+1)));
 		if (!value) return 0;	/* memory fail */
@@ -532,7 +532,7 @@ static const char *parse_object(cJSON *item,const char *value)
 	while (*value==',')
 	{
 		cJSON *new_item;
-		if (!(new_item=cJSON_New_Item()))	return 0; /* memory fail */
+		if ((new_item=cJSON_New_Item())==false)	return 0; /* memory fail */
 		child->next=new_item;new_item->prev=child;child=new_item;
 		value=skip(parse_string(child,skip(value+1)));
 		if (!value) return 0;
