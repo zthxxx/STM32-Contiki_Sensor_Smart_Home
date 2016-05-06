@@ -48,6 +48,7 @@ PROCESS_NAME(IWDG_Feed_process);
 PROCESS_NAME(Communication_Protocol_Send_process);
 PROCESS_NAME(clock_test_process);
 PROCESS_NAME(cJSON_test_process);
+PROCESS_NAME(CommunicatProtocol_Send_Sensor_Data);
 
 PROCESS_NAME(wifi_send_test_process);
 PROCESS_NAME(OLED_Show_Increment_process);

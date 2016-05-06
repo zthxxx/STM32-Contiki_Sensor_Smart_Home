@@ -18,7 +18,8 @@
 #define PROTOCOL_PACKET_RESENT_COUNT_MAX    2
 #define PROTOCOL_PACKET_RESENT_TIME_MAX     1
 
-#define sendUartByteBuf   sendUart1BytesBuf
+#define sendUartByteBuf   UART2_DMA_Send_Data
+//#define sendUartByteBuf   sendUart1BytesBuf
 
 typedef enum
 { 

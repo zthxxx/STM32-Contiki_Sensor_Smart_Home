@@ -82,7 +82,7 @@ void SendOneCommunicationPacket(Uint8PacketNode* uint8PacketNodePointer)
     if(!uint8PacketNodePointer)return;
     packet = uint8PacketNodePointer->packet;
     protocol_PacketLength = packet[5];      //长度所在位置
-    protocol_PacketLength += packet[6]>>8;
+    protocol_PacketLength += packet[6]<<8;
     
     sendUartByteBuf(packet, protocol_PacketLength + PROTOCOL_PACKET_CONSISTENT_LENGTH);
 }
@@ -217,8 +217,8 @@ void AssembleCommunicationPacket(FunctionWord_TypeDef FunctionWord, uint16_t JSO
     assembledPacketBuf = (uint8_t *)malloc(protocol_PacketLength * sizeof(uint8_t));
     
     memcpy(assembledPacketBuf,Protocol_PacketStratData,2);
-    memcpy(assembledPacketBuf + 2,&FunctionWord,1);
-    memcpy(assembledPacketBuf + 3,protocol_PacketSendIndexBytes,2);
+    memcpy(assembledPacketBuf + 2,protocol_PacketSendIndexBytes,2);
+    memcpy(assembledPacketBuf + 4,&FunctionWord,1);
     memcpy(assembledPacketBuf + 5,protocol_DataLengthBytes,2);
     memcpy(assembledPacketBuf + 7,JSONMessageData,JSONMessageDataLength);
     
