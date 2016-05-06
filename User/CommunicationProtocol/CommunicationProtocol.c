@@ -142,6 +142,17 @@ void DeletPacketQueueConditionalItem(Uint8PacketQueue* PacketQueueHandle, bool (
         uint8PacketNodePointer = uint8PacketNodePointer->next;
     }
 }
+bool UnackedPacketFree(Uint8PacketNode* uint8PacketNodePointer)
+{
+    if(uint8PacketNodePointer)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
 
 bool UnackedPacketRetimeAndRecountCondition(Uint8PacketNode* uint8PacketNodePointer)
 {
@@ -172,6 +183,7 @@ bool UnackedPacketAckIndexCondition(Uint8PacketNode* uint8PacketNodePointer)
 void SendUnackedPacketQueue()
 {    
     DeletPacketQueueConditionalItem(UnackedPacketQueueHandle, UnackedPacketRetimeAndRecountCondition);
+    DeletPacketQueueConditionalItem(UnackedPacketQueueHandle, UnackedPacketFree);
 }
 
 void IncreaseUnackedPacketQueueResendTime()

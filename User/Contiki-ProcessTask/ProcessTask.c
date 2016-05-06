@@ -167,7 +167,6 @@ PROCESS_THREAD(HCSR04_Measure_Distance_process, ev, data)
 
 PROCESS_THREAD(BH1750_Measure_Lumen_process, ev, data)
 {
-    cJSON *root;char* cJSONout;
     float lightIntensity;
     static struct etimer et;
     PROCESS_BEGIN();
@@ -176,25 +175,12 @@ PROCESS_THREAD(BH1750_Measure_Lumen_process, ev, data)
         Contiki_etimer_DelayMS(500);
         lightIntensity = BH1750_GetLumen();
         lightIntensityGlobalData = lightIntensity;
-//        printf("Light sensor Lumen is : %.2f lx\r\n",BH1750_GetLumen());	
-        
-//        root=cJSON_CreateObject();	
-
-//        cJSON_AddItemToObject(root, "Device", cJSON_CreateString("BH1750  Light Sensor"));
-//        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0xFFFF));
-//        cJSON_AddItemToObject(root, "InfoType", cJSON_CreateString("Data"));
-//        cJSON_AddItemToObject(root, " LightIntensity", cJSON_CreateNumber(BH1750_GetLumen()));
-
-//        cJSONout = cJSON_PrintUnformatted(root);
-//        cJSON_Delete(root);	
-//        AssembleCommunicationPacket(FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
     }
     PROCESS_END();
 }
 
 PROCESS_THREAD(RC522_Read_Card_process, ev, data)
 {
-    cJSON *root;char* cJSONout;
     int8_t status;
     uint8_t CardClassAndIDBuf[4];
     uint32_t CardID;
@@ -221,18 +207,6 @@ PROCESS_THREAD(RC522_Read_Card_process, ev, data)
                 {
                     LastCardID = CardID;
                     CardID_GlobalData = CardID;
-//                    printf("Card ID : %X",CardID);
-
-//                    root=cJSON_CreateObject();	
-//    
-//                    cJSON_AddItemToObject(root, "Device", cJSON_CreateString("RC522 RFID Card Reader"));
-//                    cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0xFFFF));
-//                    cJSON_AddItemToObject(root, "InfoType", cJSON_CreateString("Data"));
-//                    cJSON_AddItemToObject(root, "Card_ID", cJSON_CreateNumber(CardID));
-
-//                    cJSONout = cJSON_PrintUnformatted(root);
-//                    cJSON_Delete(root);	
-//                    AssembleCommunicationPacket(FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
                 }
             }
             else
@@ -287,7 +261,7 @@ PROCESS_THREAD(cJSON_test_process, ev, data)
     cJSONout = cJSON_PrintUnformatted(root);
     cJSON_Delete(root);	
     AssembleCommunicationPacket(FunctionWord_StartUP, strlen(cJSONout), (uint8_t*)cJSONout);
-    
+    free(cJSONout);
     PROCESS_END();
 }
 
@@ -313,7 +287,10 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);	
+        printf("%d\r\n",strlen(cJSONout));
+        printf("%s\r\n",cJSONout);
         AssembleCommunicationPacket(FunctionWord_StartUP, strlen(cJSONout), (uint8_t*)cJSONout);
+        free(cJSONout);
         Contiki_etimer_DelayMS(1000);
     }
     PROCESS_END();

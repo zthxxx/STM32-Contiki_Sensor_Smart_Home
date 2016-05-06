@@ -45,7 +45,7 @@
 
 
 #define __COMMUNICAT_PROTOCOL__     //发送队列
-#define __COMMUNICAT_PROTOCOL_SENSOR_DATA__
+#define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
 //#define __CJSON_LIB_TEST__          //cJSON lib 输出测试
 //#define __CLOCK_TICK_TEST__         //NOP 与 TCIK 数量测试
 #define __WIFI_MODULE_ON__          //WIFI模块开启
@@ -119,7 +119,7 @@ int main(void)
 
     BSP_Config();    
     
-    IWDG_Start(3);  //wifi模块透传之后开启看门狗
+    IWDG_Start(2);  //wifi模块透传之后开启看门狗
     
     process_init();
     autostart_start(autostart_processes);
