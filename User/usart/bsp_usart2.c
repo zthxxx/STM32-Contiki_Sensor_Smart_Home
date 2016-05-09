@@ -6,8 +6,8 @@
 #include "wifi_config.h"
 
 USART2_Receive_Handler USART2ReceiveHandler;
-uint8_t UART2_DMA_SendBuff[UART_SEND_DMA_BUF_LENTH];
-uint8_t *UART2_SendBuff;
+uint8_t USART2_DMA_SendBuff[USART2_SEND_DMA_BUF_LENTH];
+
 
 /*
  * 函数名：USART2_Config
@@ -52,9 +52,9 @@ void USART2_Config(uint32_t BaudRate)
 	USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
 	
 	USART_Cmd(USART2, ENABLE);
-    SetUART2_NVIC_ISENABLE(ENABLE);
+    SetUSART2_NVIC_ISENABLE(ENABLE);
 	USART2ReceiveHandler = ReceiveUSART2WifiCmdDelegate;
-    MYDMA_Config(DMA1_Channel7,(u32)&USART2->DR,(u32)UART2_DMA_SendBuff,UART_SEND_DMA_BUF_LENTH);
+    MYDMA_Config(USART2_DMA_Channel,(u32)&USART2->DR,(u32)USART2_DMA_SendBuff,ENABLE,USART2_SEND_DMA_BUF_LENTH);
 }
 
 
@@ -195,9 +195,9 @@ void USART2_printf( USART_TypeDef* USARTx, char *Data, ... )
 	}
 }
 
-void SetUART2_NVIC_ISENABLE(FunctionalState isEnable)
+void SetUSART2_NVIC_ISENABLE(FunctionalState isEnable)
 {
-    NVIC_IRQChannel_Configuration_Set(USART2_IRQn, 3, 3, isEnable);
+    NVIC_IRQChannel_Configuration_Set(USART2_IRQn, 1, 0, isEnable);
 }
 
 void sendUart2OneByte(uint8_t byteData)
@@ -207,11 +207,11 @@ void sendUart2OneByte(uint8_t byteData)
 	while(USART_GetFlagStatus(USART2,USART_FLAG_TC)!=SET);//等待发送结束
 }
 
-void UART2_DMA_Send_Data(uint8_t *UART2_SendBuff, uint16_t DataSendLength)
+void USART2_DMA_Send_Data(uint8_t *USART2_SendBuff, uint16_t DataSendLength)
 {
-    memcpy(UART2_DMA_SendBuff,UART2_SendBuff,DataSendLength);
+    memcpy(USART2_DMA_SendBuff,USART2_SendBuff,DataSendLength);
     USART_DMACmd(USART2,USART_DMAReq_Tx,ENABLE); //串口向dma发出请求
-    UART2_TXD_DMA_Enable(DataSendLength);
+    USART2_TXD_DMA_Enable(DataSendLength);
 }
 
 

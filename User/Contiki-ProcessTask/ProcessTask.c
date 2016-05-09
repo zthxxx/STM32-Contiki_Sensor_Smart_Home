@@ -62,18 +62,19 @@ PROCESS_THREAD(green_blink_process, ev, data)
 
 PROCESS_THREAD(wifi_send_test_process, ev, data)
 {
+    uint8_t *USART2_SendBuff;
     static struct etimer et;
     PROCESS_BEGIN();
     while(1)
     {
         
         Contiki_etimer_DelayMS(500);
-        UART2_SendBuff = " asdfafasdf";
-        UART2_DMA_Send_Data(UART2_SendBuff, 11);
+        USART2_SendBuff = " asdfafasdf";
+        USART2_DMA_Send_Data(USART2_SendBuff, 11);
         
         Contiki_etimer_DelayMS(500);        
-        UART2_SendBuff = " 21398416hy";
-        UART2_DMA_Send_Data(UART2_SendBuff, 11);
+        USART2_SendBuff = " 21398416hy";
+        USART2_DMA_Send_Data(USART2_SendBuff, 11);
     }
     PROCESS_END();
 }
@@ -287,8 +288,6 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);	
-        printf("%d\r\n",strlen(cJSONout));
-        printf("%s\r\n",cJSONout);
         AssembleCommunicationPacket(FunctionWord_StartUP, strlen(cJSONout), (uint8_t*)cJSONout);
         free(cJSONout);
         Contiki_etimer_DelayMS(1000);

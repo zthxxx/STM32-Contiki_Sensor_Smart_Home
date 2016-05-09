@@ -402,7 +402,7 @@ void ESP8266_STA_TCP_Client ( void )
     while(!ESP8266_TransparentTransmission());
     USART_ITConfig(USART2, USART_IT_IDLE, DISABLE);
     USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
-    SetUART2_NVIC_ISENABLE(ENABLE);
+    SetUSART2_NVIC_ISENABLE(ENABLE);
     USART2ReceiveHandler = ReceiveUSART2PacketDelegate;
     
     IS_WIFI_LOG_DEBUG && PC_Usart ( "Change into Transparent Transmission\r\n");

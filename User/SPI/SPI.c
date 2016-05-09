@@ -37,7 +37,7 @@ void SPI1_Initialization(void)
     SPI_Init(SPI1, &SPI_InitStructure);
 
 
-    NVIC_IRQChannel_Configuration_Set(SPI1_IRQn, 8, 0, ENABLE);
+    NVIC_IRQChannel_Configuration_Set(SPI1_IRQn, 3, 1, ENABLE);
     SPI_I2S_ITConfig(SPI1,SPI_I2S_IT_TXE,DISABLE);
     SPI_I2S_ITConfig(SPI1,SPI_I2S_IT_ERR,DISABLE);
     SPI_I2S_ITConfig(SPI1,SPI_I2S_IT_RXNE,DISABLE);
@@ -84,7 +84,7 @@ void SPI2_Initialization(void)
     SPI_InitStructure.SPI_CRCPolynomial = 7;
     SPI_Init(SPI2, &SPI_InitStructure);
 
-//    NVIC_IRQChannel_Configuration_Set(SPI2_IRQn, 0, 2, ENABLE);
+//    NVIC_IRQChannel_Configuration_Set(SPI2_IRQn, 2, 0, ENABLE);
 //    SPI_I2S_ITConfig(SPI2,SPI_I2S_IT_TXE,DISABLE);
 //    SPI_I2S_ITConfig(SPI2,SPI_I2S_IT_RXNE,ENABLE);
 

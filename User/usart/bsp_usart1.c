@@ -12,16 +12,13 @@
   
 #include "bsp_usart1.h"
 
-void USART1_NVIC_Configuration()
-{
-    NVIC_InitTypeDef NVIC_InitStructure; 
 
-	NVIC_InitStructure.NVIC_IRQChannel = USART1_IRQn;	 
-	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-	NVIC_Init(&NVIC_InitStructure);
-    
+uint8_t USART1_DMA_SendBuff[USART1_SEND_DMA_BUF_LENTH];
+
+
+void USART1_NVIC_Configuration(FunctionalState isEnable)
+{
+    NVIC_IRQChannel_Configuration_Set(USART1_IRQn, 3, 0, isEnable);
 }
 
 
@@ -60,10 +57,11 @@ void USART1_Config(uint32_t BaudRate)
 	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
 	USART_Init(USART1, &USART_InitStructure);
     /* 使能串口2接收中断 */
-    NVIC_IRQChannel_Configuration_Set(USART1_IRQn, 0, 0, ENABLE);
-	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
-    
-	USART_Cmd(USART1, ENABLE);
+	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);	
+    USART_Cmd(USART1, ENABLE);
+    USART1_NVIC_Configuration(ENABLE);
+    MYDMA_Config(USART1_DMA_Channel,(u32)&USART1->DR,(u32)USART1_DMA_SendBuff,ENABLE,USART1_SEND_DMA_BUF_LENTH);
+
 }
 
 
@@ -105,6 +103,12 @@ void sendUart1BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 	}
 }
 
+void USART1_DMA_Send_Data(uint8_t *USART1_SendBuff, uint16_t DataSendLength)
+{
+    memcpy(USART1_DMA_SendBuff,USART1_SendBuff,DataSendLength);
+    USART_DMACmd(USART1,USART_DMAReq_Tx,ENABLE); //串口向dma发出请求
+    USART1_TXD_DMA_Enable(DataSendLength);
+}
 
   /*******************************************************************************
 * Function Name  : USART1_IRQHandler
