@@ -18,11 +18,15 @@
 #define PROTOCOL_PACKET_RESENT_COUNT_MAX    2
 #define PROTOCOL_PACKET_RESENT_TIME_MAX     1
 
-//#define sendUartByteBuf   USART2_DMA_Send_Data
+//使用串口1或者2发送  
 #define sendUartByteBuf   USART1_DMA_Send_Data
 
-typedef enum
+//#define sendUartByteBuf   USART2_DMA_Send_Data
+
+
+typedef enum FunctionWord_TypeDef
 { 
+    FunctionWord_Null           = 0x00,
     FunctionWord_Handshake      = 0xF0,
     FunctionWord_Acknowledgement, 
     FunctionWord_RegisterDevice,
@@ -34,10 +38,21 @@ typedef enum
     FunctionWord_Shutdown
 }FunctionWord_TypeDef;
 
+typedef struct PacketBlock
+{
+    uint8_t PacketHead[2];
+    uint16_t PacketIndex;
+    FunctionWord_TypeDef PacketFunctionWord;
+    uint16_t PacketJSONDataLength;
+    uint8_t* PacketJSONData;
+    uint8_t PacketCheckSum;
+}PacketBlock;
+
 
 typedef struct Uint8PacketNode
 {
     uint8_t* packet;
+    PacketBlock* packetBlock;
     struct Uint8PacketNode* next;
     uint16_t index;
     uint8_t resendCount;
@@ -54,16 +69,14 @@ typedef struct Uint8PacketQueue
 
 
 Uint8PacketQueue* CreatUint8PacketQueue(void);
-void Uint8PacketQueuePushData(Uint8PacketQueue* Uint8PacketQueueHandle,uint8_t* packet);
-void Uint8PacketQueuePush(Uint8PacketQueue* Uint8PacketQueueHandle,Uint8PacketNode* Uint8PacketNodePointer);
-Uint8PacketNode* Uint8PacketQueuePop(Uint8PacketQueue* Uint8PacketQueueHandle);
 
 void SendUnsentPacketQueue(void);
 void SendUnackedPacketQueue(void);
 void IncreaseUnackedPacketQueueResendTime(void);
-void DeleteAckedIndexPacket(uint16_t packetAckedIndex);
-void AssembleCommunicationPacket(FunctionWord_TypeDef FunctionWord, uint16_t JSONMessageDataLength,uint8_t* JSONMessageData);
 
+void AssembleProtocolPacketPushSendQueue(FunctionWord_TypeDef FunctionWord, uint16_t JSONMessageDataLength,uint8_t* JSONMessageData);
+void PushReceiveByteDataIntoReceiveQueue(uint8_t streamByteData);
+void LoadReceiveQueueByteToPacketBlock(void);
 
 
 #endif
