@@ -9,6 +9,7 @@
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
+#include "bsp_usart3.h"
 #include "bsp_SysTick.h"
 #include "dma.h"
 #include "iwdg.h"
@@ -71,6 +72,7 @@ void BSP_Config(void)
     LED_GPIO_Config();
     USART1_Config(115200);
     USART2_Config(115200);
+    USART3_Config(115200);
     printf("Start Contiki OS\r\n");
     
 #ifdef __OLED_MODULE_ON__

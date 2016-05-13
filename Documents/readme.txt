@@ -44,7 +44,7 @@ OLED_DIN  --- STM32_A7(SPI1_MOSI)
 OLED_CLK  --- STM32_A5(SPI1_SCK)
 OLED_CS   --- STM32_A4(SPI1_NSS)
 OLED_DC   --- STM32_B0
-OLED_RES  --- STM32_B10
+OLED_RES  --- STM32_C0
 
 SPI_DataSize_8b
 SPI_CPOL_High
@@ -56,7 +56,7 @@ SPI_FirstBit_MSB
 STM32 驱动DHT11模块
 
 1) 引脚连接:
-DHT11_OUT <---> STM32_B11
+DHT11_OUT <---> STM32_C1
 DHT11_+   <---> STM32_3V3
 DHT11_-   <---> STM32_GNG
 *************************************************/

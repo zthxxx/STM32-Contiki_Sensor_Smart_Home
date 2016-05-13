@@ -63,16 +63,18 @@ void MYDMA_Enable(DMA_Channel_TypeDef* DMA_CHx, u16 bufferSize)
 
 void USART1_TXD_DMA_Enable(u16 bufferSize)
 {
- 	MYDMA_Enable(USART1_DMA_Channel,bufferSize);//DMA通道的DMA缓存的大小
+ 	MYDMA_Enable(USART1_TX_DMA_Channel,bufferSize);//DMA通道的DMA缓存的大小
 }
 
- 
 void USART2_TXD_DMA_Enable(u16 bufferSize)
 {
- 	MYDMA_Enable(USART2_DMA_Channel,bufferSize);//DMA通道的DMA缓存的大小
+ 	MYDMA_Enable(USART2_TX_DMA_Channel,bufferSize);//DMA通道的DMA缓存的大小
 }
 
-
+void USART3_TXD_DMA_Enable(u16 bufferSize)
+{
+ 	MYDMA_Enable(USART3_TX_DMA_Channel,bufferSize);//DMA通道的DMA缓存的大小
+}
 
 
 
