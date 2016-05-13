@@ -622,6 +622,11 @@
               <FileType>1</FileType>
               <FilePath>..\..\User\FIFO\FIFO.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_usart3.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\USART\bsp_usart3.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

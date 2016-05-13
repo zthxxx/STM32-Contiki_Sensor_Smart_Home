@@ -8,8 +8,8 @@
 
 /* defines */
 
-#define     OLED_RST_PORT                   GPIOB
-#define     OLED_RST_PIN                    GPIO_Pin_10
+#define     OLED_RST_PORT                   GPIOC
+#define     OLED_RST_PIN                    GPIO_Pin_0
 
 #define     OLED_RST_L                      GPIO_ResetBits(OLED_RST_PORT, OLED_RST_PIN)
 #define     OLED_RST_H                      GPIO_SetBits(OLED_RST_PORT, OLED_RST_PIN)
