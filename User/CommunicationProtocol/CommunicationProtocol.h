@@ -20,8 +20,8 @@
 
 //使用串口1或者2发送  
 //#define sendUartByteBuf   USART1_DMA_Send_Data
-//#define sendUartByteBuf   USART2_DMA_Send_Data
-#define sendUartByteBuf   E30TTLUART_SendBytesData
+#define sendUartByteBuf   USART2_DMA_Send_Data
+//#define sendUartByteBuf   E30TTLUART_SendBytesData
 
 typedef enum FunctionWord_TypeDef
 { 

@@ -517,14 +517,14 @@ void DealWithReceivePacketQueue()
             }
             else
             {
-                packetBlock = AssembleCommunicationStruct(FunctionWord_Acknowledgement, 0, NULL);
-                packetBlock->PacketIndex = ReceivedPacketNodePointer->index;
-                assembledPacketBuf = ResolvePacketStructIntoBytes(packetBlock);
-                
-                uint8PacketNodePointer = CreatUint8PacketNode(assembledPacketBuf, NULL);
-                uint8PacketNodePointer->resendTime = PROTOCOL_PACKET_RESENT_TIME_MAX;
-                uint8PacketNodePointer->resendCount = PROTOCOL_PACKET_RESENT_COUNT_MAX;
-                Uint8PacketQueuePush(UnackedPacketQueueHandle, uint8PacketNodePointer);
+//                packetBlock = AssembleCommunicationStruct(FunctionWord_Acknowledgement, 0, NULL);
+//                packetBlock->PacketIndex = ReceivedPacketNodePointer->index;
+//                assembledPacketBuf = ResolvePacketStructIntoBytes(packetBlock);
+//                
+//                uint8PacketNodePointer = CreatUint8PacketNode(assembledPacketBuf, NULL);
+//                uint8PacketNodePointer->resendTime = PROTOCOL_PACKET_RESENT_TIME_MAX;
+//                uint8PacketNodePointer->resendCount = PROTOCOL_PACKET_RESENT_COUNT_MAX;
+//                Uint8PacketQueuePush(UnackedPacketQueueHandle, uint8PacketNodePointer);
                 
                 DealWithReceivePacketBlock(ReceivedPacketNodePointer->packetBlock);
                 
