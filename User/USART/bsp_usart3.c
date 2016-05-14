@@ -66,21 +66,34 @@ void USART3_Config(uint32_t BaudRate)
 }
 
 
+void ChangeUSART3BaudRate(uint32_t BaudRate, FunctionalState ReceiveITState)
+{
+    USART_InitTypeDef USART_InitStructure;
+    /* USART3 mode config */
+	USART_InitStructure.USART_BaudRate = BaudRate;
+	USART_InitStructure.USART_WordLength = USART_WordLength_8b;
+	USART_InitStructure.USART_StopBits = USART_StopBits_1;
+	USART_InitStructure.USART_Parity = USART_Parity_No ;
+	USART_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+	USART_InitStructure.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
+	USART_Init(USART3, &USART_InitStructure);
+    USART_ITConfig(USART3, USART_IT_RXNE, ReceiveITState);	
+    USART_Cmd(USART3, ENABLE);
+}
 
 
-
-void sendUSART3OneByte(uint8_t byteData)//串口发送信息,通过查询方式发送一个字符
+void SendUSART3OneByte(uint8_t byteData)//串口发送信息,通过查询方式发送一个字符
 {
     USART_ClearFlag(USART3,USART_FLAG_TC);//先清除一下发送中断标志位，会解决第一个字节丢失的问题。
 	USART_SendData(USART3, byteData);
 	while(USART_GetFlagStatus(USART3,USART_FLAG_TC)!=SET);//等待发送结束
 }
 
-void sendUSART3BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
+void SendUSART3BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 {    
 	while(bytesBufLength--)
 	{
-		sendUSART3OneByte(*(bytesBuf++));
+		SendUSART3OneByte(*(bytesBuf++));
 	}
 }
 
@@ -105,7 +118,7 @@ void USART3_IRQHandler(void)
 	{
         USART_ClearITPendingBit(USART3,USART_IT_RXNE); //清除中断标志
 		receiveByte = USART_ReceiveData(USART3);//(USART3->DR);		//读取接收到的数据
-//        sendUSART3OneByte(receiveByte);
+//        SendUSART3OneByte(receiveByte);
 	}
 }
 

@@ -31,6 +31,7 @@
 #include "HC-SR04.h"
 #include "BH1750.h"
 #include "RC522.h"
+#include "E30TTLUART.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -58,7 +59,7 @@
 #define __HCSR04_MODULE_ON__        //超声波测距模块
 #define __BH1750_MODULE_ON__        //光照传感器
 #define __RC522_MODULE_ON__         //RFID读卡器
-
+#define __E30TTLUART_MODULE_ON__    //E30无线串口模块
 
 
 
@@ -105,6 +106,11 @@ void BSP_Config(void)
 
 #ifdef __RC522_MODULE_ON__
 	RC522_Init();
+#endif
+
+#ifdef __E30TTLUART_MODULE_ON__
+	E30TTLUART_Init();
+    E30TTLUART_Config(0x0000,0x50,DISABLE);
 #endif
 
 #ifdef __WIFI_MODULE_ON__

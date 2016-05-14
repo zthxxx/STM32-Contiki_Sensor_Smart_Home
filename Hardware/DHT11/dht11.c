@@ -34,7 +34,7 @@ void DHT11_Rst(void)
 	DHT11_Out(); 	//SET OUTPUT
     DHT11_DQ_OUT=0; 	//拉低DQ
     Delay_NOP_ms(50);    	//拉低至少18ms
-    DHT11_DQ_OUT=0; 	//DQ=1 
+    DHT11_DQ_OUT=1; 	//DQ=1 
 	Delay_NOP_us(60);     	//主机拉高20~40us
 }
 //等待DHT11的回应

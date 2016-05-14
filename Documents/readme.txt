@@ -128,6 +128,19 @@ STM32 硬件SPI2驱动RC522模块
 8--RC522_3.3V<--->STM32_3V3
 *************************************************/
 
+/*************************************************
+STM32 USART3驱动E30TTLUART模块
+
+E30TTLUART_AUX  <---> STM32_B7
+E30TTLUART_M0   <---> STM32_B8
+E30TTLUART_M1   <---> STM32_B9
+E30TTLUART_RXD  <---> STM32_B10(USART3_TX)
+E30TTLUART_TXD  <---> STM32_B11(USART3_RX)
+E30TTLUART_VCC  <---> STM32_3V3
+E30TTLUART_GND  <---> STM32_GNG
+*************************************************/
+
+
 
 
 

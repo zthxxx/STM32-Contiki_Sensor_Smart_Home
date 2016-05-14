@@ -27,6 +27,7 @@
 #include "HC-SR04.h"
 #include "BH1750.h"
 #include "RC522.h"
+#include "E30TTLUART.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
