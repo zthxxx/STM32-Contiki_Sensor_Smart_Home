@@ -58,6 +58,7 @@ void USART1_Config(uint32_t BaudRate)
 	USART_Init(USART1, &USART_InitStructure);
     /* 使能串口2接收中断 */
 	USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);	
+    USART_ClearFlag(USART1,USART_FLAG_TC);//先清除一下发送中断标志位，会解决第一个字节丢失的问题。
     USART_Cmd(USART1, ENABLE);
     USART1_NVIC_Configuration(ENABLE);
     MYDMA_Config(USART1_TX_DMA_Channel,(u32)&USART1->DR,(u32)USART1_DMA_SendBuff,ENABLE,USART1_SEND_DMA_BUF_LENTH);
@@ -90,7 +91,7 @@ int fgetc(FILE *f)
 
 void sendUart1OneByte(uint8_t byteData)//串口发送信息,通过查询方式发送一个字符
 {
-    USART_ClearFlag(USART1,USART_FLAG_TC);//先清除一下发送中断标志位，会解决第一个字节丢失的问题。
+
 	USART_SendData(USART1, byteData);
 	while(USART_GetFlagStatus(USART1,USART_FLAG_TC)!=SET);//等待发送结束
 }

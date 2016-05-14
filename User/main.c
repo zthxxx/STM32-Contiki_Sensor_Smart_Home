@@ -73,13 +73,7 @@ void BSP_Config(void)
     LED_GPIO_Config();
     USART1_Config(115200);
     USART2_Config(115200);
-    USART3_Config(115200);
     printf("Start Contiki OS\r\n");
-
-#ifdef __E30TTLUART_MODULE_ON__
-	E30TTLUART_Init();
-    E30TTLUART_MultiCountConfig(0x0000,0x50,DISABLE,3);
-#endif    
     
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
@@ -117,7 +111,12 @@ void BSP_Config(void)
     WiFi_Config(); 
     ESP8266_STA_TCP_Client();
 #endif    
-    
+
+#ifdef __E30TTLUART_MODULE_ON__
+	E30TTLUART_Init();
+    E30TTLUART_MultiCountConfig(0x0000,0x50,DISABLE,3);
+    printf("E30_TTL_100 OK\r\n");
+#endif  
 }
 
 
@@ -127,7 +126,7 @@ int main(void)
 
     BSP_Config();    
     
-    IWDG_Start(2);  //wifi模块透传之后开启看门狗
+    IWDG_Start(3);  //wifi模块透传之后开启看门狗
     
     process_init();
     autostart_start(autostart_processes);

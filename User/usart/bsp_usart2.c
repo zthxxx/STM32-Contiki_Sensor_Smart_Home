@@ -50,7 +50,7 @@ void USART2_Config(uint32_t BaudRate)
 	USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
 	/* 使能串口2总线空闲中断 */
 	USART_ITConfig(USART2, USART_IT_IDLE, ENABLE);
-	
+	USART_ClearFlag(USART2,USART_FLAG_TC);//先清除一下发送中断标志位，会解决第一个字节丢失的问题。
 	USART_Cmd(USART2, ENABLE);
     SetUSART2_NVIC_ISENABLE(ENABLE);
 	USART2ReceiveHandler = ReceiveUSART2WifiCmdDelegate;
@@ -202,7 +202,7 @@ void SetUSART2_NVIC_ISENABLE(FunctionalState isEnable)
 
 void sendUart2OneByte(uint8_t byteData)
 {
-	USART_ClearFlag(USART2,USART_FLAG_TC);//先清除一下发送中断标志位，会解决第一个字节丢失的问题。
+	
 	USART_SendData(USART2, byteData);
 	while(USART_GetFlagStatus(USART2,USART_FLAG_TC)!=SET);//等待发送结束
 }

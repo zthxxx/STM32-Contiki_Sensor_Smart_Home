@@ -118,6 +118,8 @@ void USART3_IRQHandler(void)
 	{
         USART_ClearITPendingBit(USART3,USART_IT_RXNE); //清除中断标志
 		receiveByte = USART_ReceiveData(USART3);//(USART3->DR);		//读取接收到的数据
+//        sendUart1OneByte(receiveByte);
+//        sendUart2OneByte(receiveByte);
         PushReceiveByteDataIntoReceiveQueue(receiveByte);
 	}
 }

@@ -31,6 +31,7 @@ void E30TTLUART_Init(void)
     GPIO_ResetBits(E30TTLUART_M0_Port,E30TTLUART_M0_Pin);
     GPIO_ResetBits(E30TTLUART_M1_Port,E30TTLUART_M1_Pin);
     
+    USART3_Config(115200);
 } 
 
 void E30TTLUART_ChangeMode(uint8_t E30TTLUART_mode)

@@ -430,49 +430,62 @@ void LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
     static bool isCommunicationPacketReceiveEnd = true;
     static PacketBlock* packetBlock = NULL;
     uint16_t count;
+    bool isHeadAllEqual;
     
-    if(isCommunicationPacketReceiveEnd == true)
+    while(true)
     {
-        if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < AT_LEAST_PACKET_BYTES_LENGTH) return;
-        if(!packetBlock)packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));//只有第一次会执行
-        while(true)
+        if(isCommunicationPacketReceiveEnd == true)
         {
-            if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) <= 0) return;    //长度不够时退出
-            for(count=sizeof(Protocol_PacketHeadData)-1;count>1;count--)    //顺序移位
+            if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < AT_LEAST_PACKET_BYTES_LENGTH) return;
+            if(!packetBlock)packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));//只有第一次会执行
+            while(true)
             {
-                packetBlock->PacketHead[count] = packetBlock->PacketHead[count-1];
-            }
-            packetBlock->PacketHead[0] = Uint8FIFOPop(uint8FIFOQueueHandle);//获取最新值
+                if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) <= 0) return;    //长度不够时退出     
+                for(count=sizeof(Protocol_PacketHeadData)-1;count>0;count--)    //顺序移位
+                {
+                    packetBlock->PacketHead[count] = packetBlock->PacketHead[count-1];
+                }
+                packetBlock->PacketHead[0] = Uint8FIFOPop(uint8FIFOQueueHandle);//获取最新值
+          
+                isHeadAllEqual = true;
+                for(count=0;count<sizeof(Protocol_PacketHeadData);count++)      //比较是否相等
+                {
+                    if(packetBlock->PacketHead[count] != Protocol_PacketHeadData[count])isHeadAllEqual=false;
+                }
+                if(isHeadAllEqual)
+                {
+                    break;
+                }
+            } 
             
-            for(count=0;count<sizeof(Protocol_PacketHeadData);count++)      //比较是否相等
-            {
-                if(packetBlock->PacketHead[count] != Protocol_PacketHeadData[count])continue;
-            }
-            for(count=0;count<sizeof(Protocol_PacketHeadData);count++)      //到此步说明数组已相等，做清楚与退出
-            {
-                packetBlock->PacketHead[count] = 0;
-            }
-            break;
+            if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < AT_LEAST_PACKET_BYTES_LENGTH - sizeof(Protocol_PacketHeadData)) return;
+            Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->PacketIndex)),sizeof(((PacketBlock*)0)->PacketIndex));
+            Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->PacketFunctionWord)),sizeof((uint8_t)(((PacketBlock*)0)->PacketFunctionWord)));
+            Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->PacketJSONDataLength)),sizeof(((PacketBlock*)0)->PacketJSONDataLength));
+            
         }
-        if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < AT_LEAST_PACKET_BYTES_LENGTH - sizeof(Protocol_PacketHeadData)) return;
-        Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->PacketIndex)),sizeof(((PacketBlock*)0)->PacketIndex));
-        Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->PacketFunctionWord)),sizeof((uint8_t)(((PacketBlock*)0)->PacketFunctionWord)));
-        Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->PacketJSONDataLength)),sizeof(((PacketBlock*)0)->PacketJSONDataLength));
-    }
-    if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < packetBlock->PacketJSONDataLength + sizeof(((PacketBlock*)0)->PacketCheckSum))
-    {
-        isCommunicationPacketReceiveEnd = false;
-        return;
-    }
-    else
-    {
-        packetBlock->PacketJSONData = (uint8_t*)malloc(packetBlock->PacketJSONDataLength * sizeof(uint8_t));
-        Uint8FIFOPopToStream(uint8FIFOQueueHandle, packetBlock->PacketJSONData,packetBlock->PacketJSONDataLength);
-        Uint8FIFOPopToStream(uint8FIFOQueueHandle, &(packetBlock->PacketCheckSum),sizeof(((PacketBlock*)0)->PacketCheckSum));
-        isCommunicationPacketReceiveEnd = true;
-        Uint8PacketQueuePushStruct(ReceivedPacketBlockQueueHandle, packetBlock);
-        packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));
-        return;
+        if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < packetBlock->PacketJSONDataLength + sizeof(((PacketBlock*)0)->PacketCheckSum))
+        {
+
+            isCommunicationPacketReceiveEnd = false;
+            return;
+        }
+        else
+        {
+            packetBlock->PacketJSONData = (uint8_t*)malloc(packetBlock->PacketJSONDataLength * sizeof(uint8_t));
+            Uint8FIFOPopToStream(uint8FIFOQueueHandle, packetBlock->PacketJSONData,packetBlock->PacketJSONDataLength);
+            Uint8FIFOPopToStream(uint8FIFOQueueHandle, &(packetBlock->PacketCheckSum),sizeof(((PacketBlock*)0)->PacketCheckSum));
+            isCommunicationPacketReceiveEnd = true;
+            printf("%d\r\n",Protocol_PacketSendIndex);
+            Uint8PacketQueuePushStruct(ReceivedPacketBlockQueueHandle, packetBlock);
+            
+//            Uint8PacketQueuePushData(UnsentPacketQueueHandle,ResolvePacketStructIntoBytes(packetBlock));
+//            Protocol_PacketSendIndex++;//包序号递增
+            
+            packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));
+            packetBlock->PacketHead[0]=packetBlock->PacketHead[1]=0;
+            return;
+        }
     }
 }
 
@@ -526,11 +539,11 @@ void DealWithReceivePacketQueue()
 //                uint8PacketNodePointer->resendCount = PROTOCOL_PACKET_RESENT_COUNT_MAX;
 //                Uint8PacketQueuePush(UnackedPacketQueueHandle, uint8PacketNodePointer);
                 
-                DealWithReceivePacketBlock(ReceivedPacketNodePointer->packetBlock);
-                
+                DealWithReceivePacketBlock(ReceivedPacketNodePointer->packetBlock);            
             }
-            FreePacketNoedItem(ReceivedPacketNodePointer);
         }
+
+        FreePacketNoedItem(ReceivedPacketNodePointer);
     }
 }
 
