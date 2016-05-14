@@ -75,6 +75,11 @@ void BSP_Config(void)
     USART2_Config(115200);
     USART3_Config(115200);
     printf("Start Contiki OS\r\n");
+
+#ifdef __E30TTLUART_MODULE_ON__
+	E30TTLUART_Init();
+    E30TTLUART_MultiCountConfig(0x0000,0x50,DISABLE,3);
+#endif    
     
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
@@ -106,11 +111,6 @@ void BSP_Config(void)
 
 #ifdef __RC522_MODULE_ON__
 	RC522_Init();
-#endif
-
-#ifdef __E30TTLUART_MODULE_ON__
-	E30TTLUART_Init();
-    E30TTLUART_Config(0x0000,0x50,DISABLE);
 #endif
 
 #ifdef __WIFI_MODULE_ON__
