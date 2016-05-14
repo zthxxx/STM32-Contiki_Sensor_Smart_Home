@@ -59,6 +59,7 @@ void USART3_Config(uint32_t BaudRate)
 	USART_Init(USART3, &USART_InitStructure);
     /* 使能串口3接收中断 */
 	USART_ITConfig(USART3, USART_IT_RXNE, ENABLE);	
+    USART_ClearFlag(USART3,USART_FLAG_TC);//先清除一下发送中断标志位，会解决第一个字节丢失的问题。
     USART_Cmd(USART3, ENABLE);
     USART3_NVIC_Configuration(ENABLE);
     MYDMA_Config(USART3_TX_DMA_Channel,(u32)&USART3->DR,(u32)USART3_DMA_SendBuff,ENABLE,USART3_SEND_DMA_BUF_LENTH);
@@ -84,7 +85,6 @@ void ChangeUSART3BaudRate(uint32_t BaudRate, FunctionalState ReceiveITState)
 
 void SendUSART3OneByte(uint8_t byteData)//串口发送信息,通过查询方式发送一个字符
 {
-    USART_ClearFlag(USART3,USART_FLAG_TC);//先清除一下发送中断标志位，会解决第一个字节丢失的问题。
 	USART_SendData(USART3, byteData);
 	while(USART_GetFlagStatus(USART3,USART_FLAG_TC)!=SET);//等待发送结束
 }

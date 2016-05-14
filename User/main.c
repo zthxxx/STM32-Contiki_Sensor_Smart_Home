@@ -110,7 +110,7 @@ void BSP_Config(void)
 
 #ifdef __E30TTLUART_MODULE_ON__
 	E30TTLUART_Init();
-    E30TTLUART_Config(0x0000,0x50,DISABLE);
+    E30TTLUART_Config(0x0000,0x50,ENABLE);
 #endif
 
 #ifdef __WIFI_MODULE_ON__
