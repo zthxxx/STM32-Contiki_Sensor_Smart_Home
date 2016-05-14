@@ -76,7 +76,7 @@ void IncreaseUnackedPacketQueueResendTime(void);
 void AssembleProtocolPacketPushSendQueue(FunctionWord_TypeDef FunctionWord, uint16_t JSONMessageDataLength,uint8_t* JSONMessageData);
 void PushReceiveByteDataIntoReceiveQueue(uint8_t streamByteData);
 void LoadReceiveQueueByteToPacketBlock(void);
-
+void DealWithReceivePacketQueue(void);
 
 #endif
 

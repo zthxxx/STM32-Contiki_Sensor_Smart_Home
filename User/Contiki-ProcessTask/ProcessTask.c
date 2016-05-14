@@ -304,8 +304,11 @@ PROCESS_THREAD(Communication_Protocol_Send_process, ev, data)
     {
         SendUnsentPacketQueue();
         SendUnackedPacketQueue();
+        LoadReceiveQueueByteToPacketBlock();
+        DealWithReceivePacketQueue();
 //        IncreaseUnackedPacketQueueResendTime();
-        Contiki_etimer_DelayMS(50);
+        
+        Contiki_etimer_DelayMS(100);
     }
     PROCESS_END();
 }

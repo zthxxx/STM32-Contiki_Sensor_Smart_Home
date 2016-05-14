@@ -6,6 +6,7 @@
 #include <string.h>
 #include "NVIC_CONFIG.H"
 #include "dma.h"
+#include "CommunicationProtocol.h"
 
 #define USART3_SEND_DMA_BUF_LENTH       500
 
