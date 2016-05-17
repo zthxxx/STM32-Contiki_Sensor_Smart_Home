@@ -16,10 +16,10 @@
  * 返回  : 无
  * 调用  ：被ESP8266_AT_Test调用
  */
-void ESP8266_Rst ( void )
+void ESP8266_Rst(void)
 {
 
-//    ESP8266_Cmd ( "AT+RST", "OK", "ready", 2500 );   	
+//    ESP8266_Cmd("AT+RST", "OK", "ready", 2500);   	
 
     ESP8266_RST_LOW_LEVEL();
     Delay_ms(100); 
@@ -35,7 +35,7 @@ void ESP8266_Rst ( void )
  * 返回  : 无
  * 调用  ：被外部调用
  */
-void ESP8266_AT_Test ( void )
+void ESP8266_AT_Test(void)
 {
 	ESP8266_RST_HIGH_LEVEL();
 	Delay_ms(2000); 
@@ -91,18 +91,18 @@ bool ESP8266_Cmd (char * cmd, char * reply1, char * reply2, u32 waittime)
  *         0，选择失败
  * 调用  ：被外部调用
  */
-bool ESP8266_Net_Mode_Choose ( ENUM_Net_ModeTypeDef enumMode )
+bool ESP8266_Net_Mode_Choose(ENUM_Net_ModeTypeDef enumMode)
 {
-    switch ( enumMode )
+    switch(enumMode)
     {
         case STA:
-            return ESP8266_Cmd ( "AT+CWMODE=1", "OK", "no change", 2500 ); 
+            return ESP8266_Cmd("AT+CWMODE=1", "OK", "no change", 250); 
 
         case AP:
-            return ESP8266_Cmd ( "AT+CWMODE=2", "OK", "no change", 2500 ); 
+            return ESP8266_Cmd("AT+CWMODE=2", "OK", "no change", 250); 
 
         case STA_AP:
-            return ESP8266_Cmd ( "AT+CWMODE=3", "OK", "no change", 2500 ); 
+            return ESP8266_Cmd("AT+CWMODE=3", "OK", "no change", 250); 
 
         default:
             return false;
@@ -120,14 +120,11 @@ bool ESP8266_Net_Mode_Choose ( ENUM_Net_ModeTypeDef enumMode )
  *         0，连接失败
  * 调用  ：被外部调用
  */
-bool ESP8266_JoinAP ( char * pSSID, char * pPassWord )
+bool ESP8266_JoinAP(char * pSSID, char * pPassWord)
 {
 	char cCmd [120];
-
-	sprintf ( cCmd, "AT+CWJAP=\"%s\",\"%s\"", pSSID, pPassWord );
-	
-	return ESP8266_Cmd ( cCmd, "OK", NULL, 7800 );
-	
+	sprintf(cCmd, "AT+CWJAP=\"%s\",\"%s\"", pSSID, pPassWord);
+	return ESP8266_Cmd(cCmd, "OK", NULL, 700);
 }
 
 /*
@@ -139,13 +136,13 @@ bool ESP8266_JoinAP ( char * pSSID, char * pPassWord )
  *         0，连接失败
  * 调用  ：被外部调用
  */
-bool ESP8266_STAJoinTCP ( char * ip, char * port )
+bool ESP8266_STAJoinTCP(char * ip, char * port)
 {
 	char cCmd [120];
 
-	sprintf ( cCmd, "AT+CIPSTART=\"TCP\",\"%s\",%s", ip, port );
+	sprintf(cCmd, "AT+CIPSTART=\"TCP\",\"%s\",%s", ip, port);
 	
-	return ESP8266_Cmd ( cCmd, "OK", "ALREAY CONNECT", 780 );
+	return ESP8266_Cmd(cCmd, "OK", "ALREADY CONNECTED", 420);
 	
 }
 
@@ -159,13 +156,13 @@ bool ESP8266_STAJoinTCP ( char * ip, char * port )
  *         0，创建失败
  * 调用  ：被外部调用
  */
-bool ESP8266_BuildAP ( char * pSSID, char * pPassWord, char * enunPsdMode )
+bool ESP8266_BuildAP(char * pSSID, char * pPassWord, char * enunPsdMode)
 {
 	char cCmd [120];
 
-	sprintf ( cCmd, "AT+CWSAP=\"%s\",\"%s\",1,%s", pSSID, pPassWord, enunPsdMode );
+	sprintf(cCmd, "AT+CWSAP=\"%s\",\"%s\",1,%s", pSSID, pPassWord, enunPsdMode);
 	
-	return ESP8266_Cmd ( cCmd, "OK", 0, 1000 );
+	return ESP8266_Cmd(cCmd, "OK", 0, 1000);
 	
 }
 
@@ -178,13 +175,13 @@ bool ESP8266_BuildAP ( char * pSSID, char * pPassWord, char * enunPsdMode )
  *         0，配置失败
  * 调用  ：被外部调用
  */
-bool ESP8266_Enable_MultipleId ( FunctionalState enumEnUnvarnishTx )
+bool ESP8266_Enable_MultipleId(FunctionalState enumEnUnvarnishTx)
 {
 	char cStr [20];
 	
-	sprintf ( cStr, "AT+CIPMUX=%d", ( enumEnUnvarnishTx ? 1 : 0 ) );
+	sprintf(cStr, "AT+CIPMUX=%d",(enumEnUnvarnishTx ? 1 : 0));
 	
-	return ESP8266_Cmd ( cStr, "OK", 0, 500 );
+	return ESP8266_Cmd(cStr, "OK", 0, 500);
 	
 }
 
@@ -200,35 +197,35 @@ bool ESP8266_Enable_MultipleId ( FunctionalState enumEnUnvarnishTx )
  *         0，连接失败
  * 调用  ：被外部调用
  */
-bool ESP8266_Link_Server ( ENUM_NetPro_TypeDef enumE, char * ip, char * ComNum, ENUM_ID_NO_TypeDef id)
+bool ESP8266_Link_Server(ENUM_NetPro_TypeDef enumE, char * ip, char * ComNum, ENUM_ID_NO_TypeDef id)
 {
     char cStr [100] = { 0 }, cCmd [120];
 
-    switch (  enumE )
+    switch( enumE)
     {
         case enumTCP:
-            sprintf ( cStr, "\"%s\",\"%s\",%s", "TCP", ip, ComNum );
+            sprintf(cStr, "\"%s\",\"%s\",%s", "TCP", ip, ComNum);
             break;
 
         case enumUDP:
-            sprintf ( cStr, "\"%s\",\"%s\",%s", "UDP", ip, ComNum );
+            sprintf(cStr, "\"%s\",\"%s\",%s", "UDP", ip, ComNum);
             break;
 
         default:
             break;
     }
 
-    if ( id < 5 )
-        sprintf ( cCmd, "AT+CIPSTART=%d,%s", id, cStr);
+    if(id < 5)
+        sprintf(cCmd, "AT+CIPSTART=%d,%s", id, cStr);
 
     else
-        sprintf ( cCmd, "AT+CIPSTART=%s", cStr );
+        sprintf(cCmd, "AT+CIPSTART=%s", cStr);
 
-    return ESP8266_Cmd ( cCmd, "OK", "ALREAY CONNECT", 500 );
+    return ESP8266_Cmd(cCmd, "OK", "ALREAY CONNECT", 500);
 	
 }
 //连接 tcp的函数
-void ESP8266_linkTCP_join ( void )
+void ESP8266_linkTCP_join(void)
 {
 	while(!ESP8266_STAJoinTCP(TCP_SERVER_IPADDRESS,TCP_SERVER_PORT));
 }
@@ -243,24 +240,24 @@ void ESP8266_linkTCP_join ( void )
  *         0，操作失败
  * 调用  ：被外部调用
  */
-bool ESP8266_StartOrShutServer ( FunctionalState enumMode, char * pPortNum, char * pTimeOver )
+bool ESP8266_StartOrShutServer(FunctionalState enumMode, char * pPortNum, char * pTimeOver)
 {
 	char cCmd1 [120], cCmd2 [120];
 
-	if ( enumMode )
+	if(enumMode)
 	{
-		sprintf ( cCmd1, "AT+CIPSERVER=%d,%s", 1, pPortNum );
+		sprintf(cCmd1, "AT+CIPSERVER=%d,%s", 1, pPortNum);
 		
-		sprintf ( cCmd2, "AT+CIPSTO=%s", pTimeOver );
+		sprintf(cCmd2, "AT+CIPSTO=%s", pTimeOver);
 
-		return ( ESP8266_Cmd ( cCmd1, "OK", 0, 500 ) && ESP8266_Cmd ( cCmd2, "OK", 0, 500 ) );
+		return(ESP8266_Cmd(cCmd1, "OK", 0, 500) && ESP8266_Cmd(cCmd2, "OK", 0, 500));
 	}
 	
 	else
 	{
-		sprintf ( cCmd1, "AT+CIPSERVER=%d,%s", 0, pPortNum );
+		sprintf(cCmd1, "AT+CIPSERVER=%d,%s", 0, pPortNum);
 
-		return ESP8266_Cmd ( cCmd1, "OK", 0, 500 );
+		return ESP8266_Cmd(cCmd1, "OK", 0, 500);
 	}
 	
 }
@@ -274,9 +271,9 @@ bool ESP8266_StartOrShutServer ( FunctionalState enumMode, char * pPortNum, char
  *         0，配置失败
  * 调用  ：被外部调用
  */
-bool ESP8266_TransparentTransmission ( void )
+bool ESP8266_TransparentTransmission(void)
 {
-	return (ESP8266_Cmd ( "AT+CIPMODE=1", "OK", "Link is builded", 500 ) && ESP8266_Cmd ( "AT+CIPSEND", "\r\n", ">", 500 ));
+	return (ESP8266_Cmd("AT+CIPMODE=1", "OK", "Link is builded", 250) && ESP8266_Cmd("AT+CIPSEND", "\r\n", ">", 250));
 }
 
 
@@ -291,36 +288,37 @@ bool ESP8266_TransparentTransmission ( void )
  *         0，发送失败
  * 调用  ：被外部调用
 
- //	ESP8266_SendString ( DISABLE, cStrInput, ul, ( ENUM_ID_NO_TypeDef ) uc );
+ //	ESP8266_SendString(DISABLE, cStrInput, ul,(ENUM_ID_NO_TypeDef) uc);
  */
-bool ESP8266_SendString ( FunctionalState enumEnUnvarnishTx, char * pStr, u32 ulStrLength, ENUM_ID_NO_TypeDef ucId )
+bool ESP8266_SendString(FunctionalState enumEnUnvarnishTx, char * pStr, u32 ulStrLength, ENUM_ID_NO_TypeDef ucId)
 {
 	char cStr [20];
 	bool bRet = false;
 		
-	if ( enumEnUnvarnishTx )
-		ESP8266_Usart ( "%s", pStr );
+	if(enumEnUnvarnishTx)
+		ESP8266_Usart("%s", pStr);
 
 	
 	else
 	{
-		if ( ucId < 5 )
-			sprintf ( cStr, "AT+CIPSEND=%d,%d", ucId, ulStrLength + 2 );
+		if(ucId < 5)
+			sprintf(cStr, "AT+CIPSEND=%d,%d", ucId, ulStrLength + 2);
 
 		else
-			sprintf ( cStr, "AT+CIPSEND=%d", ulStrLength + 2 );
+			sprintf(cStr, "AT+CIPSEND=%d", ulStrLength + 2);
 		
-		ESP8266_Cmd ( cStr, "> ", 0, 1000 );
+		ESP8266_Cmd(cStr, "> ", 0, 1000);
 
-		bRet = ESP8266_Cmd ( pStr, "SEND OK", 0, 1000 );
+		bRet = ESP8266_Cmd(pStr, "SEND OK", 0, 1000);
   }
 	
 	return bRet;
 
 }
-void ESP8266_WIFIAP_join ( void )
+void ESP8266_WIFIAP_join(void)
 {
-	while(!ESP8266_JoinAP(WIFI_SSID_NAME,WIFI_PASSWORD));	
+    uint8_t tryCount=0;
+	while(!ESP8266_JoinAP(WIFI_SSID_NAME,WIFI_PASSWORD))printf("%d\r\n",tryCount++);;	
 }
 
 
@@ -331,49 +329,30 @@ void ESP8266_WIFIAP_join ( void )
  * 返回  : 接收到的字符串首地址
  * 调用  ：被外部调用
  */
-char * ESP8266_ReceiveString ( FunctionalState enumEnUnvarnishTx )
+char * ESP8266_ReceiveString(FunctionalState enumEnUnvarnishTx)
 {
 	char * pRecStr = 0;
 	
 	strEsp8266_Fram_Record .InfBit .FramLength = 0;
 	strEsp8266_Fram_Record .InfBit .FramFinishFlag = 0;
-	while ( ! strEsp8266_Fram_Record .InfBit .FramFinishFlag );
+	while(! strEsp8266_Fram_Record .InfBit .FramFinishFlag);
 	strEsp8266_Fram_Record .Data_RX_BUF [ strEsp8266_Fram_Record .InfBit .FramLength ] = '\0';
 	
-	if ( enumEnUnvarnishTx )
+	if(enumEnUnvarnishTx)
 	{
-		if ( strstr ( strEsp8266_Fram_Record .Data_RX_BUF, ">" ) )
+		if(strstr(strEsp8266_Fram_Record .Data_RX_BUF, ">"))
 			pRecStr = strEsp8266_Fram_Record .Data_RX_BUF;
 
 	}
 	
 	else 
 	{
-		if ( strstr ( strEsp8266_Fram_Record .Data_RX_BUF, "+IPD" ) )
+		if(strstr(strEsp8266_Fram_Record .Data_RX_BUF, "+IPD"))
 			pRecStr = strEsp8266_Fram_Record .Data_RX_BUF;
 
 	}
 
 	return pRecStr;
-}
-
-void ESP8266_TCP_Transparent_SendTest()
-{
-    PC_Usart ( "Send Date test\r\n");
-    
-    ESP8266_Usart("6345tsdf");
-    sendUart2OneByte(0x88);
-    sendUart2OneByte(0xEF);
-    sendUart2OneByte(0x00);
-    sendUart2OneByte(0xFF);
-    sendUart2OneByte(0x00);
-    sendUart2OneByte(0x2B);
-    sendUart2OneByte(0x2B);
-    sendUart2OneByte(0x2B);
-    sendUart2OneByte(0xCC);
-    ESP8266_Usart("fasdf+++fgh8468++a");
-    
-    
 }
 
 /*
@@ -383,29 +362,35 @@ void ESP8266_TCP_Transparent_SendTest()
  * 返回  : 无
  * 调用  ：被外部调用
  */
-void ESP8266_STA_TCP_Client ( void )
+void ESP8266_STA_TCP_Client(void)
 {
-	IS_WIFI_LOG_DEBUG && PC_Usart("\r\nESP8266 WiFi模块测试\r\n");     //打印测试例程提示信息
-	ESP8266_AT_Test ();
-	ESP8266_Net_Mode_Choose ( STA );
-
-	ESP8266_WIFIAP_join();
-    IS_WIFI_LOG_DEBUG && PC_Usart ( "Linked Wifi\r\n");
-
-	ESP8266_Enable_MultipleId ( DISABLE );
-    IS_WIFI_LOG_DEBUG && PC_Usart ( "Config module into TCP Client\r\n");
+	IS_WIFI_LOG_DEBUG && PC_Usart("\r\nESP8266 WiFi Module Start.\r\n");     //打印测试例程提示信息
+    IS_WIFI_LOG_DEBUG && PC_Usart("Try to enter command mode.\r\n");
+    while(!ESP8266_Cmd ("AT", "OK", NULL, 100))//进入AT命令模式
+    {
+        ESP8266_Usart("+++");
+        Delay_ms (50) ;
+    }       
+    IS_WIFI_LOG_DEBUG && PC_Usart("AT command is OK.\r\n");
     
-	ESP8266_linkTCP_join();//处理  tcp 服务连接的函数
-    IS_WIFI_LOG_DEBUG && PC_Usart ( "Connected TCP Server\r\n");
-    
-    // 关闭串口2空闲中断 使能串口2接收中断 配置相关设置  进入透传模式
+    if(ESP8266_Cmd ("AT+CIFSR","+CIFSR:STAIP,\"0.0.0.0\"",NULL,250))
+    {
+        PC_Usart("Not connected wifi\r\n");
+        while(!ESP8266_Net_Mode_Choose(STA));
+        IS_WIFI_LOG_DEBUG && PC_Usart("Try to connect wifi with SSID:%s.\r\n",WIFI_SSID_NAME);
+        ESP8266_WIFIAP_join();
+        IS_WIFI_LOG_DEBUG && PC_Usart("Linked Wifi.\r\n");
+        IS_WIFI_LOG_DEBUG && PC_Usart("Config module into TCP Client\r\n");
+        ESP8266_Enable_MultipleId(DISABLE);
+         
+    }
+    IS_WIFI_LOG_DEBUG && PC_Usart("Try to connect TCP Server\r\n");
+    ESP8266_linkTCP_join();//处理  tcp 服务连接的函数
+    IS_WIFI_LOG_DEBUG && PC_Usart("Connected TCP Server\r\n");
+    //配置相关设置  进入透传模式
+    IS_WIFI_LOG_DEBUG && PC_Usart("Try to enter Transparent Transmission\r\n");
     while(!ESP8266_TransparentTransmission());
-    USART_ITConfig(USART2, USART_IT_IDLE, DISABLE);
-    USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
-    SetUSART2_NVIC_ISENABLE(ENABLE);
-    USART2ReceiveHandler = ReceiveUSART2PacketDelegate;
-    
-    IS_WIFI_LOG_DEBUG && PC_Usart ( "Change into Transparent Transmission\r\n");
+    IS_WIFI_LOG_DEBUG && PC_Usart("Change into Transparent Transmission\r\n");
 }
 
 
@@ -416,7 +401,7 @@ void ESP8266_STA_TCP_Client ( void )
  * 返回  : 无
  * 调用  ：被外部调用
  */
-void ESP8266_AP_TCP_Server ( void )
+void ESP8266_AP_TCP_Server(void)
 {
 	char cStrInput [100] = { 0 }, * pStrDelimiter [3], * pBuf, * pStr;
 	u8 uc = 0;
@@ -425,77 +410,77 @@ void ESP8266_AP_TCP_Server ( void )
 
 	ESP8266_AT_Test ();
 	
-	ESP8266_Net_Mode_Choose ( AP );
+	ESP8266_Net_Mode_Choose(AP);
 
 
-	PC_Usart ( "\r\n请输入要创建的WiFi的名称、加密方式和密钥，加密方式的编号为：\
+	PC_Usart("\r\n请输入要创建的WiFi的名称、加密方式和密钥，加密方式的编号为：\
               \r\n0 = OPEN\
               \r\n1 = WEP\
               \r\n2 = WPA_PSK\
 	            \r\n3 = WPA2_PSK\
               \r\n4 = WPA_WPA2_PSK\
-							\r\n输入格式为：名称字符+英文逗号+加密方式编号+英文逗号+密钥字符+空格，点击发送\r\n" );
+							\r\n输入格式为：名称字符+英文逗号+加密方式编号+英文逗号+密钥字符+空格，点击发送\r\n");
 
-	scanf ( "%s", cStrInput );
+	scanf("%s", cStrInput);
 
-	PC_Usart ( "\r\n稍等片刻 ……\r\n" );
+	PC_Usart("\r\n稍等片刻 ……\r\n");
 
 	pBuf = cStrInput;
 	uc = 0;
-	while ( ( pStr = strtok ( pBuf, "," ) ) != NULL )
+	while(( pStr = strtok(pBuf, ",")) != NULL)
 	{
 		pStrDelimiter [ uc ++ ] = pStr;
 		pBuf = NULL;
 	} 
 	
-	ESP8266_BuildAP ( pStrDelimiter [0], pStrDelimiter [2], pStrDelimiter [1] );
-	ESP8266_Cmd ( "AT+RST", "OK", "ready", 2500 ); //*
+	ESP8266_BuildAP(pStrDelimiter [0], pStrDelimiter [2], pStrDelimiter [1]);
+	ESP8266_Cmd("AT+RST", "OK", "ready", 2500); //*
 		
 
-	ESP8266_Enable_MultipleId ( ENABLE );
+	ESP8266_Enable_MultipleId(ENABLE);
 		
 	
-	PC_Usart ( "\r\n请输入服务器要开启的端口号和超时时间（0~28800，单位：秒），输入格式为：端口号字符+英文逗号+超时时间字符+空格，点击发送\r\n" );
+	PC_Usart("\r\n请输入服务器要开启的端口号和超时时间（0~28800，单位：秒），输入格式为：端口号字符+英文逗号+超时时间字符+空格，点击发送\r\n");
 
-	scanf ( "%s", cStrInput );
+	scanf("%s", cStrInput);
 
-	PC_Usart ( "\r\n稍等片刻 ……\r\n" );
+	PC_Usart("\r\n稍等片刻 ……\r\n");
 
 	pBuf = cStrInput;
 	uc = 0;
-	while ( ( pStr = strtok ( pBuf, "," ) ) != NULL )
+	while(( pStr = strtok(pBuf, ",")) != NULL)
 	{
 		pStrDelimiter [ uc ++ ] = pStr;
 		pBuf = NULL;
 	} 
 
-	ESP8266_StartOrShutServer ( ENABLE, pStrDelimiter [0], pStrDelimiter [1] );
+	ESP8266_StartOrShutServer(ENABLE, pStrDelimiter [0], pStrDelimiter [1]);
 	
 	
 	do
 	{
-		PC_Usart ( "\r\n正查询本模块IP……\r\n" );
-	  ESP8266_Cmd ( "AT+CIFSR", "OK", "Link", 500 );
+		PC_Usart("\r\n正查询本模块IP……\r\n");
+	  ESP8266_Cmd("AT+CIFSR", "OK", "Link", 500);
 		
-		PC_Usart ( "\r\n请用手机连接刚才创建的WiFi，这里只连接一个手机，作为ID0，然后用手机网络调试助手以TCP Client连接刚才开启的服务器（AP IP）……\r\n" );
-		Delay_ms ( 20000 ) ;
-	}	while ( ! ESP8266_Cmd ( "AT+CIPSTATUS", "+CIPSTATUS:0", 0, 500 ) );
+		PC_Usart("\r\n请用手机连接刚才创建的WiFi，这里只连接一个手机，作为ID0，然后用手机网络调试助手以TCP Client连接刚才开启的服务器（AP IP）……\r\n");
+		Delay_ms(20000) ;
+	}	while(! ESP8266_Cmd("AT+CIPSTATUS", "+CIPSTATUS:0", 0, 500));
 	
 
-	PC_Usart ( "\r\n请输入要向端口手机（ID0）发送的字符串，输入格式为：字符串（不含空格）+空格，点击发送\r\n" );
+	PC_Usart("\r\n请输入要向端口手机（ID0）发送的字符串，输入格式为：字符串（不含空格）+空格，点击发送\r\n");
 
-	scanf ( "%s", cStrInput );
+	scanf("%s", cStrInput);
 
-	ul = strlen ( cStrInput );
+	ul = strlen(cStrInput);
 	
-	ESP8266_SendString ( DISABLE, cStrInput, ul, Multiple_ID_0 );
+	ESP8266_SendString(DISABLE, cStrInput, ul, Multiple_ID_0);
 
 	
-	PC_Usart ( "\r\n请在手机网络调试助手发送字符串\r\n" );
+	PC_Usart("\r\n请在手机网络调试助手发送字符串\r\n");
 	while (1)
 	{
-	  pStr = ESP8266_ReceiveString ( DISABLE );
-		PC_Usart ( "%s", pStr );
+	  pStr = ESP8266_ReceiveString(DISABLE);
+		PC_Usart("%s", pStr);
 	}
 
 }
@@ -508,7 +493,7 @@ void ESP8266_AP_TCP_Server ( void )
  * 返回  : 无
  * 调用  ：被外部调用
  */
-void ESP8266_StaTcpClient_ApTcpServer ( void )
+void ESP8266_StaTcpClient_ApTcpServer(void)
 {
 	char cStrInput [100] = { 0 }, * pStrDelimiter [3], * pBuf, * pStr;
 	u8 uc = 0;
@@ -517,132 +502,132 @@ void ESP8266_StaTcpClient_ApTcpServer ( void )
 
 	ESP8266_AT_Test ();
 	
-	ESP8266_Net_Mode_Choose ( STA_AP );
+	ESP8266_Net_Mode_Choose(STA_AP);
 
 
-	PC_Usart ( "\r\n请输入要创建的WiFi的名称、加密方式和密钥，加密方式的编号为：\
+	PC_Usart("\r\n请输入要创建的WiFi的名称、加密方式和密钥，加密方式的编号为：\
 						\r\n0 = OPEN\
 						\r\n1  =WEP\
 						\r\n2 = WPA_PSK\
 						\r\n3 = WPA2_PSK\
 						\r\n4 = WPA_WPA2_PSK\
-						\r\n输入格式为：名称字符+英文逗号+加密方式编号+英文逗号+密钥字符+空格，点击发送\r\n" );
+						\r\n输入格式为：名称字符+英文逗号+加密方式编号+英文逗号+密钥字符+空格，点击发送\r\n");
 
-	scanf ( "%s", cStrInput );
+	scanf("%s", cStrInput);
 
-	PC_Usart ( "\r\n稍等片刻 ……\r\n" );
+	PC_Usart("\r\n稍等片刻 ……\r\n");
 
 	pBuf = cStrInput;
 	uc = 0;
-	while ( ( pStr = strtok ( pBuf, "," ) ) != NULL )
+	while(( pStr = strtok(pBuf, ",")) != NULL)
 	{
 		pStrDelimiter [ uc ++ ] = pStr;
 		pBuf = NULL;
 	} 
 	
-	ESP8266_BuildAP ( pStrDelimiter [0], pStrDelimiter [2], pStrDelimiter [1] );
-	ESP8266_Cmd ( "AT+RST", "OK", "ready", 2500 ); //*
+	ESP8266_BuildAP(pStrDelimiter [0], pStrDelimiter [2], pStrDelimiter [1]);
+	ESP8266_Cmd("AT+RST", "OK", "ready", 2500); //*
 	
 
-	ESP8266_Cmd ( "AT+CWLAP", "OK", 0, 5000 );
+	ESP8266_Cmd("AT+CWLAP", "OK", 0, 5000);
 		
   do
 	{
-		PC_Usart ( "\r\n请输入要连接的WiFi名称和密钥，输入格式为：名称字符+英文逗号+密钥字符+空格，点击发送\r\n" );
+		PC_Usart("\r\n请输入要连接的WiFi名称和密钥，输入格式为：名称字符+英文逗号+密钥字符+空格，点击发送\r\n");
 
-		scanf ( "%s", cStrInput );
+		scanf("%s", cStrInput);
 
-		PC_Usart ( "\r\n稍等片刻 ……\r\n" );
+		PC_Usart("\r\n稍等片刻 ……\r\n");
 
 		pBuf = cStrInput;
 		uc = 0;
-		while ( ( pStr = strtok ( pBuf, "," ) ) != NULL )
+		while(( pStr = strtok(pBuf, ",")) != NULL)
 		{
 			pStrDelimiter [ uc ++ ] = pStr;
 			pBuf = NULL;
 		} 
 		
-  } while ( ! ESP8266_JoinAP ( pStrDelimiter [0], pStrDelimiter [1] ) );
+  } while(! ESP8266_JoinAP(pStrDelimiter [0], pStrDelimiter [1]));
 
 	
-	ESP8266_Enable_MultipleId ( ENABLE );
+	ESP8266_Enable_MultipleId(ENABLE);
 		
 	
-	PC_Usart ( "\r\n请输入服务器要开启的端口号和超时时间（0~28800，单位：秒），输入格式为：端口号字符+英文逗号+超时时间字符+空格，点击发送\r\n" );
+	PC_Usart("\r\n请输入服务器要开启的端口号和超时时间（0~28800，单位：秒），输入格式为：端口号字符+英文逗号+超时时间字符+空格，点击发送\r\n");
 
-	scanf ( "%s", cStrInput );
+	scanf("%s", cStrInput);
 
-	PC_Usart ( "\r\n稍等片刻 ……\r\n" );
+	PC_Usart("\r\n稍等片刻 ……\r\n");
 
 	pBuf = cStrInput;
 	uc = 0;
-	while ( ( pStr = strtok ( pBuf, "," ) ) != NULL )
+	while(( pStr = strtok(pBuf, ",")) != NULL)
 	{
 		pStrDelimiter [ uc ++ ] = pStr;
 		pBuf = NULL;
 	} 
 
-	ESP8266_StartOrShutServer ( ENABLE, pStrDelimiter [0], pStrDelimiter [1] );
+	ESP8266_StartOrShutServer(ENABLE, pStrDelimiter [0], pStrDelimiter [1]);
 	
 	
 	do 
 	{
-		PC_Usart ( "\r\n请在电脑上将网络调试助手以TCP Server连接网络，并输入电脑的IP和端口号，输入格式为：电脑IP+英文逗号+端口号+空格，点击发送\r\n" );
+		PC_Usart("\r\n请在电脑上将网络调试助手以TCP Server连接网络，并输入电脑的IP和端口号，输入格式为：电脑IP+英文逗号+端口号+空格，点击发送\r\n");
 
-		scanf ( "%s", cStrInput );
+		scanf("%s", cStrInput);
 
-		PC_Usart ( "\r\n稍等片刻 ……\r\n" );
+		PC_Usart("\r\n稍等片刻 ……\r\n");
 
 		pBuf = cStrInput;
 		uc = 0;
-		while ( ( pStr = strtok ( pBuf, "," ) ) != NULL )
+		while(( pStr = strtok(pBuf, ",")) != NULL)
 		{
 			pStrDelimiter [ uc ++ ] = pStr;
 			pBuf = NULL;
 		} 
 		
-  } while ( ! ( ESP8266_Link_Server ( enumTCP, pStrDelimiter [0], pStrDelimiter [1], Multiple_ID_0 ) &&
-	              ESP8266_Link_Server ( enumTCP, pStrDelimiter [0], pStrDelimiter [1], Multiple_ID_1 ) &&
-	              ESP8266_Link_Server ( enumTCP, pStrDelimiter [0], pStrDelimiter [1], Multiple_ID_2 ) ) );
+  } while(!(ESP8266_Link_Server(enumTCP, pStrDelimiter [0], pStrDelimiter [1], Multiple_ID_0) &&
+	              ESP8266_Link_Server(enumTCP, pStrDelimiter [0], pStrDelimiter [1], Multiple_ID_1) &&
+	              ESP8266_Link_Server(enumTCP, pStrDelimiter [0], pStrDelimiter [1], Multiple_ID_2)));
 		
 	
 	do
 	{
-		PC_Usart ( "\r\n正查询本模块IP，前一个为AP IP，后一个为STA IP……\r\n" );
-	  ESP8266_Cmd ( "AT+CIFSR", "OK", "Link", 500 );
+		PC_Usart("\r\n正查询本模块IP，前一个为AP IP，后一个为STA IP……\r\n");
+	  ESP8266_Cmd("AT+CIFSR", "OK", "Link", 500);
 		
-		PC_Usart ( "\r\n请用手机连接刚才创建的WiFi，这里只连接一个手机，作为ID3，然后用手机网络调试助手以TCP Client连接刚才开启的服务器（AP IP）……\r\n" );
-		Delay_ms ( 20000 ) ;
-	}	while ( ! ESP8266_Cmd ( "AT+CIPSTATUS", "+CIPSTATUS:3", 0, 500 ) );
+		PC_Usart("\r\n请用手机连接刚才创建的WiFi，这里只连接一个手机，作为ID3，然后用手机网络调试助手以TCP Client连接刚才开启的服务器（AP IP）……\r\n");
+		Delay_ms(20000) ;
+	}	while(! ESP8266_Cmd("AT+CIPSTATUS", "+CIPSTATUS:3", 0, 500));
 	
 
-	for ( uc = 0; uc < 3; uc ++ )
+	for(uc = 0; uc < 3; uc ++)
 	{
-		PC_Usart ( "\r\n请输入端口ID%d要发送的字符串，输入格式为：字符串（不含空格）+空格，点击发送\r\n", uc );
+		PC_Usart("\r\n请输入端口ID%d要发送的字符串，输入格式为：字符串（不含空格）+空格，点击发送\r\n", uc);
 
-		scanf ( "%s", cStrInput );
+		scanf("%s", cStrInput);
 
-		ul = strlen ( cStrInput );
+		ul = strlen(cStrInput);
 		
-		ESP8266_SendString ( DISABLE, cStrInput, ul, ( ENUM_ID_NO_TypeDef ) uc );
+		ESP8266_SendString(DISABLE, cStrInput, ul,(ENUM_ID_NO_TypeDef) uc);
 		
 	}
 	
 	
-	PC_Usart ( "\r\n请输入要向端口手机（ID3）发送的字符串，输入格式为：字符串（不含空格）+空格，点击发送\r\n" );
+	PC_Usart("\r\n请输入要向端口手机（ID3）发送的字符串，输入格式为：字符串（不含空格）+空格，点击发送\r\n");
 
-	scanf ( "%s", cStrInput );
+	scanf("%s", cStrInput);
 
-	ul = strlen ( cStrInput );
+	ul = strlen(cStrInput);
 	
-	ESP8266_SendString ( DISABLE, cStrInput, ul, Multiple_ID_3 );
+	ESP8266_SendString(DISABLE, cStrInput, ul, Multiple_ID_3);
 
 	
-	PC_Usart ( "\r\n请在电脑网络调试助手或手机网络调试助手发送字符串……\r\n" );
+	PC_Usart("\r\n请在电脑网络调试助手或手机网络调试助手发送字符串……\r\n");
 	while (1)
 	{
-	  pStr = ESP8266_ReceiveString ( DISABLE );
-		PC_Usart ( "%s", pStr );
+	  pStr = ESP8266_ReceiveString(DISABLE);
+		PC_Usart("%s", pStr);
 	}
 	
 }

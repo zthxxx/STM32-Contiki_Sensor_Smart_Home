@@ -62,7 +62,12 @@ void Uint8PacketQueuePush(Uint8PacketQueue* Uint8PacketQueueHandle,Uint8PacketNo
     uint8PacketNodePointer->next = NULL;
     Uint8PacketQueueHandle->last = uint8PacketNodePointer;
 }
-
+/*通过包数据或者数据块创建一个包节点，用于加入队列等操作
+*packet:数据包
+*packetBlock:数据块
+*返回新建的包节点指针
+*
+*/
 Uint8PacketNode* CreatUint8PacketNode(uint8_t* packet, PacketBlock* packetBlock)
 {
     Uint8PacketNode* uint8PacketNodePointer;
@@ -340,7 +345,11 @@ void DeleteAckedIndexPacket(uint16_t packetAckedIndex)
     Protocol_PacketAckedIndex = packetAckedIndex;
     DeletPacketQueueConditionalItem(UnackedPacketQueueHandle, UnackedPacketAckIndexCondition);
 }
-
+/*计算一个数据块的校验和
+*
+*
+*
+*/
 uint8_t CalculatePacketBlockCheckSum(PacketBlock* packetBlock)
 {
     uint8_t packetHeadLength;
@@ -430,12 +439,18 @@ void AssembleProtocolPacketPushSendQueue(FunctionWord_TypeDef FunctionWord, uint
     Uint8PacketQueuePushData(UnsentPacketQueueHandle,assembledPacketBuf);
     Protocol_PacketSendIndex++;//包序号递增
 }
-
+/*对内封装，提供对外push进接收FIFO的接口
+*
+*
+*/
 void PushReceiveByteDataIntoReceiveQueue(uint8_t streamByteData)//对内封装，提供对外push进FIFO的接口
 {
     Uint8FIFOPush(ReceiveBytesFIFOQueueHandle, streamByteData);
 }
-
+/*从直节流FIFO中解包成块并添加到接收包队列
+*
+*
+*/
 void LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
 {
     static bool isCommunicationPacketReceiveEnd = true;
@@ -502,12 +517,18 @@ void LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
         }
     }
 }
-
-void LoadReceiveQueueByteToPacketBlock()//对内封装，提供对外读取加载接收FIFO队列的接口
+/*对内封装，提供对外读取加载接收FIFO队列的接口
+*
+*
+*/
+void LoadReceiveQueueByteToPacketBlock()
 {
     LoadQueueByteToPacketBlock(ReceiveBytesFIFOQueueHandle);
 }
-
+/*对数据块进行处理
+*
+*
+*/
 void DealWithReceivePacketBlock(PacketBlock* packetBlock)
 {
     if(!packetBlock)return;
@@ -515,9 +536,8 @@ void DealWithReceivePacketBlock(PacketBlock* packetBlock)
     {
         case FunctionWord_Data:
         {
-            printf("%d\t%d\r\n",Protocol_PacketSendIndex,packetBlock->PacketJSONDataLength);
+            printf("%d\t%d\r\n",Protocol_PacketSendIndex++,packetBlock->PacketJSONDataLength);
             Uint8PacketQueuePushData(UnsentPacketQueueHandle,ResolvePacketStructIntoBytes(packetBlock));
-            Protocol_PacketSendIndex++;//包序号递增
         }
         break;
         
@@ -527,6 +547,10 @@ void DealWithReceivePacketBlock(PacketBlock* packetBlock)
         break;
     }
 }
+/*对接收包队列每个数据块进行处理
+*
+*
+*/
 void DealWithReceivePacketQueue()
 {
     Uint8PacketNode* uint8PacketNodePointer;
@@ -546,6 +570,7 @@ void DealWithReceivePacketQueue()
             }
             else
             {
+                /**发送回应包**/
 //                packetBlock = AssembleCommunicationStruct(FunctionWord_Acknowledgement, 0, NULL);
 //                packetBlock->PacketIndex = ReceivedPacketNodePointer->index;
 //                assembledPacketBuf = ResolvePacketStructIntoBytes(packetBlock);

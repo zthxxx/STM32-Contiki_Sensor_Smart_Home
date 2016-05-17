@@ -69,8 +69,8 @@ void ESP8266_WIFI_GPIO_Config( void )
     /*调用库函数，初始化GPIOA*/
     GPIO_Init( WIFI_RST_GPIO_Port, &GPIO_InitStructure );	 
 
-    /*	*/
-    GPIO_ResetBits( WIFI_RST_GPIO_Port, WIFI_RST_GPIO_Pin );// 拉低WiFi模块的复位重启引脚	
+//    /*拉高WiFi模块的复位重启引脚	*/
+    GPIO_SetBits( WIFI_RST_GPIO_Port, WIFI_RST_GPIO_Pin );	
 }
 
 /*********************************************************end of file**************************************************/

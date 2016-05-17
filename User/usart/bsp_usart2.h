@@ -18,6 +18,7 @@ extern USART2_Receive_Handler USART2ReceiveHandler;
 
 
 void USART2_Config(uint32_t BaudRate);
+void ChangeUSART2ReceiveMode(void);
 void USART2_printf(USART_TypeDef* USARTx, char *Data, ...);
 void sendUart2OneByte(uint8_t byteData);
 void SetUSART2_NVIC_ISENABLE(FunctionalState isEnable);

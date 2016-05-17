@@ -110,12 +110,12 @@ void BSP_Config(void)
 #ifdef __WIFI_MODULE_ON__
     WiFi_Config(); 
     ESP8266_STA_TCP_Client();
+    ChangeUSART2ReceiveMode();// 关闭串口2空闲中断 使能串口2接收中断 
 #endif    
 
 #ifdef __E30TTLUART_MODULE_ON__
 	E30TTLUART_Init();
     E30TTLUART_MultiCountConfig(0x0000,0x50,DISABLE,3);
-    printf("E30_TTL_100 OK\r\n");
 #endif  
 }
 
@@ -126,7 +126,7 @@ int main(void)
 
     BSP_Config();    
     
-    IWDG_Start(3);  //wifi模块透传之后开启看门狗
+    IWDG_Start(2);  //wifi模块透传之后开启看门狗
     
     process_init();
     autostart_start(autostart_processes);

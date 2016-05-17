@@ -290,7 +290,7 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);	
         AssembleProtocolPacketPushSendQueue(FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
-        Contiki_etimer_DelayMS(1000);
+        Contiki_etimer_DelayMS(300);
     }
     PROCESS_END();
 }
@@ -308,7 +308,7 @@ PROCESS_THREAD(Communication_Protocol_Send_process, ev, data)
         DealWithReceivePacketQueue();
 //        IncreaseUnackedPacketQueueResendTime();
         
-        Contiki_etimer_DelayMS(100);
+        Contiki_etimer_DelayMS(60);
     }
     PROCESS_END();
 }

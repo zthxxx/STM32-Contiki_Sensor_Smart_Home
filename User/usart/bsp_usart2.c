@@ -57,7 +57,13 @@ void USART2_Config(uint32_t BaudRate)
     MYDMA_Config(USART2_TX_DMA_Channel,(u32)&USART2->DR,(u32)USART2_DMA_SendBuff,ENABLE,USART2_SEND_DMA_BUF_LENTH);
 }
 
-
+void ChangeUSART2ReceiveMode()
+{
+    USART_ITConfig(USART2, USART_IT_IDLE, DISABLE);
+    USART_ITConfig(USART2, USART_IT_RXNE, ENABLE);
+    SetUSART2_NVIC_ISENABLE(ENABLE);
+    USART2ReceiveHandler = ReceiveUSART2PacketDelegate;
+}
 /*
  * 函数名：itoa
  * 描述  ：将整形数据转换成字符串
