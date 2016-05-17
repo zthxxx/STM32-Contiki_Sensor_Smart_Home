@@ -9,6 +9,7 @@
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
 #include "CommunicationProtocol.h"
+#include "SDS01.h"
 
 #define UART4_SEND_DMA_BUF_LENTH       500
 

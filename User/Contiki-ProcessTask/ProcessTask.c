@@ -18,6 +18,7 @@ PROCESS(HCSR501_Read_Status_process, "Read status of is anyone here");
 PROCESS(HCSR04_Measure_Distance_process, "Measure distance with HC-SR04 UltrasonicWave rangefinder");
 PROCESS(BH1750_Measure_Lumen_process, "Measure lumen with BH1750 Light Sensor");
 PROCESS(RC522_Read_Card_process, "Read card ID and data with RC522 RFID");
+PROCESS(SDS01_Read_PM_Value_process, "Get PM2.5 and PM10 data with SDS01");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -28,7 +29,8 @@ bool someoneStatusGlobalData;
 uint16_t distanceGlobalData;
 float lightIntensityGlobalData;
 uint32_t CardID_GlobalData;
-
+float PM2_5_GlobalData;
+float PM10_GlobalData;
 
 /*******************PROCESS************************/
 
@@ -180,6 +182,24 @@ PROCESS_THREAD(BH1750_Measure_Lumen_process, ev, data)
     PROCESS_END();
 }
 
+PROCESS_THREAD(SDS01_Read_PM_Value_process, ev, data)
+{
+    float PM2_5_Value = 0;
+    float PM10_Value = 0;
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        SDS01_LoadReceiveQueueByteToPacketBlock();
+        PM2_5_Value = SDS01_getPM2_5_Value();
+        PM10_Value = SDS01_getPM10_Value();
+        PM2_5_GlobalData = PM2_5_Value;
+        PM10_GlobalData = PM10_Value;
+        Contiki_etimer_DelayMS(3000);
+    }
+    PROCESS_END();
+}
+
 PROCESS_THREAD(RC522_Read_Card_process, ev, data)
 {
     int8_t status;
@@ -288,11 +308,13 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSON_AddItemToObject(root, "WaveDistance", cJSON_CreateNumber(distanceGlobalData));
         cJSON_AddItemToObject(root, "LightIntensity", cJSON_CreateNumber(lightIntensityGlobalData));
         cJSON_AddItemToObject(root, "CardID", cJSON_CreateNumber(CardID_GlobalData));
+        cJSON_AddItemToObject(root, "PM2_5", cJSON_CreateNumber(PM2_5_GlobalData));
+        cJSON_AddItemToObject(root, "PM10", cJSON_CreateNumber(PM10_GlobalData));
         
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);	
         AssembleProtocolPacketPushSendQueue(0x0001, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
-        Contiki_etimer_DelayMS(1000);
+        Contiki_etimer_DelayMS(2000);
     }
     PROCESS_END();
 }
@@ -304,13 +326,14 @@ PROCESS_THREAD(Communication_Protocol_Send_process, ev, data)
     PROCESS_BEGIN();
     while(1)
     {
+        Contiki_etimer_DelayMS(200);
         SendUnsentPacketQueue();
         SendUnackedPacketQueue();
         LoadReceiveQueueByteToPacketBlock();
         DealWithReceivePacketQueue();
 //        IncreaseUnackedPacketQueueResendTime();
         
-        Contiki_etimer_DelayMS(100);
+        
     }
     PROCESS_END();
 }

@@ -34,6 +34,7 @@
 #include "BH1750.h"
 #include "RC522.h"
 #include "E30TTLUART.h"
+#include "SDS01.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -64,6 +65,7 @@
     #define __BH1750_MODULE_ON__        //光照传感器
     #define __RC522_MODULE_ON__         //RFID读卡器
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
+    #define __SDS01_MODULE_ON__    //E30无线串口模块
     #endif
 #endif
 
@@ -117,6 +119,10 @@ void BSP_Config(void)
 
 #ifdef __RC522_MODULE_ON__
 	RC522_Init();
+#endif
+
+#ifdef __SDS01_MODULE_ON__
+	SDS01_Init();
 #endif
 
 #ifdef __WIFI_MODULE_ON__
@@ -187,6 +193,10 @@ int main(void)
 
 #ifdef __RC522_MODULE_ON__     
     process_start(&RC522_Read_Card_process,NULL);
+#endif
+
+#ifdef __RC522_MODULE_ON__
+	process_start(&SDS01_Read_PM_Value_process,NULL);
 #endif
 
 #ifdef __COMMUNICAT_PROTOCOL_SENSOR_DATA__     

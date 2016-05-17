@@ -28,6 +28,7 @@
 #include "BH1750.h"
 #include "RC522.h"
 #include "E30TTLUART.h"
+#include "SDS01.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -59,7 +60,7 @@ PROCESS_NAME(HCSR501_Read_Status_process);
 PROCESS_NAME(HCSR04_Measure_Distance_process);
 PROCESS_NAME(BH1750_Measure_Lumen_process);
 PROCESS_NAME(RC522_Read_Card_process);
-
+PROCESS_NAME(SDS01_Read_PM_Value_process);
 
 
 

@@ -308,7 +308,7 @@ void LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
     static bool isCommunicationPacketReceiveEnd = true;
     static PacketBlock* packetBlock = NULL;
     uint16_t count;
-    bool isHeadAllEqual = false;
+    static bool isHeadAllEqual = false;
     
     if(!packetBlock){packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));for(count=0;count<sizeof(Protocol_HeadData);count++)packetBlock->head[count] = 0;packetBlock->functionWord = FunctionWord_Null;}/*只有第一次会执行,清零头部和功能字*/
     while(true)
