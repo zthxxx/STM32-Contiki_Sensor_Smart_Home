@@ -120,7 +120,9 @@ void USART3_IRQHandler(void)
 		receiveByte = USART_ReceiveData(USART3);//(USART3->DR);		//读取接收到的数据
 //        sendUart1OneByte(receiveByte);
 //        sendUart2OneByte(receiveByte);
-//        PushReceiveByteDataIntoReceiveFIFO(receiveByte);
+#ifdef __TERMINAL_ON__
+        PushReceiveByteDataIntoReceiveFIFO(receiveByte);
+#endif
 	}
 }
 

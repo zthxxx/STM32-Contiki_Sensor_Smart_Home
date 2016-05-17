@@ -12,7 +12,17 @@ STM32 移植使用Contiki系统
 3) 现将各模块驱动全部调通并能将所有数据打印显示。
 4) 现系统中各任务均为单元测试例程，并未做数据处理及控制。
 5) 使用串口1作为打印调节输出端口。
-6) 以下为各模块接口（具体接口文本在各模块文件夹内）。
+6) 终端和节点不同的地方：
+		a.) CommunicationConfig.h 中 #define __TERMINAL_ON__ 位置的宏定义 __TERMINAL_ON__ __TERMINAL_OFF__
+		b.) bsp_usart3.C 中 USART3_IRQHandler 中是否开启接收无线串口的数据;
+		c.) ProcessTask.C CommunicatProtocol_Send_Sensor_Data中传感器类型与应用层json的地址;
+		d.) ProcessTask.C CommunicatProtocol_Send_Sensor_Data AssembleProtocolPacketPushSendQueue 中设置传输层协议目的地址;
+		e.) CommunicationConfig.c 中 Protocol_LocalhostAddress 设置传输层协议本机地址;
+		f.) main.c 中 E30TTLUART_MultiCountConfig设置链路层本机地址和信道;
+		f.) E30TTLUART.c 中 E30TTLUART_Appoint_Target_Address 中设置链路层目的地址和信道;
+		g.) wifi_config.c 中设置wifi与socket相关数据;
+		
+7) 以下为各模块接口（具体接口文本在各模块文件夹内）。
 
 
 

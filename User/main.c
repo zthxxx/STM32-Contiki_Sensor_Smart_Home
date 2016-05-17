@@ -55,18 +55,18 @@
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
     
     #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
-    #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
+//    #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
 #else
     #ifdef __TERMINAL_OFF__
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列
     #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
-    #define __OLED_MODULE_ON__          //OLED显示屏
+//    #define __OLED_MODULE_ON__          //OLED显示屏
     #define __DHT11_MODULE_ON__         //温湿度传感器
     #define __MQ02_MODULE_ON__          //烟雾传感器
-    #define __HCSR501_MODULE_ON__       //红外热释电人体传感器
-    #define __HCSR04_MODULE_ON__        //超声波测距模块
+//    #define __HCSR501_MODULE_ON__       //红外热释电人体传感器
+//    #define __HCSR04_MODULE_ON__        //超声波测距模块
     #define __BH1750_MODULE_ON__        //光照传感器
-    #define __RC522_MODULE_ON__         //RFID读卡器
+//    #define __RC522_MODULE_ON__         //RFID读卡器
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
     #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
     #endif
