@@ -6,7 +6,7 @@
 #include "timer4_cap.h"
 
 #define	HCSR04_TRIG_PORT        GPIOA		    //TRIG       
-#define	HCSR04_TRIG_PIN         GPIO_Pin_11     //TRIG  
+#define	HCSR04_TRIG_PIN         GPIO_Pin_8     //TRIG  
 
 #define	HCSR04_ECHO_PORT        GPIOB		    //ECHO 
 #define	HCSR04_ECHO_PIN         GPIO_Pin_6	    //ECHO 

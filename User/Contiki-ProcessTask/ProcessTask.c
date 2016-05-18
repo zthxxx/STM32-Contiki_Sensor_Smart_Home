@@ -297,24 +297,24 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
     {
         root=cJSON_CreateObject();	
         
-        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x03));
+        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x01));
         cJSON_AddItemToObject(root, "InfoType", cJSON_CreateString("Data"));
         cJSON_AddItemToObject(root, "Owner", cJSON_CreateString("admin"));
         
-//        cJSON_AddItemToObject(root, "Temperature", cJSON_CreateNumber(temperatureGlobalData));
-//        cJSON_AddItemToObject(root, "Humidity", cJSON_CreateNumber(humidityGlobalData));
-//        cJSON_AddItemToObject(root, "SmogPercentage", cJSON_CreateNumber(smogPercentageGlobalData));
-//        cJSON_AddItemToObject(root, "BodyStatus", cJSON_CreateBool(someoneStatusGlobalData));
-//        cJSON_AddItemToObject(root, "WaveDistance", cJSON_CreateNumber(distanceGlobalData));
-//        cJSON_AddItemToObject(root, "LightIntensity", cJSON_CreateNumber(lightIntensityGlobalData));
-//        cJSON_AddItemToObject(root, "CardID", cJSON_CreateNumber(CardID_GlobalData));
+        cJSON_AddItemToObject(root, "Temperature", cJSON_CreateNumber(temperatureGlobalData));
+        cJSON_AddItemToObject(root, "Humidity", cJSON_CreateNumber(humidityGlobalData));
+        cJSON_AddItemToObject(root, "SmogPercentage", cJSON_CreateNumber(smogPercentageGlobalData));
+        cJSON_AddItemToObject(root, "BodyStatus", cJSON_CreateBool(someoneStatusGlobalData));
+        cJSON_AddItemToObject(root, "WaveDistance", cJSON_CreateNumber(distanceGlobalData));
+        cJSON_AddItemToObject(root, "LightIntensity", cJSON_CreateNumber(lightIntensityGlobalData));
+        cJSON_AddItemToObject(root, "CardID", cJSON_CreateNumber(CardID_GlobalData));
         cJSON_AddItemToObject(root, "PM2_5", cJSON_CreateNumber(PM2_5_GlobalData));
         cJSON_AddItemToObject(root, "PM10", cJSON_CreateNumber(PM10_GlobalData));
         
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);	
         AssembleProtocolPacketPushSendQueue(0x0001, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
-        Contiki_etimer_DelayMS(5000);
+        Contiki_etimer_DelayMS(2000);
     }
     PROCESS_END();
 }
