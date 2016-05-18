@@ -20,8 +20,8 @@
 
 //使用串口1或者2发送  
 //#define sendUartByteBuf   USART1_DMA_Send_Data
-#define sendUartByteBuf   USART2_DMA_Send_Data
-//#define sendUartByteBuf   E30TTLUART_SendBytesData
+//#define sendUartByteBuf   USART2_DMA_Send_Data
+#define sendUartByteBuf   E30TTLUART_SendBytesData
 
 typedef enum FunctionWord_TypeDef
 { 
@@ -39,12 +39,12 @@ typedef enum FunctionWord_TypeDef
 
 typedef struct PacketBlock
 {
-    uint8_t PacketHead[2];
-    uint16_t PacketIndex;
-    FunctionWord_TypeDef PacketFunctionWord;
-    uint16_t PacketJSONDataLength;
-    uint8_t* PacketJSONData;
-    uint8_t PacketCheckSum;
+    uint8_t head[2];
+    uint16_t index;
+    FunctionWord_TypeDef functionWord;
+    uint16_t messageDataLength;
+    uint8_t* messageData;
+    uint8_t checkSum;
 }PacketBlock;
 
 
@@ -56,7 +56,6 @@ typedef struct Uint8PacketNode
     uint16_t index;
     uint8_t resendCount;
     uint8_t resendTime;
-    
 }Uint8PacketNode;
 
 typedef struct Uint8PacketQueue
@@ -73,8 +72,8 @@ void SendUnsentPacketQueue(void);
 void SendUnackedPacketQueue(void);
 void IncreaseUnackedPacketQueueResendTime(void);
 
-void AssembleProtocolPacketPushSendQueue(FunctionWord_TypeDef FunctionWord, uint16_t JSONMessageDataLength,uint8_t* JSONMessageData);
-void PushReceiveByteDataIntoReceiveQueue(uint8_t streamByteData);
+void AssembleProtocolPacketPushSendQueue(FunctionWord_TypeDef functionWord, uint16_t messageDataLength,uint8_t* messageData);
+void PushReceiveByteDataIntoReceiveFIFO(uint8_t streamByteData);
 void LoadReceiveQueueByteToPacketBlock(void);
 void DealWithReceivePacketQueue(void);
 

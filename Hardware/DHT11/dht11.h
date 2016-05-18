@@ -14,13 +14,13 @@
 //All rights reserved									  
 //////////////////////////////////////////////////////////////////////////////////
 
-#define DHT11_GPIO_Pin  GPIO_Pin_1
+#define DHT11_GPIO_Pin  GPIO_Pin_13
 #define DHT11_GPIO_Port GPIOC
 
 
 ////IO操作函数											   
-#define	DHT11_DQ_OUT    PCout(1) //数据端口	PA0 
-#define	DHT11_DQ_IN     PCin(1)  //数据端口	PA0 
+#define	DHT11_DQ_OUT    PCout(13) //数据端口	PA0 
+#define	DHT11_DQ_IN     PCin(13)  //数据端口	PA0 
 
 
 uint8_t DHT11_Init(void);//初始化DHT11
