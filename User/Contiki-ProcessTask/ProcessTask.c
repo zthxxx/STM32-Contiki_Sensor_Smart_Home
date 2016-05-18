@@ -261,7 +261,7 @@ PROCESS_THREAD(cJSON_test_process, ev, data)
 
     cJSONout = cJSON_PrintUnformatted(root);
     cJSON_Delete(root);	
-    AssembleProtocolPacketPushSendQueue(FunctionWord_StartUP, strlen(cJSONout), (uint8_t*)cJSONout);
+    AssembleProtocolPacketPushSendQueue(0x0000, FunctionWord_StartUP, strlen(cJSONout), (uint8_t*)cJSONout);
     free(cJSONout);
     PROCESS_END();
 }
@@ -289,7 +289,7 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);	
-        AssembleProtocolPacketPushSendQueue(FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
+        AssembleProtocolPacketPushSendQueue(0x0000, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
         Contiki_etimer_DelayMS(300);
     }
     PROCESS_END();

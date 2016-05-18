@@ -14,7 +14,8 @@
 #include "E30TTLUART.h"
 
 
-#define PROTOCOL_PACKET_CONSISTENT_LENGTH   10
+#define PROTOCOL_PACKET_CONSISTENT_LENGTH   15
+#define PROTOCOL_PACKET_HEAD_LENGTH         4
 #define PROTOCOL_PACKET_RESENT_COUNT_MAX    2
 #define PROTOCOL_PACKET_RESENT_TIME_MAX     1
 
@@ -22,6 +23,8 @@
 //#define sendUartByteBuf   USART1_DMA_Send_Data
 #define sendUartByteBuf   USART2_DMA_Send_Data
 //#define sendUartByteBuf   E30TTLUART_SendBytesData
+
+
 
 typedef enum FunctionWord_TypeDef
 { 
@@ -39,12 +42,15 @@ typedef enum FunctionWord_TypeDef
 
 typedef struct PacketBlock
 {
-    uint8_t head[4];
+    uint8_t head[PROTOCOL_PACKET_HEAD_LENGTH];
+    uint16_t targetAddress;
+    uint16_t sourceAddress;
     uint16_t index;
     FunctionWord_TypeDef functionWord;
+    uint8_t headCheckSum;
     uint16_t messageDataLength;
     uint8_t* messageData;
-    uint8_t checkSum;
+    uint8_t messageDataCheckSum;
 }PacketBlock;
 
 
@@ -72,7 +78,7 @@ void SendUnsentPacketQueue(void);
 void SendUnackedPacketQueue(void);
 void IncreaseUnackedPacketQueueResendTime(void);
 
-void AssembleProtocolPacketPushSendQueue(FunctionWord_TypeDef functionWord, uint16_t messageDataLength,uint8_t* messageData);
+void AssembleProtocolPacketPushSendQueue(uint16_t targetAddress, FunctionWord_TypeDef functionWord, uint16_t messageDataLength,uint8_t* messageData);
 void PushReceiveByteDataIntoReceiveFIFO(uint8_t streamByteData);
 void LoadReceiveQueueByteToPacketBlock(void);
 void DealWithReceivePacketQueue(void);

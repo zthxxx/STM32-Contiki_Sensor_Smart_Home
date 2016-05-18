@@ -48,7 +48,7 @@
 
 //#define __CJSON_LIB_TEST__          //cJSON lib 输出测试
 //#define __CLOCK_TICK_TEST__         //NOP 与 TCIK 数量测试
-//#define __WIFI_MODULE_ON__          //WIFI模块开启
+#define __WIFI_MODULE_ON__          //WIFI模块开启
 //#define __WIFI_MODULE_TEST__        //WIFI模块开启后测试
 #define __COMMUNICAT_PROTOCOL__     //管理发送队列
 //#define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
@@ -116,13 +116,13 @@ void BSP_Config(void)
 #ifdef __E30TTLUART_MODULE_ON__
 	E30TTLUART_Init();
     E30TTLUART_MultiCountConfig(0x0000,0x50,DISABLE,3);
+    printf("E30-TTL-100 OK.\r\n");
 #endif  
 }
 
 
 int main(void)
 {
-
 
     BSP_Config();    
     

@@ -1,7 +1,8 @@
 #include "CommunicationProtocol.h"
 
 
-const uint8_t Protocol_headData[4] = {0xEF,0x02,0xAA,0xAA};
+const uint8_t Protocol_HeadData[PROTOCOL_PACKET_HEAD_LENGTH] = {0xEF,0x02,0xAA,0xAA};
+const uint16_t Protocol_LocalhostAddress = 0x0001;
 uint16_t Protocol_PacketSendIndex = 0;//连续增加的发送序号
 uint16_t Protocol_PacketAckedIndex = 0;//作为缓存中转的接收序号
 Uint8PacketQueue UnsentPacketQueue;
@@ -145,16 +146,17 @@ Uint8PacketNode* Uint8PacketQueuePop(Uint8PacketQueue* Uint8PacketQueueHandle)
 */
 void SendOneCommunicationPacketNode(Uint8PacketNode* uint8PacketNodePointer)
 {
-    uint16_t protocol_PacketLength;
+    uint16_t protocol_messageDataLength;
     uint8_t* packet;
-    uint8_t packetLengthPosition;
-    packetLengthPosition = sizeof(((PacketBlock*)0)->head)+sizeof(((PacketBlock*)0)->index)+sizeof((uint8_t)(((PacketBlock*)0)->functionWord));
+    uint8_t messageDataLengthPosition;
+    messageDataLengthPosition = sizeof(((PacketBlock*)0)->head)+sizeof(((PacketBlock*)0)->targetAddress)+sizeof(((PacketBlock*)0)->sourceAddress)+sizeof(((PacketBlock*)0)->index)+sizeof((uint8_t)(((PacketBlock*)0)->functionWord));
     if(!uint8PacketNodePointer)return;
+    if(!uint8PacketNodePointer->packet)return;
     packet = uint8PacketNodePointer->packet;
-    protocol_PacketLength = packet[packetLengthPosition];      //长度所在位置
-    protocol_PacketLength += packet[packetLengthPosition+1]<<8;
+    protocol_messageDataLength = packet[messageDataLengthPosition];      //长度所在位置
+    protocol_messageDataLength += packet[messageDataLengthPosition+1]<<8;
     
-    sendUartByteBuf(packet, protocol_PacketLength + PROTOCOL_PACKET_CONSISTENT_LENGTH);
+    sendUartByteBuf(packet, protocol_messageDataLength + PROTOCOL_PACKET_CONSISTENT_LENGTH);
 }
 
 /*发送一整个未发送队列数据
@@ -321,49 +323,65 @@ void DeleteAckedIndexPacket(uint16_t packetAckedIndex)
     Protocol_PacketAckedIndex = packetAckedIndex;
     DeletPacketQueueConditionalItem(UnackedPacketQueueHandle, UnackedPacketAckIndexCondition);
 }
+/*计算一个数据块头部固定字节的校验和
+*
+*/
+uint8_t CalculatePacketBlockHeadCheckSum(PacketBlock* packetBlock)
+{
+    uint8_t headLength;
+    uint8_t headCheckSum = 0;
+    if(!packetBlock)return NULL;
+    headLength = sizeof(packetBlock->head);
+    while(headLength-- > 0)
+    {
+        headCheckSum += packetBlock->head[headLength];
+    }
+    headCheckSum += (uint8_t)(packetBlock->targetAddress & 0x00FF);
+    headCheckSum += (uint8_t)((packetBlock->targetAddress >> 8) & 0x00FF);
+    headCheckSum += (uint8_t)(packetBlock->sourceAddress & 0x00FF);
+    headCheckSum += (uint8_t)((packetBlock->sourceAddress >> 8) & 0x00FF);
+    headCheckSum += (uint8_t)(packetBlock->index & 0x00FF);
+    headCheckSum += (uint8_t)((packetBlock->index >> 8) & 0x00FF);
+    headCheckSum += (uint8_t)packetBlock->functionWord;
+    headCheckSum += (uint8_t)(packetBlock->messageDataLength & 0x00FF);
+    headCheckSum += (uint8_t)((packetBlock->messageDataLength >> 8) & 0x00FF);
+    return headCheckSum;
+}
 /*计算一个数据块的校验和
 *
 */
-uint8_t CalculatePacketBlockCheckSum(PacketBlock* packetBlock)
+uint8_t CalculatePacketBlockMessageDataCheckSum(PacketBlock* packetBlock)
 {
-    uint8_t headLength;
-    uint16_t MessageDataLength;
-    uint8_t checkSum = 0;
+    uint16_t messageDataLength;
+    uint8_t messageDataCheckSum = 0;
     if(!packetBlock)return NULL;
+    if(!packetBlock->messageData)return NULL;
     
-    MessageDataLength = packetBlock->messageDataLength;
-    headLength = sizeof(Protocol_headData);
-    while(headLength-- > 0)
+    messageDataLength = packetBlock->messageDataLength;
+
+    while(messageDataLength-- > 0)
     {
-        checkSum += packetBlock->head[headLength];
+        messageDataCheckSum += packetBlock->messageData[messageDataLength];
     }
-    checkSum += (uint8_t)(packetBlock->index & 0x00FF);
-    checkSum += (uint8_t)((packetBlock->index >> 8) & 0x00FF);
-    checkSum += (uint8_t)packetBlock->functionWord;
-    checkSum += (uint8_t)(packetBlock->messageDataLength & 0x00FF);
-    checkSum += (uint8_t)((packetBlock->messageDataLength >> 8) & 0x00FF);
-    while(MessageDataLength-- > 0)
-    {
-        checkSum += packetBlock->messageData[MessageDataLength];
-    }
-    return checkSum;
+    return messageDataCheckSum;
 }
 
 /*组装一个结构体表示包的信息
 *
 */
-PacketBlock* AssembleProtocolPacketBlock(FunctionWord_TypeDef FunctionWord, uint16_t MessageDataLength,uint8_t* MessageData)
+PacketBlock* AssembleProtocolPacketBlock(uint16_t targetAddress, uint16_t sourceAddress, FunctionWord_TypeDef FunctionWord, uint16_t MessageDataLength,uint8_t* MessageData)
 {
     PacketBlock* packetBlock;
     packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));//生成一个数据包结构体，作为发送时在生成字节流时释放;作为接收时，在处理接收数据时被释放
-    memcpy(packetBlock->head,Protocol_headData,sizeof(Protocol_headData));
+    memcpy(packetBlock->head,Protocol_HeadData,sizeof(Protocol_HeadData));
+    packetBlock->targetAddress = targetAddress;
+    packetBlock->sourceAddress = sourceAddress;
     packetBlock->index = Protocol_PacketSendIndex;
     packetBlock->functionWord = FunctionWord;
     packetBlock->messageDataLength = MessageDataLength;
+    packetBlock->headCheckSum = CalculatePacketBlockHeadCheckSum(packetBlock);
     packetBlock->messageData = MessageData;
-    
-    packetBlock->checkSum = CalculatePacketBlockCheckSum(packetBlock);
-    
+    packetBlock->messageDataCheckSum = CalculatePacketBlockMessageDataCheckSum(packetBlock);
     return packetBlock;
 }
 
@@ -386,11 +404,14 @@ uint8_t* ResolvePacketStructIntoBytes(PacketBlock* packetBlock)
     assembledPacketBuf = (uint8_t *)malloc(protocol_PacketLength * sizeof(uint8_t));//生成串字节流，做发送时在Unasked队列超时或响应接收时释放，做接收时在处理接收数据时被释放。
     
     memcpy(assembledPacketBuf + packetBufOffset,packetBlock->head,sizeof(packetBlock->head));packetBufOffset += sizeof(packetBlock->head);
+    memcpy(assembledPacketBuf + packetBufOffset,&(packetBlock->targetAddress),sizeof(packetBlock->targetAddress));packetBufOffset += sizeof(packetBlock->targetAddress);
+    memcpy(assembledPacketBuf + packetBufOffset,&(packetBlock->sourceAddress),sizeof(packetBlock->sourceAddress));packetBufOffset += sizeof(packetBlock->sourceAddress);
     memcpy(assembledPacketBuf + packetBufOffset,&(packetBlock->index),sizeof(packetBlock->index));packetBufOffset += sizeof(packetBlock->index);
     memcpy(assembledPacketBuf + packetBufOffset,&uint8FunctionWord,sizeof(uint8FunctionWord));packetBufOffset += sizeof(uint8FunctionWord);
     memcpy(assembledPacketBuf + packetBufOffset,&(packetBlock->messageDataLength),sizeof(packetBlock->messageDataLength));packetBufOffset += sizeof(packetBlock->messageDataLength);
+    memcpy(assembledPacketBuf + packetBufOffset,&(packetBlock->headCheckSum),sizeof(packetBlock->headCheckSum));packetBufOffset += sizeof(packetBlock->headCheckSum);
     memcpy(assembledPacketBuf + packetBufOffset,packetBlock->messageData,packetBlock->messageDataLength);packetBufOffset += packetBlock->messageDataLength;
-    memcpy(assembledPacketBuf + packetBufOffset,&(packetBlock->checkSum),sizeof(packetBlock->checkSum));packetBufOffset += sizeof(packetBlock->checkSum);
+    memcpy(assembledPacketBuf + packetBufOffset,&(packetBlock->messageDataCheckSum),sizeof(packetBlock->messageDataCheckSum));packetBufOffset += sizeof(packetBlock->messageDataCheckSum);
     
     free(packetBlock->messageData);
     free(packetBlock);
@@ -401,11 +422,11 @@ uint8_t* ResolvePacketStructIntoBytes(PacketBlock* packetBlock)
 *
 *
 */
-void AssembleProtocolPacketPushSendQueue(FunctionWord_TypeDef FunctionWord, uint16_t MessageDataLength,uint8_t* MessageData)
+void AssembleProtocolPacketPushSendQueue(uint16_t targetAddress, FunctionWord_TypeDef FunctionWord, uint16_t MessageDataLength,uint8_t* MessageData)
 {
     uint8_t* assembledPacketBuf;
     PacketBlock* packetBlock;
-    packetBlock = AssembleProtocolPacketBlock(FunctionWord, MessageDataLength, MessageData);
+    packetBlock = AssembleProtocolPacketBlock(targetAddress, Protocol_LocalhostAddress,FunctionWord, MessageDataLength, MessageData);
     assembledPacketBuf = ResolvePacketStructIntoBytes(packetBlock);
     Uint8PacketQueuePushStreamData(UnsentPacketQueueHandle,assembledPacketBuf);
     Protocol_PacketSendIndex++;//包序号递增
@@ -426,68 +447,67 @@ void LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
     static bool isCommunicationPacketReceiveEnd = true;
     static PacketBlock* packetBlock = NULL;
     uint16_t count;
-    bool isHeadAllEqual;
+    bool isHeadAllEqual = false;
     
+    if(!packetBlock){packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));for(count=0;count<sizeof(Protocol_HeadData);count++)packetBlock->head[count] = 0;packetBlock->functionWord = FunctionWord_Null;}/*只有第一次会执行,清零头部和功能字*/
     while(true)
     {
         if(isCommunicationPacketReceiveEnd == true)
         {
-            if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < PROTOCOL_PACKET_CONSISTENT_LENGTH) return;
-            if(!packetBlock)packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));//只有第一次会执行
-            while(true)
+            if(!isHeadAllEqual)
             {
-                if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) <= 0) return;    //长度不够时退出     
-                for(count=0;count<sizeof(Protocol_headData)-1;count++)    //顺序移位  先收到低字节
+                if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < PROTOCOL_PACKET_CONSISTENT_LENGTH) return;
+                while(true)
                 {
-                    packetBlock->head[count] = packetBlock->head[count+1];
+                    if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) <= 0) return;    //长度不够时退出     
+                    for(count=0;count<sizeof(Protocol_HeadData)-1;count++)          //顺序移位  先收到低字节
+                    {
+                        packetBlock->head[count] = packetBlock->head[count+1];
+                    }
+                    packetBlock->head[sizeof(Protocol_HeadData)-1] = Uint8FIFOPop(uint8FIFOQueueHandle);//获取最新值
+              
+                    for(count=0,isHeadAllEqual=true;count<sizeof(Protocol_HeadData);count++)      //比较是否相等
+                    {
+                        if(packetBlock->head[count] != Protocol_HeadData[count])isHeadAllEqual=false;
+                    }
+                    if(isHeadAllEqual)break;
                 }
-                packetBlock->head[sizeof(Protocol_headData)-1] = Uint8FIFOPop(uint8FIFOQueueHandle);//获取最新值
-          
-                isHeadAllEqual = true;
-                for(count=0;count<sizeof(Protocol_headData);count++)      //比较是否相等
-                {
-                    if(packetBlock->head[count] != Protocol_headData[count])isHeadAllEqual=false;
-                }
-                if(isHeadAllEqual)
-                {
-                    break;
-                }
-            } 
-            
-            if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < PROTOCOL_PACKET_CONSISTENT_LENGTH - sizeof(Protocol_headData)) return;
+            }
+            if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < PROTOCOL_PACKET_CONSISTENT_LENGTH - sizeof(Protocol_HeadData)) return;
+            Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->targetAddress)),sizeof(((PacketBlock*)0)->targetAddress));
+            Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->sourceAddress)),sizeof(((PacketBlock*)0)->sourceAddress));
             Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->index)),sizeof(((PacketBlock*)0)->index));
             Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->functionWord)),sizeof((uint8_t)(((PacketBlock*)0)->functionWord)));
             Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->messageDataLength)),sizeof(((PacketBlock*)0)->messageDataLength));
-            
+            Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->headCheckSum)),sizeof(((PacketBlock*)0)->headCheckSum));
+            if(packetBlock->headCheckSum != CalculatePacketBlockHeadCheckSum(packetBlock))
+            {
+                isHeadAllEqual = false;
+                for(count=0;count<sizeof(Protocol_HeadData);count++)packetBlock->head[count] = 0;
+                continue;
+            }
         }
-        if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < packetBlock->messageDataLength + sizeof(((PacketBlock*)0)->checkSum))
+        isCommunicationPacketReceiveEnd = false;
+        if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < packetBlock->messageDataLength + sizeof(((PacketBlock*)0)->messageDataCheckSum))return;
+       
+        packetBlock->messageData = (uint8_t*)malloc(packetBlock->messageDataLength * sizeof(uint8_t));
+        Uint8FIFOPopToStream(uint8FIFOQueueHandle, packetBlock->messageData,packetBlock->messageDataLength);
+        Uint8FIFOPopToStream(uint8FIFOQueueHandle, &(packetBlock->messageDataCheckSum),sizeof(((PacketBlock*)0)->messageDataCheckSum));
+        isCommunicationPacketReceiveEnd = true;
+        isHeadAllEqual = false;
+        if(packetBlock->messageDataCheckSum != CalculatePacketBlockMessageDataCheckSum(packetBlock))
         {
-            isCommunicationPacketReceiveEnd = false;
-            return;
+            free(packetBlock->messageData);
+            free(packetBlock);
+            printf("Bad block\r\n");
         }
         else
         {
-            packetBlock->messageData = (uint8_t*)malloc(packetBlock->messageDataLength * sizeof(uint8_t));
-            Uint8FIFOPopToStream(uint8FIFOQueueHandle, packetBlock->messageData,packetBlock->messageDataLength);
-            Uint8FIFOPopToStream(uint8FIFOQueueHandle, &(packetBlock->checkSum),sizeof(((PacketBlock*)0)->checkSum));
-            isCommunicationPacketReceiveEnd = true;
-            if(packetBlock->checkSum != CalculatePacketBlockCheckSum(packetBlock))
-            {
-                free(packetBlock->messageData);
-                free(packetBlock);
-                printf("Bad block\r\n");
-            }
-            else
-            {
-                Uint8PacketQueuePushBlock(ReceivedPacketBlockQueueHandle, packetBlock);
-            }
-            packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));
-            for(count=0;count<sizeof(Protocol_headData);count++)      //比较是否相等
-            {
-                packetBlock->head[count] = 0;
-            }
-            return;
+            Uint8PacketQueuePushBlock(ReceivedPacketBlockQueueHandle, packetBlock);
         }
+        packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));
+        for(count=0;count<sizeof(Protocol_HeadData);count++)packetBlock->head[count] = 0;//清零头部
+        packetBlock->functionWord = FunctionWord_Null;
     }
 }
 /*对内封装，提供对外读取加载接收FIFO队列的接口
