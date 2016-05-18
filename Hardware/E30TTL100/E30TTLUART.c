@@ -101,10 +101,9 @@ void E30TTLUART_TransparentSendBytesData(uint8_t *bytesBuf, uint16_t bytesBufLen
     while(bytesBufLength > 0xFF)
     {
         while(E30TTLUART_AUX_IN == 0);
-        E30TTLUART_UART_SendBytesBuf(bytesBuf, 0xFF);
+        E30TTLUART_UART_SendBuf_Force_Block(bytesBuf, 0xFF);
         bytesBuf += 0xFF;
         bytesBufLength -= 0xFF;
-        Delay_NOP_us(10);
     }
     while(E30TTLUART_AUX_IN == 0);
     E30TTLUART_UART_SendBytesBuf(bytesBuf, bytesBufLength);

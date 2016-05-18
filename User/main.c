@@ -180,7 +180,7 @@ int main(void)
 	process_start(&SDS01_Read_PM_Value_process,NULL);
 #endif
 
-#ifdef __COMMUNICAT_PROTOCOL_SENSOR_DATA__     
+#ifdef __COMMUNICAT_PROTOCOL_SENSOR_DATA__
     process_start(&CommunicatProtocol_Send_Sensor_Data,NULL);
 #endif
 
