@@ -35,6 +35,7 @@
 #include "RC522.h"
 #include "E30TTLUART.h"
 #include "SDS01.h"
+#include "SHT15.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -47,37 +48,6 @@
 #include <clock.h>
 #include "contiki_delay.h"
 #include "ProcessTask.h"
-
-//在"CommunicationProtocol.h"文件中修改 __TERMINAL_XX__宏定义，选择节点或终端模式
-#ifdef __TERMINAL_ON__
-    #define __WIFI_MODULE_ON__          //WIFI模块开启
-    #define __COMMUNICAT_PROTOCOL__     //管理发送队列
-    #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
-    
-    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
-    #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
-#else
-    #ifdef __TERMINAL_OFF__
-    #define __COMMUNICAT_PROTOCOL__     //管理发送队列
-    #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
-    #define __OLED_MODULE_ON__          //OLED显示屏
-    #define __DHT11_MODULE_ON__         //温湿度传感器
-    #define __MQ02_MODULE_ON__          //烟雾传感器
-    #define __HCSR501_MODULE_ON__       //红外热释电人体传感器
-    #define __HCSR04_MODULE_ON__        //超声波测距模块
-    #define __BH1750_MODULE_ON__        //光照传感器
-    #define __RC522_MODULE_ON__         //RFID读卡器
-    #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
-    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
-    #endif
-#endif
-
-
-//#define __CJSON_LIB_TEST__          //cJSON lib 输出测试
-//#define __CLOCK_TICK_TEST__         //NOP 与 TCIK 数量测试
-//#define __WIFI_MODULE_ON__          //WIFI模块开启
-//#define __WIFI_MODULE_TEST__        //WIFI模块开启后测试
-
 
 
 void BSP_Config(void)
@@ -101,7 +71,7 @@ void BSP_Config(void)
     
 #ifdef __DHT11_MODULE_ON__
     DHT11_Init(); 
-#endif   
+#endif
 
 #ifdef __MQ02_MODULE_ON__
     MQ02_Init();
@@ -116,12 +86,16 @@ void BSP_Config(void)
 #endif
 
 #ifdef __BH1750_MODULE_ON__
-	BH1750_Init();               
+	BH1750_Init();
 	BH1750_Start();
 #endif
 
 #ifdef __RC522_MODULE_ON__
 	RC522_Init();
+#endif
+
+#ifdef __SHT15_MODULE_ON__
+	SHT15_Init();
 #endif
 
 #ifdef __SDS01_MODULE_ON__
@@ -196,6 +170,10 @@ int main(void)
 
 #ifdef __RC522_MODULE_ON__     
     process_start(&RC522_Read_Card_process,NULL);
+#endif
+
+#ifdef __SHT15_MODULE_ON__
+	process_start(&SHT15_Read_DATA_Value_process,NULL);
 #endif
 
 #ifdef __SDS01_MODULE_ON__

@@ -364,7 +364,7 @@
               <MiscControls></MiscControls>
               <Define>STM32F10X_HD, USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC;..\..\Hardware\MQ_2;..\..\Hardware\HC-SR501;..\..\Hardware\HC-SR04;..\..\User\TIMER;..\..\User\EXTI;..\..\User\TIMER\TIM4-capture;..\..\User\I2C;..\..\Hardware\BH1750;..\..\User\NVIC;..\..\User\Contiki-ProcessTask;..\..\Hardware\RC522;..\..\Libraries\cJSON;..\..\Libraries\Malloc;..\..\User\CommunicationProtocol;..\..\User\FIFO;..\..\Hardware\E30TTL100;..\..\Hardware\SDS01</IncludePath>
+              <IncludePath>..\..\Libraries\CMSIS;..\..\User;..\..\Libraries\FWlib\inc;..\..\User\gpio;..\..\User\SysTick;..\..\User\usart;..\..\User\DMA;..\..\User\contiki-code\cpu\arm\stm32f103;..\..\User\contiki-code\platform\stm32test;..\..\User\contiki-code\core;..\..\User\contiki-code\core\sys;..\..\User\IWDG;..\..\User\SPI;..\..\Hardware\DHT11;..\..\Hardware\OLED;..\..\Hardware\wifi;..\..\Libraries\sys;..\..\User\delay;..\..\User\ADC;..\..\Hardware\MQ_2;..\..\Hardware\HC-SR501;..\..\Hardware\HC-SR04;..\..\User\TIMER;..\..\User\EXTI;..\..\User\TIMER\TIM4-capture;..\..\User\I2C;..\..\Hardware\BH1750;..\..\User\NVIC;..\..\User\Contiki-ProcessTask;..\..\Hardware\RC522;..\..\Libraries\cJSON;..\..\Libraries\Malloc;..\..\User\CommunicationProtocol;..\..\User\FIFO;..\..\Hardware\E30TTL100;..\..\Hardware\SDS01;..\..\Hardware\SHT15</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -722,6 +722,16 @@
               <FileType>5</FileType>
               <FilePath>..\..\Hardware\E30TTL100\E30TTLUART_GPIO.txt</FilePath>
             </File>
+            <File>
+              <FileName>SDS01_GPIO.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Hardware\SDS01\SDS01_GPIO.txt</FilePath>
+            </File>
+            <File>
+              <FileName>SHT15_GPIO.txt</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\..\Hardware\SHT15\SHT15_GPIO.txt</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -781,6 +791,11 @@
               <FileName>SDS01.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Hardware\SDS01\SDS01.c</FilePath>
+            </File>
+            <File>
+              <FileName>SHT15.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\Hardware\SHT15\SHT15.c</FilePath>
             </File>
           </Files>
         </Group>

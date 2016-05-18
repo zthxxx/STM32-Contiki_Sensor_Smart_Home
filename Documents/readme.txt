@@ -15,8 +15,8 @@ STM32 移植使用Contiki系统
 6) 终端和节点不同的地方：
 		a.) CommunicationConfig.h 中 #define __TERMINAL_ON__ 位置的宏定义 __TERMINAL_ON__ __TERMINAL_OFF__
 		b.) bsp_usart3.C 中 USART3_IRQHandler 中是否开启接收无线串口的数据;
-		c.) ProcessTask.C CommunicatProtocol_Send_Sensor_Data中传感器类型与应用层json的地址;
-		d.) ProcessTask.C CommunicatProtocol_Send_Sensor_Data AssembleProtocolPacketPushSendQueue 中设置传输层协议目的地址;
+		c.) ProcessTask.h 中所需传感器类型;
+		d.) ProcessTask.C CommunicatProtocol_Send_Sensor_Data 中应用层json的地址 AssembleProtocolPacketPushSendQueue 中设置传输层协议目的地址;
 		e.) CommunicationConfig.c 中 Protocol_LocalhostAddress 设置传输层协议本机地址;
 		f.) main.c 中 E30TTLUART_MultiCountConfig设置链路层本机地址和信道;
 		f.) E30TTLUART.c 中 E30TTLUART_Appoint_Target_Address 中设置链路层目的地址和信道;
@@ -159,6 +159,14 @@ SDS01_VCC <---> STM32_5V
 SDS01_GND <---> STM32_GND
 *************************************************/
 
+/*************************************************
+STM32 非标准I2C驱动SHT15模块
+
+SHT15_SCK  <---> STM32_A11
+SHT15_DATA <---> STM32_A12
+SHT15_VCC  <---> STM32_3V3
+SHT15_GND  <---> STM32_GNG
+*************************************************/
 
 
 

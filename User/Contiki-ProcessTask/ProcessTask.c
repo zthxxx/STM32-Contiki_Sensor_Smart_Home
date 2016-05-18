@@ -19,11 +19,14 @@ PROCESS(HCSR04_Measure_Distance_process, "Measure distance with HC-SR04 Ultrason
 PROCESS(BH1750_Measure_Lumen_process, "Measure lumen with BH1750 Light Sensor");
 PROCESS(RC522_Read_Card_process, "Read card ID and data with RC522 RFID");
 PROCESS(SDS01_Read_PM_Value_process, "Get PM2.5 and PM10 data with SDS01");
+PROCESS(SHT15_Read_DATA_Value_process, "SHT15 read accurate temperature and humidity");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
 float temperatureGlobalData;
 float humidityGlobalData;
+float SHT15_AccurateTemperatureGlobalData;
+float SHT15_AccurateHumidityGlobalData;
 float smogPercentageGlobalData;
 bool someoneStatusGlobalData;
 uint16_t distanceGlobalData;
@@ -111,6 +114,36 @@ PROCESS_THREAD(DHT11_Read_Data_process, ev, data)
         
 //        printf("temperature: %.2f°C  humidity: %.2f \r\n",(float)temperature+(float)temperature0*0.01,(float)humidity+(float)humidity0*0.01);	
         Contiki_etimer_DelayMS(500);
+    }
+    PROCESS_END();
+}
+
+PROCESS_THREAD(SHT15_Read_DATA_Value_process, ev, data)
+{
+    u16 humi_val, temp_val;
+    u8 err = 0, checksum = 0;
+    float humi_val_real = 0.0; 
+    float temp_val_real = 0.0;
+    float dew_point = 0.0;
+    static struct etimer et;
+    
+    PROCESS_BEGIN();
+    while(1)
+    {
+        err += SHT15_Measure(&temp_val, &checksum, TEMP);                  //获取温度测量值
+        err += SHT15_Measure(&humi_val, &checksum, HUMI);                  //获取湿度测量值
+        if(err != 0)
+        {
+            SHT15_ConReset();
+        }
+        else
+        {
+            SHT15_Calculate(temp_val, humi_val, &temp_val_real, &humi_val_real); //计算实际的温湿度值
+            dew_point = SHT15_CalcuDewPoint(temp_val_real, humi_val_real);       //计算露点温度
+            SHT15_AccurateTemperatureGlobalData = temp_val_real;
+            SHT15_AccurateHumidityGlobalData = humi_val_real;
+        }	
+        Contiki_etimer_DelayMS(1000);
     }
     PROCESS_END();
 }
@@ -300,17 +333,42 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x01));
         cJSON_AddItemToObject(root, "InfoType", cJSON_CreateString("Data"));
         cJSON_AddItemToObject(root, "Owner", cJSON_CreateString("admin"));
-        
+
+#ifdef __DHT11_MODULE_ON__
         cJSON_AddItemToObject(root, "Temperature", cJSON_CreateNumber(temperatureGlobalData));
         cJSON_AddItemToObject(root, "Humidity", cJSON_CreateNumber(humidityGlobalData));
+#endif
+        
+#ifdef __SDS01_MODULE_ON__
+        cJSON_AddItemToObject(root, "AccurateTemperature", cJSON_CreateNumber(SHT15_AccurateTemperatureGlobalData));
+        cJSON_AddItemToObject(root, "AccurateHumidity", cJSON_CreateNumber(SHT15_AccurateHumidityGlobalData));
+#endif
+
+#ifdef __MQ02_MODULE_ON__
         cJSON_AddItemToObject(root, "SmogPercentage", cJSON_CreateNumber(smogPercentageGlobalData));
+#endif
+
+#ifdef __HCSR501_MODULE_ON__
         cJSON_AddItemToObject(root, "BodyStatus", cJSON_CreateBool(someoneStatusGlobalData));
+#endif
+
+#ifdef __HCSR04_MODULE_ON__
         cJSON_AddItemToObject(root, "WaveDistance", cJSON_CreateNumber(distanceGlobalData));
+#endif
+
+#ifdef __BH1750_MODULE_ON__
         cJSON_AddItemToObject(root, "LightIntensity", cJSON_CreateNumber(lightIntensityGlobalData));
+#endif
+
+#ifdef __RC522_MODULE_ON__
         cJSON_AddItemToObject(root, "CardID", cJSON_CreateNumber(CardID_GlobalData));
+#endif
+
+#ifdef __SDS01_MODULE_ON__
         cJSON_AddItemToObject(root, "PM2_5", cJSON_CreateNumber(PM2_5_GlobalData));
         cJSON_AddItemToObject(root, "PM10", cJSON_CreateNumber(PM10_GlobalData));
-        
+#endif
+
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);	
         AssembleProtocolPacketPushSendQueue(0x0001, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
