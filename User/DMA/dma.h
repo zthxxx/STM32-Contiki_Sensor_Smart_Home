@@ -19,6 +19,11 @@
 #define USART2_TX_DMA_Channel             DMA1_Channel7
 #define USART3_TX_DMA_Channel             DMA1_Channel2
 #define UART4_TX_DMA_Channel              DMA2_Channel5
+#define USART1_DMA_TX_FLAG                DMA1_FLAG_TC4
+#define USART2_DMA_TX_FLAG                DMA1_FLAG_TC7
+#define USART3_DMA_TX_FLAG                DMA1_FLAG_TC2
+#define UART4_DMA_TX_FLAG                 DMA2_FLAG_TC5
+
 
 void MYDMA_Config(DMA_Channel_TypeDef* Channel_x,u32 PeripheralBaseAddr,u32 MemoryBaseAddr,FunctionalState isMemoryToPeripheral,u16 BufferSize);
 void MYDMA_Enable(DMA_Channel_TypeDef* DMA_CHx, u16 bufferSize);

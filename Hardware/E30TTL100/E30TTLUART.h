@@ -6,7 +6,6 @@
 #define E30TTLUART_SendOneByte          SendUSART3OneByte
 #define E30TTLUART_ChangeBaudRate       ChangeUSART3BaudRate
 #define E30TTLUART_UART_SendBytesBuf    USART3_DMA_Send_Data
-#define E30TTLUART_UART_SendBuf_Force_Block SendUSART3BytesBuf
 #define E30TTLUART_UART_AppointSendBytesBuf SendUSART3BytesBuf     //指定发送时需要的发送函数不能是DMA方式
 
 

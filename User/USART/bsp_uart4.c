@@ -62,7 +62,8 @@ void UART4_Config(uint32_t BaudRate)
     USART_Cmd(UART4, ENABLE);
     UART4_NVIC_Configuration(ENABLE);
     MYDMA_Config(UART4_TX_DMA_Channel,(u32)&UART4->DR,(u32)UART4_DMA_SendBuff,ENABLE,UART4_SEND_DMA_BUF_LENTH);
-
+    USART_DMACmd(UART4,USART_DMAReq_Tx,ENABLE);
+    DMA_Cmd(UART4_TX_DMA_Channel, ENABLE);  //使能USART1 TX DMA1 所指示的通道 
 }
 
 
@@ -99,6 +100,8 @@ void SendUART4BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 
 void UART4_DMA_Send_Data(uint8_t *UART4_SendBuff, uint16_t DataSendLength)
 {
+    while(!DMA_GetFlagStatus(UART4_DMA_TX_FLAG));
+    DMA_ClearFlag(UART4_DMA_TX_FLAG);
     memcpy(UART4_DMA_SendBuff,UART4_SendBuff,DataSendLength);
     USART_DMACmd(UART4,USART_DMAReq_Tx,ENABLE); //串口向dma发出请求
     UART4_TXD_DMA_Enable(DataSendLength);

@@ -55,6 +55,8 @@ void USART2_Config(uint32_t BaudRate)
     SetUSART2_NVIC_ISENABLE(ENABLE);
 	USART2ReceiveHandler = ReceiveUSART2WifiCmdDelegate;
     MYDMA_Config(USART2_TX_DMA_Channel,(u32)&USART2->DR,(u32)USART2_DMA_SendBuff,ENABLE,USART2_SEND_DMA_BUF_LENTH);
+    USART_DMACmd(USART2,USART_DMAReq_Tx,ENABLE);
+    DMA_Cmd(USART2_TX_DMA_Channel, ENABLE);  //使能USART1 TX DMA1 所指示的通道 
 }
 
 void ChangeUSART2ReceiveMode()
@@ -221,6 +223,8 @@ void SendUSART2BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 }
 void USART2_DMA_Send_Data(uint8_t *USART2_SendBuff, uint16_t DataSendLength)
 {
+    while(!DMA_GetFlagStatus(USART2_DMA_TX_FLAG));
+    DMA_ClearFlag(USART2_DMA_TX_FLAG);
     memcpy(USART2_DMA_SendBuff,USART2_SendBuff,DataSendLength);
     USART_DMACmd(USART2,USART_DMAReq_Tx,ENABLE); //串口向dma发出请求
     USART2_TXD_DMA_Enable(DataSendLength);
