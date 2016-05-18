@@ -14,14 +14,14 @@
 #include "E30TTLUART.h"
 
 
-#define PROTOCOL_PACKET_CONSISTENT_LENGTH   8
+#define PROTOCOL_PACKET_CONSISTENT_LENGTH   10
 #define PROTOCOL_PACKET_RESENT_COUNT_MAX    2
 #define PROTOCOL_PACKET_RESENT_TIME_MAX     1
 
 //使用串口1或者2发送  
 //#define sendUartByteBuf   USART1_DMA_Send_Data
-//#define sendUartByteBuf   USART2_DMA_Send_Data
-#define sendUartByteBuf   E30TTLUART_SendBytesData
+#define sendUartByteBuf   USART2_DMA_Send_Data
+//#define sendUartByteBuf   E30TTLUART_SendBytesData
 
 typedef enum FunctionWord_TypeDef
 { 
@@ -39,7 +39,7 @@ typedef enum FunctionWord_TypeDef
 
 typedef struct PacketBlock
 {
-    uint8_t head[2];
+    uint8_t head[4];
     uint16_t index;
     FunctionWord_TypeDef functionWord;
     uint16_t messageDataLength;

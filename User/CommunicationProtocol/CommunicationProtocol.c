@@ -1,9 +1,7 @@
 #include "CommunicationProtocol.h"
 
 
-#define AT_LEAST_PACKET_BYTES_LENGTH 8
-
-const uint8_t Protocol_headData[2] = {0xAA,0xAA};
+const uint8_t Protocol_headData[4] = {0xEF,0x02,0xAA,0xAA};
 uint16_t Protocol_PacketSendIndex = 0;//连续增加的发送序号
 uint16_t Protocol_PacketAckedIndex = 0;//作为缓存中转的接收序号
 Uint8PacketQueue UnsentPacketQueue;
@@ -434,16 +432,16 @@ void LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
     {
         if(isCommunicationPacketReceiveEnd == true)
         {
-            if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < AT_LEAST_PACKET_BYTES_LENGTH) return;
+            if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < PROTOCOL_PACKET_CONSISTENT_LENGTH) return;
             if(!packetBlock)packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));//只有第一次会执行
             while(true)
             {
                 if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) <= 0) return;    //长度不够时退出     
-                for(count=sizeof(Protocol_headData)-1;count>0;count--)    //顺序移位
+                for(count=0;count<sizeof(Protocol_headData)-1;count++)    //顺序移位  先收到低字节
                 {
-                    packetBlock->head[count] = packetBlock->head[count-1];
+                    packetBlock->head[count] = packetBlock->head[count+1];
                 }
-                packetBlock->head[0] = Uint8FIFOPop(uint8FIFOQueueHandle);//获取最新值
+                packetBlock->head[sizeof(Protocol_headData)-1] = Uint8FIFOPop(uint8FIFOQueueHandle);//获取最新值
           
                 isHeadAllEqual = true;
                 for(count=0;count<sizeof(Protocol_headData);count++)      //比较是否相等
@@ -456,7 +454,7 @@ void LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
                 }
             } 
             
-            if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < AT_LEAST_PACKET_BYTES_LENGTH - sizeof(Protocol_headData)) return;
+            if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < PROTOCOL_PACKET_CONSISTENT_LENGTH - sizeof(Protocol_headData)) return;
             Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->index)),sizeof(((PacketBlock*)0)->index));
             Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->functionWord)),sizeof((uint8_t)(((PacketBlock*)0)->functionWord)));
             Uint8FIFOPopToStream(uint8FIFOQueueHandle, (uint8_t*)(&(packetBlock->messageDataLength)),sizeof(((PacketBlock*)0)->messageDataLength));
@@ -484,7 +482,10 @@ void LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
                 Uint8PacketQueuePushBlock(ReceivedPacketBlockQueueHandle, packetBlock);
             }
             packetBlock = (PacketBlock*)malloc(sizeof(PacketBlock));
-            packetBlock->head[0]=packetBlock->head[1]=0;
+            for(count=0;count<sizeof(Protocol_headData);count++)      //比较是否相等
+            {
+                packetBlock->head[count] = 0;
+            }
             return;
         }
     }
