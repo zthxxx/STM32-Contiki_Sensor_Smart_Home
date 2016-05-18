@@ -13,7 +13,8 @@
 //使用配置发送端口  
 //#define sendUartByteBuf   USART1_DMA_Send_Data
 #ifdef __TERMINAL_ON__
-    #define sendUartByteBuf   USART2_DMA_Send_Data
+//    #define sendUartByteBuf   USART2_DMA_Send_Data
+    #define sendUartByteBuf   SendUSART2BytesBuf
 #else
     #ifdef __TERMINAL_OFF__
     #define sendUartByteBuf   E30TTLUART_SendBytesData

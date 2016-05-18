@@ -20,7 +20,8 @@ extern USART2_Receive_Handler USART2ReceiveHandler;
 void USART2_Config(uint32_t BaudRate);
 void ChangeUSART2ReceiveMode(void);
 void USART2_printf(USART_TypeDef* USARTx, char *Data, ...);
-void sendUart2OneByte(uint8_t byteData);
+void SendUSART2OneByte(uint8_t byteData);
+void SendUSART2BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength);
 void SetUSART2_NVIC_ISENABLE(FunctionalState isEnable);
 void ReceiveUSART2PacketDelegate(void);                	//串口中断服务程序
 void ReceiveUSART2WifiCmdDelegate(void);                //wifi串口中断服务程序

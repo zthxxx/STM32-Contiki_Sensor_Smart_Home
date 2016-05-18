@@ -125,7 +125,7 @@ void USART1_IRQHandler(void)
 	{
         USART_ClearITPendingBit(USART1,USART_IT_RXNE); //清除中断标志
 		receiveByte = USART_ReceiveData(USART1);//(USART1->DR);		//读取接收到的数据
-//        sendUart2OneByte(receiveByte);
+
 	}
 }
 

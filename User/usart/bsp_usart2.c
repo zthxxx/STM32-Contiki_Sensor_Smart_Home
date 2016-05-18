@@ -206,13 +206,19 @@ void SetUSART2_NVIC_ISENABLE(FunctionalState isEnable)
     NVIC_IRQChannel_Configuration_Set(USART2_IRQn, 1, 0, isEnable);
 }
 
-void sendUart2OneByte(uint8_t byteData)
+void SendUSART2OneByte(uint8_t byteData)
 {
-	
+	USART_ClearFlag(USART2,USART_FLAG_TC);//先清除一下发送中断标志位，会解决第一个字节丢失的问题。
 	USART_SendData(USART2, byteData);
 	while(USART_GetFlagStatus(USART2,USART_FLAG_TC)!=SET);//等待发送结束
 }
-
+void SendUSART2BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
+{
+	while(bytesBufLength--)
+	{
+		SendUSART2OneByte(*(bytesBuf++));
+	}
+}
 void USART2_DMA_Send_Data(uint8_t *USART2_SendBuff, uint16_t DataSendLength)
 {
     memcpy(USART2_DMA_SendBuff,USART2_SendBuff,DataSendLength);

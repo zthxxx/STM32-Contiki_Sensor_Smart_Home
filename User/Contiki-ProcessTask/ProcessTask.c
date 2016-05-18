@@ -326,7 +326,7 @@ PROCESS_THREAD(Communication_Protocol_Send_process, ev, data)
     PROCESS_BEGIN();
     while(1)
     {
-        Contiki_etimer_DelayMS(200);
+        Contiki_etimer_DelayMS(100);
         SendUnsentPacketQueue();
         SendUnackedPacketQueue();
         LoadReceiveQueueByteToPacketBlock();
