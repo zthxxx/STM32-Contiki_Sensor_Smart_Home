@@ -13,8 +13,12 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
+
+Uint8PacketQueue USART1_DMASendPacketQueue = {NULL, NULL, CreatUint8PacketNode, FreePacketNoedItem};
+Uint8PacketQueue* USART1_DMASendPacketQueueHandle = &USART1_DMASendPacketQueue;
+
    
-//DMA1的各通道配置
+//DMA的各通道配置
 //这里的传输形式是固定的,这点要根据不同的情况来修改
 //从存储器->外设模式/8位数据宽度/存储器增量模式
 //Channel_x:DMA通道CHx
@@ -51,7 +55,7 @@ void MYDMA_Config(DMA_Channel_TypeDef* Channel_x,u32 PeripheralBaseAddr,u32 Memo
 	DMA_InitStructure.DMA_Priority = DMA_Priority_Medium;               //DMA通道 x拥有中优先级 
 	DMA_InitStructure.DMA_M2M = DMA_M2M_Disable;                        //DMA通道x没有设置为内存到内存传输
 	DMA_Init(Channel_x, &DMA_InitStructure);                        //根据DMA_InitStruct中指定的参数初始化DMA的通道所标识的寄存器
-	//DMA_Cmd(DMA_CHx, ENABLE);                                         //使能所指示的通道 在每次发送请求时使能
+	DMA_Cmd(Channel_x, ENABLE);                                         //使能所指示的通道 在每次发送请求时使能
 }
 //开启一次DMA传输
 void MYDMA_Enable(DMA_Channel_TypeDef* DMA_CHx, u16 bufferSize)
@@ -83,7 +87,13 @@ void UART4_TXD_DMA_Enable(u16 bufferSize)
 }
 
 
-
+/*对内封装，提供对外push进接收FIFO的接口
+*
+*/
+void PushUSRAT1_DMA_SendDataIntoFIFO(uint8_t *USART1_SendBuff, uint16_t DataSendLength)//对内封装，提供对外push进FIFO的接口
+{
+    Uint8PacketQueuePushStreamData(USART1_DMASendPacketQueueHandle, USART1_SendBuff, DataSendLength);
+}
 
 
 

@@ -62,6 +62,7 @@ void SendUnsentPacketQueue(void);
 void SendUnackedPacketQueue(void);
 void IncreaseUnackedPacketQueueResendTime(void);
 Uint8PacketNode* CreatTianProtocolUint8PacketNode(uint8_t* packet, void* packetBlock);
+void FreeTianProtocolPacketNoedItem(Uint8PacketNode* uint8PacketNodePointer);
 void AssembleProtocolPacketPushSendQueue(uint16_t targetAddress, FunctionWord_TypeDef functionWord, uint16_t messageDataLength,uint8_t* messageData);
 uint8_t* ResolvePacketStructIntoBytes(PacketBlock* packetBlock);
 void LoadReceiveQueueByteToPacketBlock(void);

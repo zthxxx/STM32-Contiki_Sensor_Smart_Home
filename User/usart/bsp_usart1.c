@@ -61,9 +61,8 @@ void USART1_Config(uint32_t BaudRate)
     USART_ClearFlag(USART1,USART_FLAG_TC);//先清除一下发送中断标志位，会解决第一个字节丢失的问题。
     USART_Cmd(USART1, ENABLE);
     USART1_NVIC_Configuration(ENABLE);
-    MYDMA_Config(USART1_TX_DMA_Channel,(u32)&USART1->DR,(u32)USART1_DMA_SendBuff,ENABLE,USART1_SEND_DMA_BUF_LENTH);
     USART_DMACmd(USART1,USART_DMAReq_Tx,ENABLE);
-    DMA_Cmd(USART1_TX_DMA_Channel, ENABLE);  //使能USART1 TX DMA1 所指示的通道 
+    MYDMA_Config(USART1_TX_DMA_Channel,(u32)&USART1->DR,(u32)USART1_DMA_SendBuff,ENABLE,USART1_SEND_DMA_BUF_LENTH);
 }
 
 

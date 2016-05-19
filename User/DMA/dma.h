@@ -2,6 +2,7 @@
 #define	__DMA_H	   
 #include "stm32f10x.h"
 #include "stm32f10x_dma.h"
+#include "Uint8PacketQueueManger.h"
 //////////////////////////////////////////////////////////////////////////////////	 
 //本程序只供学习使用，未经作者许可，不得用于其它任何用途
 //ALIENTEK miniSTM32开发板
@@ -31,6 +32,11 @@ void USART1_TXD_DMA_Enable(u16 bufferSize);
 void USART2_TXD_DMA_Enable(u16 bufferSize);
 void USART3_TXD_DMA_Enable(u16 bufferSize);
 void UART4_TXD_DMA_Enable(u16 bufferSize);
+
+
+void PushUSRAT1_DMA_SendDataIntoFIFO(uint8_t *USART1_SendBuff, uint16_t DataSendLength);
+
+
 
 #endif
 

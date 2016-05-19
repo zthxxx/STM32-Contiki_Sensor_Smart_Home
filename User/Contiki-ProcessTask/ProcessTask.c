@@ -325,7 +325,7 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
     static struct etimer et;
     cJSON *root;char* cJSONout;
     PROCESS_BEGIN();
-    Contiki_etimer_DelayMS(1000);
+    Contiki_etimer_DelayMS(2000);
     while(1)
     {
         root=cJSON_CreateObject();	
@@ -378,7 +378,7 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);
         AssembleProtocolPacketPushSendQueue(0x0001, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
-        Contiki_etimer_DelayMS(1000);
+        Contiki_etimer_DelayMS(2000);
     }
     PROCESS_END();
 }

@@ -116,9 +116,71 @@ Uint8PacketNode* Uint8PacketQueuePop(Uint8PacketQueue* Uint8PacketQueueHandle)
 }
 
 
+/*释放一个包节点的空间
+*uint8PacketNodePointer：要释放的项节点指针
+*
+*/
+void FreePacketNoedItem(Uint8PacketNode* uint8PacketNodePointer)
+{
+    if(!uint8PacketNodePointer)return;
+    if(uint8PacketNodePointer->packet)free(uint8PacketNodePointer->packet);
+    if(uint8PacketNodePointer->packetBlock)free(uint8PacketNodePointer->packetBlock);
+    free(uint8PacketNodePointer);
+}
+
+
+/*删除队列中的一项
+*PacketQueueHandle：包队列指针
+*uint8PacketNodePointer：要删除的项节点指针
+*uint8PacketNodePreviousPointer：要删除项的前一向的节点指针
+*/
+void DeletPacketQueueCurrentItem(Uint8PacketQueue* PacketQueueHandle, Uint8PacketNode** uint8PacketNodePointer, Uint8PacketNode** uint8PacketNodePreviousPointer)
+{
+    if(!*uint8PacketNodePointer)return;
+    if(!*uint8PacketNodePreviousPointer)         //上一项不存在  相当于为头节点
+    {
+        *uint8PacketNodePreviousPointer = *uint8PacketNodePointer;
+        *uint8PacketNodePointer = (*uint8PacketNodePointer)->next;
+        PacketQueueHandle->FreePacketNoedItem(*uint8PacketNodePreviousPointer);      
+        *uint8PacketNodePreviousPointer = NULL;
+        PacketQueueHandle->head = *uint8PacketNodePointer;
+    }
+    else
+    {
+        (*uint8PacketNodePreviousPointer)->next = (*uint8PacketNodePointer)->next;
+        PacketQueueHandle->FreePacketNoedItem(*uint8PacketNodePreviousPointer);        
+        *uint8PacketNodePointer = (*uint8PacketNodePreviousPointer)->next;
+        if(!*uint8PacketNodePointer)            //下一项不存在  相当于为尾节点
+        {
+            PacketQueueHandle->last = *uint8PacketNodePreviousPointer;
+        }
+    }
+}
 
 
 
+/*通过条件判断队列中每一项是否要删除
+*PacketQueueHandle：包队列指针
+*PacketQueueItemCondition：一个判断条件函数指针，接收一个节点，并判断是否需要删除它，如果是则返回True。
+*
+*/
+void DeletPacketQueueConditionalItem(Uint8PacketQueue* PacketQueueHandle, bool (*PacketQueueItemCondition)(Uint8PacketNode* uint8PacketNodePointer))
+{
+    Uint8PacketNode* uint8PacketNodePointer = NULL;
+    Uint8PacketNode* uint8PacketNodePreviousPointer = NULL;
+    uint8PacketNodePointer = PacketQueueHandle->head;
+    
+    while(uint8PacketNodePointer)
+    {
+        if(PacketQueueItemCondition(uint8PacketNodePointer))
+        {
+            DeletPacketQueueCurrentItem(PacketQueueHandle, &uint8PacketNodePointer, &uint8PacketNodePreviousPointer);//因为要对外部的指针变量也产生影响，因此此处参数为指向指针的指针。
+            continue;
+        }
+        uint8PacketNodePreviousPointer = uint8PacketNodePointer;
+        uint8PacketNodePointer = uint8PacketNodePointer->next;
+    }
+}
 
 
 
