@@ -52,9 +52,6 @@
 
 void BSP_Config(void)
 {
-    char a[] = "ajosifjas0djgasdf92fksdhbauinsd9fa\r\n";
-    char b[] = "782309481290785901723478109275893489\r\n";
-    char c[] = "jiohasidhjf0ajsd897fu98qh98892374fgh87sedg\r\n";
     /* 初始化 */
     delay_init();
     clock_init();
@@ -64,9 +61,7 @@ void BSP_Config(void)
     USART1_Config(115200);
     USART2_Config(115200);
     printf("Start Contiki OS\r\n");
-    USART1_DMA_Send_Data(a,strlen(a));
-    USART1_DMA_Send_Data(b,strlen(b));
-    USART1_DMA_Send_Data(c,strlen(c));
+
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
     OLED_ShowString(0,0,"SPI OLED");
@@ -123,7 +118,6 @@ void BSP_Config(void)
 
 int main(void)
 {
-    
     BSP_Config();    
     
     IWDG_Start(2);  //wifi模块透传之后开启看门狗

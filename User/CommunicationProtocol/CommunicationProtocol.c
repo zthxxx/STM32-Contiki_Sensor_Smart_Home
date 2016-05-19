@@ -59,11 +59,21 @@ void SendUnsentPacketQueue()
 void FreeTianProtocolPacketNoedItem(Uint8PacketNode* uint8PacketNodePointer)
 {
     if(!uint8PacketNodePointer)return;
-    if(uint8PacketNodePointer->packet)free(uint8PacketNodePointer->packet);
+    if(uint8PacketNodePointer->packet)
+    {
+        free(uint8PacketNodePointer->packet);
+        uint8PacketNodePointer->packet = NULL;
+    }
+    
     if(uint8PacketNodePointer->packetBlock)
     {
-        if(((PacketBlock*)uint8PacketNodePointer->packetBlock)->messageData)free(((PacketBlock*)uint8PacketNodePointer->packetBlock)->messageData);
+        if(((PacketBlock*)uint8PacketNodePointer->packetBlock)->messageData)
+        {
+            free(((PacketBlock*)uint8PacketNodePointer->packetBlock)->messageData);
+            ((PacketBlock*)uint8PacketNodePointer->packetBlock)->messageData = NULL;
+        }
         free(uint8PacketNodePointer->packetBlock);
+        uint8PacketNodePointer->packetBlock = NULL;
     }
     free(uint8PacketNodePointer);
 }
@@ -262,7 +272,12 @@ uint8_t* ResolvePacketStructIntoBytes(PacketBlock* packetBlock)
     uint16_t packetBufOffset = 0;
     
     if(!packetBlock)return NULL;
-    if(!packetBlock->messageData){free(packetBlock);return NULL;}
+    if(!packetBlock->messageData)
+    {
+        free(packetBlock);
+        packetBlock = NULL;
+        return NULL;
+    }
     protocol_PacketLength = packetBlock->messageDataLength + PROTOCOL_PACKET_CONSISTENT_LENGTH;
     uint8FunctionWord = (uint8_t)(packetBlock->functionWord);
     assembledPacketBuf = (uint8_t *)malloc(protocol_PacketLength * sizeof(uint8_t));//生成串字节流，做发送时在Unasked队列超时或响应接收时释放，做接收时在处理接收数据时被释放。
@@ -278,7 +293,9 @@ uint8_t* ResolvePacketStructIntoBytes(PacketBlock* packetBlock)
     memcpy(assembledPacketBuf + packetBufOffset,&(packetBlock->messageDataCheckSum),sizeof(packetBlock->messageDataCheckSum));packetBufOffset += sizeof(packetBlock->messageDataCheckSum);
     
     free(packetBlock->messageData);
+    packetBlock->messageData = NULL;
     free(packetBlock);
+    packetBlock = NULL;
     return assembledPacketBuf;
 }
 
@@ -357,7 +374,9 @@ void LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
         if(packetBlock->messageDataCheckSum != CalculatePacketBlockMessageDataCheckSum(packetBlock))
         {
             free(packetBlock->messageData);
+            packetBlock->messageData = NULL;
             free(packetBlock);
+            packetBlock = NULL;
             printf("Bad block\r\n");
         }
         else

@@ -6,7 +6,6 @@
 #include "wifi_config.h"
 
 USART2_Receive_Handler USART2ReceiveHandler;
-uint8_t USART2_DMA_SendBuff[USART2_SEND_DMA_BUF_LENTH];
 
 
 /*
@@ -56,6 +55,8 @@ void USART2_Config(uint32_t BaudRate)
 	USART2ReceiveHandler = ReceiveUSART2WifiCmdDelegate;
     USART_DMACmd(USART2,USART_DMAReq_Tx,ENABLE);
     MYDMA_Config(USART2_TX_DMA_Channel,(u32)&USART2->DR,(u32)USART2_DMA_SendBuff,ENABLE,USART2_SEND_DMA_BUF_LENTH);
+    NVIC_IRQChannel_Configuration_Set(DMA1_Channel7_IRQn, 3, 1, ENABLE);
+    DMA_ITConfig(USART2_TX_DMA_Channel,DMA_IT_TC,ENABLE);
 }
 
 void ChangeUSART2ReceiveMode()
@@ -220,13 +221,9 @@ void SendUSART2BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 		SendUSART2OneByte(*(bytesBuf++));
 	}
 }
-void USART2_DMA_Send_Data(uint8_t *USART2_SendBuff, uint16_t DataSendLength)
+void USART2_DMA_Send_Data(uint8_t *USART_SendBuff, uint16_t DataSendLength)
 {
-    while(!DMA_GetFlagStatus(USART2_DMA_TX_FLAG));
-    DMA_ClearFlag(USART2_DMA_TX_FLAG);
-    memcpy(USART2_DMA_SendBuff,USART2_SendBuff,DataSendLength);
-    USART_DMACmd(USART2,USART_DMAReq_Tx,ENABLE); //串口向dma发出请求
-    USART2_TXD_DMA_Enable(DataSendLength);
+    PushUSRAT2_DMA_SendDataIntoFIFO(USART_SendBuff, DataSendLength);
 }
 
 

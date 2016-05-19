@@ -123,8 +123,16 @@ Uint8PacketNode* Uint8PacketQueuePop(Uint8PacketQueue* Uint8PacketQueueHandle)
 void FreePacketNoedItem(Uint8PacketNode* uint8PacketNodePointer)
 {
     if(!uint8PacketNodePointer)return;
-    if(uint8PacketNodePointer->packet)free(uint8PacketNodePointer->packet);
-    if(uint8PacketNodePointer->packetBlock)free(uint8PacketNodePointer->packetBlock);
+    if(uint8PacketNodePointer->packet)
+    {
+        free(uint8PacketNodePointer->packet);
+        uint8PacketNodePointer->packet = NULL;
+    }
+    if(uint8PacketNodePointer->packetBlock)
+    {
+        free(uint8PacketNodePointer->packetBlock);
+        uint8PacketNodePointer->packetBlock = NULL;
+    }
     free(uint8PacketNodePointer);
 }
 

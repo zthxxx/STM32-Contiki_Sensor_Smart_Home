@@ -22,6 +22,7 @@ void DealWithReceivePacketBlock(PacketBlock* packetBlock)
         
         default:
             free(packetBlock->messageData);
+            packetBlock->messageData = NULL;
             free(packetBlock);
         break;
     }

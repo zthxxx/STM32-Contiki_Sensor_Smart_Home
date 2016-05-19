@@ -13,7 +13,6 @@
 #include "bsp_uart4.h"
 
 
-uint8_t UART4_DMA_SendBuff[UART4_SEND_DMA_BUF_LENTH];
 
 
 void UART4_NVIC_Configuration(FunctionalState isEnable)
@@ -63,7 +62,8 @@ void UART4_Config(uint32_t BaudRate)
     UART4_NVIC_Configuration(ENABLE);
     USART_DMACmd(UART4,USART_DMAReq_Tx,ENABLE);
     MYDMA_Config(UART4_TX_DMA_Channel,(u32)&UART4->DR,(u32)UART4_DMA_SendBuff,ENABLE,UART4_SEND_DMA_BUF_LENTH);
-    DMA_Cmd(UART4_TX_DMA_Channel, ENABLE);  //使能USART1 TX DMA1 所指示的通道 
+    NVIC_IRQChannel_Configuration_Set(DMA2_Channel4_5_IRQn, 3, 3, ENABLE);
+    DMA_ITConfig(UART4_TX_DMA_Channel,DMA_IT_TC,ENABLE);
 }
 
 
@@ -98,13 +98,9 @@ void SendUART4BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 	}
 }
 
-void UART4_DMA_Send_Data(uint8_t *UART4_SendBuff, uint16_t DataSendLength)
+void UART4_DMA_Send_Data(uint8_t *USART_SendBuff, uint16_t DataSendLength)
 {
-    while(!DMA_GetFlagStatus(UART4_DMA_TX_FLAG));
-    DMA_ClearFlag(UART4_DMA_TX_FLAG);
-    memcpy(UART4_DMA_SendBuff,UART4_SendBuff,DataSendLength);
-    USART_DMACmd(UART4,USART_DMAReq_Tx,ENABLE); //串口向dma发出请求
-    UART4_TXD_DMA_Enable(DataSendLength);
+    PushURAT4_DMA_SendDataIntoFIFO(USART_SendBuff, DataSendLength);
 }
 
   /*******************************************************************************

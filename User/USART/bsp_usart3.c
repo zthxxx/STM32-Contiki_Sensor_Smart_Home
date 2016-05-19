@@ -13,7 +13,6 @@
 #include "bsp_usart3.h"
 
 
-uint8_t USART3_DMA_SendBuff[USART3_SEND_DMA_BUF_LENTH];
 
 
 void USART3_NVIC_Configuration(FunctionalState isEnable)
@@ -63,6 +62,8 @@ void USART3_Config(uint32_t BaudRate)
     USART3_NVIC_Configuration(ENABLE);
     USART_DMACmd(USART3,USART_DMAReq_Tx,ENABLE);
     MYDMA_Config(USART3_TX_DMA_Channel,(u32)&USART3->DR,(u32)USART3_DMA_SendBuff,ENABLE,USART3_SEND_DMA_BUF_LENTH);
+    NVIC_IRQChannel_Configuration_Set(DMA1_Channel2_IRQn, 3, 1, ENABLE);
+    DMA_ITConfig(USART3_TX_DMA_Channel,DMA_IT_TC,ENABLE);
 }
 
 
@@ -97,13 +98,9 @@ void SendUSART3BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 	}
 }
 
-void USART3_DMA_Send_Data(uint8_t *USART3_SendBuff, uint16_t DataSendLength)
+void USART3_DMA_Send_Data(uint8_t *USART_SendBuff, uint16_t DataSendLength)
 {
-    while(!DMA_GetFlagStatus(USART3_DMA_TX_FLAG));
-    DMA_ClearFlag(USART3_DMA_TX_FLAG);
-    memcpy(USART3_DMA_SendBuff,USART3_SendBuff,DataSendLength);
-    USART_DMACmd(USART3,USART_DMAReq_Tx,ENABLE); //串口向dma发出请求
-    USART3_TXD_DMA_Enable(DataSendLength);
+    PushUSRAT3_DMA_SendDataIntoFIFO(USART_SendBuff, DataSendLength);
 }
 
   /*******************************************************************************

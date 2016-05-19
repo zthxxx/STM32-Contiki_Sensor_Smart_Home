@@ -75,11 +75,11 @@ PROCESS_THREAD(wifi_send_test_process, ev, data)
         
         Contiki_etimer_DelayMS(500);
         USART2_SendBuff = " asdfafasdf";
-        USART2_DMA_Send_Data(USART2_SendBuff, 11);
+        SendUSART2BytesBuf(USART2_SendBuff, 11);
         
         Contiki_etimer_DelayMS(500);        
         USART2_SendBuff = " 21398416hy";
-        USART2_DMA_Send_Data(USART2_SendBuff, 11);
+        SendUSART2BytesBuf(USART2_SendBuff, 11);
     }
     PROCESS_END();
 }
