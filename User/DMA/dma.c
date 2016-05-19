@@ -134,7 +134,7 @@ void USART_DMA_SendPacketNode(Uint8PacketQueue* USART_DMASendPacketQueueHandle,u
 /*对内封装，提供对外push进接收FIFO的接口
 *
 */
-void PushUSRAT1_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength)//对内封装，提供对外push进FIFO的接口
+void PushUSART1_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength)//对内封装，提供对外push进FIFO的接口
 {
     Uint8PacketQueuePushStreamData(USART1_DMASendPacketQueueHandle, USART_SendBuff, DataSendLength);
     if(USART1_DMA_Sendding == false)
@@ -146,7 +146,7 @@ void PushUSRAT1_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendL
 /*对内封装，提供对外push进接收FIFO的接口
 *
 */
-void PushUSRAT2_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength)//对内封装，提供对外push进FIFO的接口
+void PushUSART2_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength)//对内封装，提供对外push进FIFO的接口
 {
     Uint8PacketQueuePushStreamData(USART2_DMASendPacketQueueHandle, USART_SendBuff, DataSendLength);
     if(USART2_DMA_Sendding == false)
@@ -159,7 +159,7 @@ void PushUSRAT2_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendL
 /*对内封装，提供对外push进接收FIFO的接口
 *
 */
-void PushUSRAT3_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength)//对内封装，提供对外push进FIFO的接口
+void PushUSART3_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength)//对内封装，提供对外push进FIFO的接口
 {
     Uint8PacketQueuePushStreamData(USART3_DMASendPacketQueueHandle, USART_SendBuff, DataSendLength);
     if(USART3_DMA_Sendding == false)
@@ -172,7 +172,7 @@ void PushUSRAT3_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendL
 /*对内封装，提供对外push进接收FIFO的接口
 *
 */
-void PushURAT4_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength)//对内封装，提供对外push进FIFO的接口
+void PushUART4_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength)//对内封装，提供对外push进FIFO的接口
 {
     Uint8PacketQueuePushStreamData(UART4_DMASendPacketQueueHandle, USART_SendBuff, DataSendLength);
     if(UART4_DMA_Sendding == false)

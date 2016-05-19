@@ -100,7 +100,7 @@ void SendUSART3BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 
 void USART3_DMA_Send_Data(uint8_t *USART_SendBuff, uint16_t DataSendLength)
 {
-    PushUSRAT3_DMA_SendDataIntoFIFO(USART_SendBuff, DataSendLength);
+    PushUSART3_DMA_SendDataIntoFIFO(USART_SendBuff, DataSendLength);
 }
 
   /*******************************************************************************

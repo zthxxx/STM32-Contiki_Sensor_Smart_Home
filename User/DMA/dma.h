@@ -55,10 +55,10 @@ void USART3_TXD_DMA_Enable(u16 bufferSize);
 void UART4_TXD_DMA_Enable(u16 bufferSize);
 
 
-void PushUSRAT1_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength);
-void PushUSRAT2_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength);
-void PushUSRAT3_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength);
-void PushURAT4_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength);
+void PushUSART1_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength);
+void PushUSART2_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength);
+void PushUSART3_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength);
+void PushUART4_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength);
 
 void Free_USART_DMA_PacketNoedItem(Uint8PacketNode* uint8PacketNodePointer);
 

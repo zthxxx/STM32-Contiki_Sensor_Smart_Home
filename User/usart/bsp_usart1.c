@@ -108,7 +108,7 @@ void sendUart1BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 
 void USART1_DMA_Send_Data(uint8_t *USART_SendBuff, uint16_t DataSendLength)
 {
-    PushUSRAT1_DMA_SendDataIntoFIFO(USART_SendBuff, DataSendLength);
+    PushUSART1_DMA_SendDataIntoFIFO(USART_SendBuff, DataSendLength);
 }
 
 

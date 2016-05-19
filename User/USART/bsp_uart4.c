@@ -100,7 +100,7 @@ void SendUART4BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 
 void UART4_DMA_Send_Data(uint8_t *USART_SendBuff, uint16_t DataSendLength)
 {
-    PushURAT4_DMA_SendDataIntoFIFO(USART_SendBuff, DataSendLength);
+    PushUART4_DMA_SendDataIntoFIFO(USART_SendBuff, DataSendLength);
 }
 
   /*******************************************************************************

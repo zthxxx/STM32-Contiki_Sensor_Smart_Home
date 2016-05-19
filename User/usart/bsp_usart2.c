@@ -223,7 +223,7 @@ void SendUSART2BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 }
 void USART2_DMA_Send_Data(uint8_t *USART_SendBuff, uint16_t DataSendLength)
 {
-    PushUSRAT2_DMA_SendDataIntoFIFO(USART_SendBuff, DataSendLength);
+    PushUSART2_DMA_SendDataIntoFIFO(USART_SendBuff, DataSendLength);
 }
 
 

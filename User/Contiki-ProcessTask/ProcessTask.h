@@ -46,6 +46,7 @@
 //在"CommunicationConfig.h"文件中修改 __TERMINAL_XX__宏定义，选择节点或终端模式
 #ifdef __TERMINAL_ON__
     #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
+    #define __SHT15_MODULE_ON__         //SHT15 精确温湿度传感器模块
     #define __WIFI_MODULE_ON__          //WIFI模块开启
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列
