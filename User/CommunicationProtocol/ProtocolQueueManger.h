@@ -27,7 +27,7 @@ typedef struct Uint8PacketQueue
 extern  Uint8PacketQueue* UnsentPacketQueueHandle;
 extern  Uint8PacketQueue* UnackedPacketQueueHandle;
 extern  Uint8PacketQueue* ReceivedPacketBlockQueueHandle;
-extern  Uint8FIFOQueue* ReceiveBytesFIFOQueueHandle;
+extern  Uint8FIFOQueue* TianMaoProtocolReceiveBytesFIFOQueueHandle;
 
 
 

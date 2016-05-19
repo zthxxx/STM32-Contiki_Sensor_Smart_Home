@@ -4,12 +4,12 @@
 Uint8PacketQueue UnsentPacketQueue;
 Uint8PacketQueue UnackedPacketQueue;
 Uint8PacketQueue ReceivedPacketQueue;
-Uint8FIFOQueue ReceiveBytesFIFOQueue;
+Uint8FIFOQueue   TianMaoProtocolReceiveBytesFIFOQueue;
 
 Uint8PacketQueue* UnsentPacketQueueHandle = &UnsentPacketQueue;
 Uint8PacketQueue* UnackedPacketQueueHandle = &UnackedPacketQueue;
 Uint8PacketQueue* ReceivedPacketBlockQueueHandle = &ReceivedPacketQueue;
-Uint8FIFOQueue* ReceiveBytesFIFOQueueHandle = &ReceiveBytesFIFOQueue;
+Uint8FIFOQueue*   TianMaoProtocolReceiveBytesFIFOQueueHandle = &TianMaoProtocolReceiveBytesFIFOQueue;
 
 
 
@@ -140,7 +140,7 @@ Uint8PacketNode* Uint8PacketQueuePop(Uint8PacketQueue* Uint8PacketQueueHandle)
 */
 void PushReceiveByteDataIntoReceiveFIFO(uint8_t streamByteData)//对内封装，提供对外push进FIFO的接口
 {
-    Uint8FIFOPush(ReceiveBytesFIFOQueueHandle, streamByteData);
+    Uint8FIFOPush(TianMaoProtocolReceiveBytesFIFOQueueHandle, streamByteData);
 }
 
 

@@ -25,7 +25,7 @@ typedef struct SDS01_PacketNode
 
 
 void SDS01_Init(void);
-void SDS01_PushReceiveByteDataIntoReceiveFIFO(uint8_t streamByteData);
+void SDS01_PushReceiveByteIntoFIFO(uint8_t streamByteData);
 void SDS01_LoadReceiveQueueByteToPacketBlock(void);
 float SDS01_getPM2_5_Value(void);
 float SDS01_getPM10_Value(void);

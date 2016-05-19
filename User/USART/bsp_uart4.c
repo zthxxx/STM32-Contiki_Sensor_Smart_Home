@@ -124,7 +124,7 @@ void UART4_IRQHandler(void)
 //        sendUart1OneByte(receiveByte);
 //        SendUART4OneByte(receiveByte);
 //        PushReceiveByteDataIntoReceiveFIFO(receiveByte);
-        SDS01_PushReceiveByteDataIntoReceiveFIFO(receiveByte);
+        SDS01_PushReceiveByteIntoFIFO(receiveByte);
 	}
 }
 

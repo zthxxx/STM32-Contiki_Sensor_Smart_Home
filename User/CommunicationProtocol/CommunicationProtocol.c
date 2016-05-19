@@ -378,7 +378,7 @@ void LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
 */
 void LoadReceiveQueueByteToPacketBlock()
 {
-    LoadQueueByteToPacketBlock(ReceiveBytesFIFOQueueHandle);
+    LoadQueueByteToPacketBlock(TianMaoProtocolReceiveBytesFIFOQueueHandle);
 }
 /*对接收包队列每个数据块进行处理
 *

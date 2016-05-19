@@ -3,8 +3,8 @@
 
 const uint8_t SDS01_Protocol_HeadData = 0xAA;
 const uint8_t SDS01_Protocol_EnddingData = 0xAB;
-Uint8FIFOQueue SDS01_ReceiveBytesFIFOQueue;
-Uint8FIFOQueue* SDS01_ReceiveBytesFIFOQueueHandle = &SDS01_ReceiveBytesFIFOQueue;
+Uint8FIFOQueue SDS01_ReceiveBytesFIFO_Queue;
+Uint8FIFOQueue* SDS01_ReceiveBytesFIFO_QueueHandle = &SDS01_ReceiveBytesFIFO_Queue;
 SDS01_PacketNode SDS01_GlobalPacket;
 
 void SDS01_Init(void)
@@ -15,9 +15,9 @@ void SDS01_Init(void)
 /*对内封装，提供对外push进接收FIFO的接口
 *
 */
-void SDS01_PushReceiveByteDataIntoReceiveFIFO(uint8_t streamByteData)//对内封装，提供对外push进FIFO的接口
+void SDS01_PushReceiveByteIntoFIFO(uint8_t streamByteData)//对内封装，提供对外push进FIFO的接口
 {
-    Uint8FIFOPush(SDS01_ReceiveBytesFIFOQueueHandle, streamByteData);
+    Uint8FIFOPush(SDS01_ReceiveBytesFIFO_QueueHandle, streamByteData);
 }
 
 uint8_t SDS01_CalculatePacketCheckSum(SDS01_PacketNode* SDS01_packet_node)
@@ -83,7 +83,7 @@ void SDS01_LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
 */
 void SDS01_LoadReceiveQueueByteToPacketBlock()
 {
-    SDS01_LoadQueueByteToPacketBlock(SDS01_ReceiveBytesFIFOQueueHandle);
+    SDS01_LoadQueueByteToPacketBlock(SDS01_ReceiveBytesFIFO_QueueHandle);
 }
 
 float SDS01_getPacketNodePM2_5_Value(SDS01_PacketNode* SDS01_packet_node)
