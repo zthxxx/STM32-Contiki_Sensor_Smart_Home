@@ -60,6 +60,7 @@ void PushUSRAT2_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendL
 void PushUSRAT3_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength);
 void PushURAT4_DMA_SendDataIntoFIFO(uint8_t *USART_SendBuff, uint16_t DataSendLength);
 
+void Free_USART_DMA_PacketNoedItem(Uint8PacketNode* uint8PacketNodePointer);
 
 #endif
 

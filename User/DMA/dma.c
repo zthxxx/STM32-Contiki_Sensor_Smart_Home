@@ -15,22 +15,22 @@
 
 uint8_t USART1_DMA_SendBuff[USART1_SEND_DMA_BUF_LENTH];
 bool USART1_DMA_Sendding = false;
-Uint8PacketQueue USART1_DMASendPacketQueue = {NULL, NULL, CreatUint8PacketNode, FreePacketNoedItem};
+Uint8PacketQueue USART1_DMASendPacketQueue = {NULL, NULL, CreatUint8PacketNode, Free_USART_DMA_PacketNoedItem};
 Uint8PacketQueue* USART1_DMASendPacketQueueHandle = &USART1_DMASendPacketQueue;
 
 uint8_t USART2_DMA_SendBuff[USART2_SEND_DMA_BUF_LENTH];
 bool USART2_DMA_Sendding = false;
-Uint8PacketQueue USART2_DMASendPacketQueue = {NULL, NULL, CreatUint8PacketNode, FreePacketNoedItem};
+Uint8PacketQueue USART2_DMASendPacketQueue = {NULL, NULL, CreatUint8PacketNode, Free_USART_DMA_PacketNoedItem};
 Uint8PacketQueue* USART2_DMASendPacketQueueHandle = &USART2_DMASendPacketQueue;
 
 uint8_t USART3_DMA_SendBuff[USART3_SEND_DMA_BUF_LENTH];
 bool USART3_DMA_Sendding = false;
-Uint8PacketQueue USART3_DMASendPacketQueue = {NULL, NULL, CreatUint8PacketNode, FreePacketNoedItem};
+Uint8PacketQueue USART3_DMASendPacketQueue = {NULL, NULL, CreatUint8PacketNode, Free_USART_DMA_PacketNoedItem};
 Uint8PacketQueue* USART3_DMASendPacketQueueHandle = &USART3_DMASendPacketQueue;
 
 uint8_t UART4_DMA_SendBuff[UART4_SEND_DMA_BUF_LENTH];
 bool UART4_DMA_Sendding = false;
-Uint8PacketQueue UART4_DMASendPacketQueue = {NULL, NULL, CreatUint8PacketNode, FreePacketNoedItem};
+Uint8PacketQueue UART4_DMASendPacketQueue = {NULL, NULL, CreatUint8PacketNode, Free_USART_DMA_PacketNoedItem};
 Uint8PacketQueue* UART4_DMASendPacketQueueHandle = &UART4_DMASendPacketQueue;
    
 //DMA的各通道配置
@@ -101,7 +101,16 @@ void UART4_TXD_DMA_Enable(u16 bufferSize)
  	MYDMA_Enable(UART4_TX_DMA_Channel,bufferSize);//DMA通道的DMA缓存的大小
 }
 
-
+void Free_USART_DMA_PacketNoedItem(Uint8PacketNode* uint8PacketNodePointer)
+{
+    if(!uint8PacketNodePointer)return;
+    if(uint8PacketNodePointer->packetBlock)
+    {
+        free(uint8PacketNodePointer->packetBlock);
+        uint8PacketNodePointer->packetBlock = NULL;
+    }
+    free(uint8PacketNodePointer);
+}
 
 void USART_DMA_SendPacketNode(Uint8PacketQueue* USART_DMASendPacketQueueHandle,uint8_t* USART_DMA_SendBuff,bool* USART_DMA_Sendding,void (*USART_TXD_DMA_Enable)(u16 bufferSize))
 {
@@ -114,9 +123,10 @@ void USART_DMA_SendPacketNode(Uint8PacketQueue* USART_DMASendPacketQueueHandle,u
         packet = uint8PacketNodePointer->packet;
         packetLength = uint8PacketNodePointer->packetLength;
         memcpy(USART_DMA_SendBuff,packet,packetLength);
-        free(uint8PacketNodePointer);
+        USART_DMASendPacketQueueHandle->FreePacketNoedItem(uint8PacketNodePointer);
         *USART_DMA_Sendding = true;
         USART_TXD_DMA_Enable(packetLength);
+
     }
 }
 
