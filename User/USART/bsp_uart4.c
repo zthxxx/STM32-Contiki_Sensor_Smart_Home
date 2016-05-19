@@ -121,9 +121,6 @@ void UART4_IRQHandler(void)
 	{
         USART_ClearITPendingBit(UART4,USART_IT_RXNE); //清除中断标志
 		receiveByte = USART_ReceiveData(UART4);//(UART4->DR);		//读取接收到的数据
-//        sendUart1OneByte(receiveByte);
-//        SendUART4OneByte(receiveByte);
-//        PushReceiveByteDataIntoReceiveFIFO(receiveByte);
         SDS01_PushReceiveByteIntoFIFO(receiveByte);
 	}
 }

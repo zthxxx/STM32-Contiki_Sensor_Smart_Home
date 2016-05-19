@@ -8,7 +8,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "CommunicationConfig.h"
-#include "ProtocolQueueManger.h"
+#include "Uint8PacketQueueManger.h"
 #include "CommunicationDealPacket.h"
 #include "cJSON.h"
 #include "bsp_usart1.h"
@@ -35,7 +35,7 @@ typedef enum FunctionWord_TypeDef
     FunctionWord_Shutdown
 }FunctionWord_TypeDef;
 
-struct PacketBlock
+typedef struct PacketBlock
 {
     uint8_t head[PROTOCOL_PACKET_HEAD_LENGTH];
     uint16_t targetAddress;
@@ -46,12 +46,14 @@ struct PacketBlock
     uint16_t messageDataLength;
     uint8_t* messageData;
     uint8_t messageDataCheckSum;
-};
-typedef struct PacketBlock PacketBlock;
+}PacketBlock;
 
 
 
-
+extern  Uint8PacketQueue* UnsentPacketQueueHandle;
+extern  Uint8PacketQueue* UnackedPacketQueueHandle;
+extern  Uint8PacketQueue* ReceivedPacketBlockQueueHandle;
+extern  Uint8FIFOQueue* TianMaoProtocolReceiveBytesFIFOQueueHandle;
 
 extern uint16_t Protocol_PacketSendIndex;
 
@@ -59,11 +61,12 @@ extern uint16_t Protocol_PacketSendIndex;
 void SendUnsentPacketQueue(void);
 void SendUnackedPacketQueue(void);
 void IncreaseUnackedPacketQueueResendTime(void);
+Uint8PacketNode* CreatTianProtocolUint8PacketNode(uint8_t* packet, void* packetBlock);
 void AssembleProtocolPacketPushSendQueue(uint16_t targetAddress, FunctionWord_TypeDef functionWord, uint16_t messageDataLength,uint8_t* messageData);
 uint8_t* ResolvePacketStructIntoBytes(PacketBlock* packetBlock);
 void LoadReceiveQueueByteToPacketBlock(void);
 void DealWithReceivePacketQueue(void);
-
+void PushTianProtocolReceiveByteIntoFIFO(uint8_t streamByteData);
 #endif
 
 

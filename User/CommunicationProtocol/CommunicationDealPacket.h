@@ -3,7 +3,7 @@
 
 
 #include "CommunicationProtocol.h"
-#include "ProtocolQueueManger.h"
+#include "Uint8PacketQueueManger.h"
 #include "CommunicationConfig.h"
 
 typedef struct PacketBlock PacketBlock;

@@ -125,7 +125,7 @@ void USART3_IRQHandler(void)
 //        sendUart1OneByte(receiveByte);
 
 #ifdef __TERMINAL_ON__
-        PushReceiveByteDataIntoReceiveFIFO(receiveByte);
+        PushTianProtocolReceiveByteIntoFIFO(receiveByte);
 #endif
 	}
 }

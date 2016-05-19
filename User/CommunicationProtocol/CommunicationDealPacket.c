@@ -13,8 +13,10 @@ void DealWithReceivePacketBlock(PacketBlock* packetBlock)
     {
         case FunctionWord_Data:
         {
+            uint8_t* assembledPacketBuf;
             printf("%d\t%d\r\n",Protocol_PacketSendIndex++,packetBlock->messageDataLength);
-            Uint8PacketQueuePushStreamData(UnsentPacketQueueHandle,ResolvePacketStructIntoBytes(packetBlock));
+            assembledPacketBuf = ResolvePacketStructIntoBytes(packetBlock);
+            Uint8PacketQueuePushStreamData(UnsentPacketQueueHandle,assembledPacketBuf,packetBlock->messageDataLength + PROTOCOL_PACKET_CONSISTENT_LENGTH);
         }
         break;
         

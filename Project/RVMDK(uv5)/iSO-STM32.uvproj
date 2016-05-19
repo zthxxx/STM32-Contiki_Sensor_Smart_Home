@@ -613,11 +613,6 @@
               <FilePath>..\..\Libraries\cJSON\cJSON.c</FilePath>
             </File>
             <File>
-              <FileName>FIFO.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\FIFO\FIFO.c</FilePath>
-            </File>
-            <File>
               <FileName>bsp_usart3.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\USART\bsp_usart3.c</FilePath>
@@ -813,14 +808,24 @@
               <FilePath>..\..\User\CommunicationProtocol\CommunicationConfig.c</FilePath>
             </File>
             <File>
-              <FileName>ProtocolQueueManger.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\CommunicationProtocol\ProtocolQueueManger.c</FilePath>
-            </File>
-            <File>
               <FileName>CommunicationDealPacket.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\CommunicationProtocol\CommunicationDealPacket.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>FIFO</GroupName>
+          <Files>
+            <File>
+              <FileName>FIFO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\FIFO\FIFO.c</FilePath>
+            </File>
+            <File>
+              <FileName>Uint8PacketQueueManger.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\FIFO\Uint8PacketQueueManger.c</FilePath>
             </File>
           </Files>
         </Group>

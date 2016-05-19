@@ -1,6 +1,17 @@
 #include "CommunicationProtocol.h"
 
 
+Uint8PacketQueue UnsentPacketQueue = {NULL, NULL, CreatTianProtocolUint8PacketNode};
+Uint8PacketQueue UnackedPacketQueue = {NULL, NULL, CreatTianProtocolUint8PacketNode};
+Uint8PacketQueue ReceivedPacketQueue = {NULL, NULL, CreatTianProtocolUint8PacketNode};
+Uint8FIFOQueue   TianMaoProtocolReceiveBytesFIFOQueue;
+
+Uint8PacketQueue* UnsentPacketQueueHandle = &UnsentPacketQueue;
+Uint8PacketQueue* UnackedPacketQueueHandle = &UnackedPacketQueue;
+Uint8PacketQueue* ReceivedPacketBlockQueueHandle = &ReceivedPacketQueue;
+Uint8FIFOQueue*   TianMaoProtocolReceiveBytesFIFOQueueHandle = &TianMaoProtocolReceiveBytesFIFOQueue;
+
+
 const uint8_t Protocol_HeadData[PROTOCOL_PACKET_HEAD_LENGTH] = {0xEF,0x02,0xAA,0xAA};//固定包头
 uint16_t Protocol_PacketSendIndex = 0;//连续增加的发送序号
 uint16_t Protocol_PacketAckedIndex = 0;//作为缓存中转的接收序号
@@ -51,7 +62,7 @@ void FreePacketNoedItem(Uint8PacketNode* uint8PacketNodePointer)
     if(uint8PacketNodePointer->packet)free(uint8PacketNodePointer->packet);
     if(uint8PacketNodePointer->packetBlock)
     {
-        if(uint8PacketNodePointer->packetBlock->messageData)free(uint8PacketNodePointer->packetBlock->messageData);
+        if(((PacketBlock*)uint8PacketNodePointer->packetBlock)->messageData)free(((PacketBlock*)uint8PacketNodePointer->packetBlock)->messageData);
         free(uint8PacketNodePointer->packetBlock);
     }
     free(uint8PacketNodePointer);
@@ -233,6 +244,43 @@ uint8_t CalculatePacketBlockMessageDataCheckSum(PacketBlock* packetBlock)
     return messageDataCheckSum;
 }
 
+/*通过包数据或者数据块创建一个包节点，用于加入队列等操作
+*packet:数据包
+*packetBlock:数据块
+*返回新建的包节点指针
+*
+*/
+Uint8PacketNode* CreatTianProtocolUint8PacketNode(uint8_t* packet, void* packetBlock)
+{
+    Uint8PacketNode* uint8PacketNodePointer;
+    uint8_t packetIndexPosition;
+    packetIndexPosition = sizeof(((PacketBlock*)0)->head);
+    
+    uint8PacketNodePointer = (Uint8PacketNode*)malloc(sizeof(Uint8PacketNode));
+    if(!uint8PacketNodePointer)return NULL;
+    
+    uint8PacketNodePointer->packet = packet;
+    uint8PacketNodePointer->packetBlock = packetBlock;
+    uint8PacketNodePointer->next = NULL;
+    if(packet)
+    {
+        uint8PacketNodePointer->index = packet[packetIndexPosition];
+        uint8PacketNodePointer->index = packet[packetIndexPosition+1]<<8; 
+    }
+    else if(packetBlock)
+    {
+        uint8PacketNodePointer->index = ((PacketBlock*)packetBlock)->index;
+    }
+    else
+    {
+        uint8PacketNodePointer->index = 0;
+    }
+    
+    uint8PacketNodePointer->resendCount = 0;
+    uint8PacketNodePointer->resendTime = 0;
+    return uint8PacketNodePointer;
+}
+
 /*组装一个结构体表示包的信息
 *
 */
@@ -295,7 +343,7 @@ void AssembleProtocolPacketPushSendQueue(uint16_t targetAddress, FunctionWord_Ty
     PacketBlock* packetBlock;
     packetBlock = AssembleProtocolPacketBlock(targetAddress, Protocol_LocalhostAddress,FunctionWord, MessageDataLength, MessageData);
     assembledPacketBuf = ResolvePacketStructIntoBytes(packetBlock);
-    Uint8PacketQueuePushStreamData(UnsentPacketQueueHandle,assembledPacketBuf);
+    Uint8PacketQueuePushStreamData(UnsentPacketQueueHandle,assembledPacketBuf,packetBlock->messageDataLength + PROTOCOL_PACKET_CONSISTENT_LENGTH);
     Protocol_PacketSendIndex++;//包序号递增
 }
 
@@ -372,6 +420,13 @@ void LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
         packetBlock->functionWord = FunctionWord_Null;
     }
 }
+/*对内封装，提供对外push进接收FIFO的接口
+*
+*/
+void PushTianProtocolReceiveByteIntoFIFO(uint8_t streamByteData)//对内封装，提供对外push进FIFO的接口
+{
+    Uint8FIFOPush(TianMaoProtocolReceiveBytesFIFOQueueHandle, streamByteData);
+}
 /*对内封装，提供对外读取加载接收FIFO队列的接口
 *
 *
@@ -411,7 +466,7 @@ void DealWithReceivePacketQueue()
 //                    packetBlock->index = ReceivedPacketNodePointer->index;
 //                    assembledPacketBuf = ResolvePacketStructIntoBytes(packetBlock);
 //                    
-//                    uint8PacketNodePointer = CreatUint8PacketNode(assembledPacketBuf, NULL);
+//                    uint8PacketNodePointer = CreatTianProtocolUint8PacketNode(assembledPacketBuf, NULL);
 //                    uint8PacketNodePointer->resendTime = PROTOCOL_PACKET_RESENT_TIME_MAX;
 //                    uint8PacketNodePointer->resendCount = PROTOCOL_PACKET_RESENT_COUNT_MAX;
 //                    Uint8PacketQueuePush(UnackedPacketQueueHandle, uint8PacketNodePointer);

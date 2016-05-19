@@ -1,24 +1,10 @@
-#include "ProtocolQueueManger.h"
-
-
-Uint8PacketQueue UnsentPacketQueue;
-Uint8PacketQueue UnackedPacketQueue;
-Uint8PacketQueue ReceivedPacketQueue;
-Uint8FIFOQueue   TianMaoProtocolReceiveBytesFIFOQueue;
-
-Uint8PacketQueue* UnsentPacketQueueHandle = &UnsentPacketQueue;
-Uint8PacketQueue* UnackedPacketQueueHandle = &UnackedPacketQueue;
-Uint8PacketQueue* ReceivedPacketBlockQueueHandle = &ReceivedPacketQueue;
-Uint8FIFOQueue*   TianMaoProtocolReceiveBytesFIFOQueueHandle = &TianMaoProtocolReceiveBytesFIFOQueue;
-
-
-
+#include "Uint8PacketQueueManger.h"
 
 
 /*创建一个发送包的队列
 *返回一个管理包的指针
 */
-Uint8PacketQueue* CreatUint8PacketQueue(void)
+Uint8PacketQueue* CreatUint8PacketQueue(Uint8PacketNode* (*CreatUint8PacketNode)(uint8_t* packet, void* packetBlock))
 {
     Uint8PacketQueue*  Uint8PacketQueueHandle = NULL;
     Uint8PacketQueueHandle = (Uint8PacketQueue*)malloc(sizeof(Uint8PacketQueue));//作为全局的管理队列对象，只生成一次，不释放
@@ -28,6 +14,7 @@ Uint8PacketQueue* CreatUint8PacketQueue(void)
     }
     Uint8PacketQueueHandle->head = NULL;
     Uint8PacketQueueHandle->last = NULL;
+    Uint8PacketQueueHandle->CreatUint8PacketNode = CreatUint8PacketNode;
     return Uint8PacketQueueHandle;
 }
 
@@ -56,37 +43,29 @@ void Uint8PacketQueuePush(Uint8PacketQueue* Uint8PacketQueueHandle,Uint8PacketNo
 *返回新建的包节点指针
 *
 */
-Uint8PacketNode* CreatUint8PacketNode(uint8_t* packet, PacketBlock* packetBlock)
+Uint8PacketNode* CreatUint8PacketNode(uint8_t* packet, void* packetBlock)
 {
     Uint8PacketNode* uint8PacketNodePointer;
-    uint8_t packetIndexPosition;
-    packetIndexPosition = sizeof(((PacketBlock*)0)->head);
     
     uint8PacketNodePointer = (Uint8PacketNode*)malloc(sizeof(Uint8PacketNode));
     if(!uint8PacketNodePointer)return NULL;
     
     uint8PacketNodePointer->packet = packet;
+    uint8PacketNodePointer->packetLength = 0;
     uint8PacketNodePointer->packetBlock = packetBlock;
     uint8PacketNodePointer->next = NULL;
-    if(packet)
-    {
-        uint8PacketNodePointer->index = packet[packetIndexPosition];
-        uint8PacketNodePointer->index = packet[packetIndexPosition+1]<<8; 
-    }
-    else if(packetBlock)
-    {
-        uint8PacketNodePointer->index = packetBlock->index;
-    }
-    else
-    {
-        uint8PacketNodePointer->index = 0;
-    }
-    
+    uint8PacketNodePointer->index = 0;
     uint8PacketNodePointer->resendCount = 0;
     uint8PacketNodePointer->resendTime = 0;
     return uint8PacketNodePointer;
 }
 
+Uint8PacketNode* SetUint8PacketNodeLength(Uint8PacketNode* uint8PacketNodePointer,uint16_t packetLength)
+{
+    if(!uint8PacketNodePointer)return NULL;
+    uint8PacketNodePointer->packetLength = packetLength;
+    return uint8PacketNodePointer;
+}
 
 /*将一个数据包结构体节点压入包队列中
 *Uint8PacketQueueHandle:要压入的管理包指针
@@ -94,11 +73,11 @@ Uint8PacketNode* CreatUint8PacketNode(uint8_t* packet, PacketBlock* packetBlock)
 *
 *
 */
-void Uint8PacketQueuePushBlock(Uint8PacketQueue* Uint8PacketQueueHandle,PacketBlock* packetBlock)
+void Uint8PacketQueuePushBlock(Uint8PacketQueue* Uint8PacketQueueHandle,void* packetBlock)
 {
     Uint8PacketNode* uint8PacketNodePointer;
     if(!Uint8PacketQueueHandle)return;
-    uint8PacketNodePointer = CreatUint8PacketNode(NULL, packetBlock);
+    uint8PacketNodePointer = Uint8PacketQueueHandle->CreatUint8PacketNode(NULL, packetBlock);
     Uint8PacketQueuePush(Uint8PacketQueueHandle, uint8PacketNodePointer);
 }
 
@@ -108,11 +87,12 @@ void Uint8PacketQueuePushBlock(Uint8PacketQueue* Uint8PacketQueueHandle,PacketBl
 *
 *
 */
-void Uint8PacketQueuePushStreamData(Uint8PacketQueue* Uint8PacketQueueHandle,uint8_t* packet)
+void Uint8PacketQueuePushStreamData(Uint8PacketQueue* Uint8PacketQueueHandle,uint8_t* packet,uint16_t packetLength)
 {
     Uint8PacketNode* uint8PacketNodePointer;
     if(!Uint8PacketQueueHandle)return;
-    uint8PacketNodePointer = CreatUint8PacketNode(packet, NULL);
+    uint8PacketNodePointer = Uint8PacketQueueHandle->CreatUint8PacketNode(packet, NULL);
+    SetUint8PacketNodeLength(uint8PacketNodePointer, packetLength);
     Uint8PacketQueuePush(Uint8PacketQueueHandle, uint8PacketNodePointer);
 }
 
@@ -135,13 +115,7 @@ Uint8PacketNode* Uint8PacketQueuePop(Uint8PacketQueue* Uint8PacketQueueHandle)
     return uint8PacketNodePointer;  
 }
 
-/*对内封装，提供对外push进接收FIFO的接口
-*
-*/
-void PushReceiveByteDataIntoReceiveFIFO(uint8_t streamByteData)//对内封装，提供对外push进FIFO的接口
-{
-    Uint8FIFOPush(TianMaoProtocolReceiveBytesFIFOQueueHandle, streamByteData);
-}
+
 
 
 
