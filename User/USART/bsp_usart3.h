@@ -6,8 +6,6 @@
 #include <string.h>
 #include "NVIC_CONFIG.H"
 #include "dma.h"
-#include "bsp_usart1.h"
-#include "bsp_usart2.h"
 #include "CommunicationProtocol.h"
 #include "CommunicationConfig.h"
 

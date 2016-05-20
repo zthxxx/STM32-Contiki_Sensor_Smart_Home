@@ -11,6 +11,7 @@
 #include "bsp_usart2.h"
 #include "bsp_usart3.h"
 #include "bsp_uart4.h"
+#include "bsp_uart5.h"
 #include "bsp_SysTick.h"
 #include "dma.h"
 #include "iwdg.h"
@@ -36,6 +37,7 @@
 #include "E30TTLUART.h"
 #include "SDS01.h"
 #include "SHT15.h"
+#include "T6603.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -57,11 +59,13 @@ void BSP_Config(void)
     clock_init();
 
     NVIC_Configuration_Init();
-    LED_GPIO_Config();
     USART1_Config(115200);
-    USART2_Config(115200);
     printf("Start Contiki OS\r\n");
 
+#ifdef __LED_BLINK_ON__
+    LED_GPIO_Config(); 
+#endif    
+    
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
     OLED_ShowString(0,0,"SPI OLED");
@@ -98,6 +102,10 @@ void BSP_Config(void)
 	SHT15_Init();
 #endif
 
+#ifdef __T6603_MODULE_ON__
+	T6603_Init();
+#endif
+
 #ifdef __SDS01_MODULE_ON__
 	SDS01_Init();
 #endif
@@ -124,8 +132,11 @@ int main(void)
     
     process_init();
     autostart_start(autostart_processes);
+    
+#ifdef __LED_BLINK_ON__
     process_start(&red_blink_process,NULL);
     process_start(&green_blink_process,NULL);
+#endif    
 
 #ifdef __CJSON_LIB_TEST__
     process_start(&cJSON_test_process,NULL);
@@ -157,6 +168,10 @@ int main(void)
 
 #ifdef __HCSR501_MODULE_ON__     
     process_start(&HCSR501_Read_Status_process,NULL);
+#endif
+
+#ifdef __T6603_MODULE_ON__
+	process_start(&T6603_Read_CO2_PPM_process,NULL);
 #endif
 
 #ifdef __HCSR04_MODULE_ON__     

@@ -1,7 +1,6 @@
 #include "SHT15.h"
 #include <math.h>
 
-
 /*************************************************************
   Function   ：SHT15_Dly  
   Description：SHT15时序需要的延时
@@ -280,21 +279,28 @@ uint8_t SHT15_Measure(uint16_t *p_value, uint8_t *p_checksum, uint8_t mode)
     switch(mode)                                                         
     {
     case TEMP:                                              //测量温度
-            err += SHT15_WriteByte(MEASURE_TEMP);           //写MEASURE_TEMP测量温度命令
-            break;
+        err += SHT15_WriteByte(MEASURE_TEMP);           //写MEASURE_TEMP测量温度命令
+        break;
     case HUMI:
-            err += SHT15_WriteByte(MEASURE_HUMI);           //写MEASURE_HUMI测量湿度命令
-            break;
+        err += SHT15_WriteByte(MEASURE_HUMI);           //写MEASURE_HUMI测量湿度命令
+        break;
     default:
-            break;
+        break;
+    }
+    if(err != 0)
+    {
+        return err;
     }
     SHT15_DATAIn();
-    for(i = 0; i < 72000000; i++)                           //等待DATA信号被拉低
+    for(i = 0; i < 1200000; i++)                           //等待DATA信号被拉低
     {
-            if(SHT15_DATA_R() == 0) break;                  //检测到DATA被拉低了，跳出循环
+        if(SHT15_DATA_R() == 0) break;                  //检测到DATA被拉低了，跳出循环
     }
-    if(SHT15_DATA_R() == 1)                                 //如果等待超时了
-            err += 1;
+    if(SHT15_DATA_R() == 1)                                //如果等待超时了
+    {
+        err += 1;
+        return err;
+    }
     value_H = SHT15_ReadByte(ACK);
     value_L = SHT15_ReadByte(ACK);
     *p_checksum = SHT15_ReadByte(noACK);                    //读取校验数据

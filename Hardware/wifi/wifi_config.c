@@ -47,6 +47,7 @@ char TCP_CILENT_PORT[] = "50000";
   */
 void WiFi_Config( void )
 {
+    USART2_Config(115200);
 	WiFi_RST_INIT();
 }
 

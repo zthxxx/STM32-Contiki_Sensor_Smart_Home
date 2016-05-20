@@ -20,6 +20,7 @@ PROCESS(BH1750_Measure_Lumen_process, "Measure lumen with BH1750 Light Sensor");
 PROCESS(RC522_Read_Card_process, "Read card ID and data with RC522 RFID");
 PROCESS(SDS01_Read_PM_Value_process, "Get PM2.5 and PM10 data with SDS01");
 PROCESS(SHT15_Read_DATA_Value_process, "SHT15 read accurate temperature and humidity");
+PROCESS(T6603_Read_CO2_PPM_process, "T6603-5 read CO2 PPM value");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -34,6 +35,7 @@ float lightIntensityGlobalData;
 uint32_t CardID_GlobalData;
 float PM2_5_GlobalData;
 float PM10_GlobalData;
+uint16_t CO2_PPM_Value_GlobalData;
 
 /*******************PROCESS************************/
 
@@ -131,17 +133,27 @@ PROCESS_THREAD(SHT15_Read_DATA_Value_process, ev, data)
     while(1)
     {
         err += SHT15_Measure(&temp_val, &checksum, TEMP);                  //获取温度测量值
-        err += SHT15_Measure(&humi_val, &checksum, HUMI);                  //获取湿度测量值
+        
         if(err != 0)
         {
             SHT15_ConReset();
+            printf("SHT15 Err\r\n");
         }
         else
         {
-            SHT15_Calculate(temp_val, humi_val, &temp_val_real, &humi_val_real); //计算实际的温湿度值
-            dew_point = SHT15_CalcuDewPoint(temp_val_real, humi_val_real);       //计算露点温度
-            SHT15_AccurateTemperatureGlobalData = temp_val_real;
-            SHT15_AccurateHumidityGlobalData = humi_val_real;
+            err += SHT15_Measure(&humi_val, &checksum, HUMI);                  //获取湿度测量值
+            if(err != 0)
+            {
+                SHT15_ConReset();
+                printf("SHT15 Err\r\n");
+            }
+            else
+            {
+                SHT15_Calculate(temp_val, humi_val, &temp_val_real, &humi_val_real); //计算实际的温湿度值
+                dew_point = SHT15_CalcuDewPoint(temp_val_real, humi_val_real);       //计算露点温度
+                SHT15_AccurateTemperatureGlobalData = temp_val_real;
+                SHT15_AccurateHumidityGlobalData = humi_val_real;
+            }
         }	
         Contiki_etimer_DelayMS(1000);
     }
@@ -319,13 +331,28 @@ PROCESS_THREAD(cJSON_test_process, ev, data)
     PROCESS_END();
 }
 
+PROCESS_THREAD(T6603_Read_CO2_PPM_process, ev, data)
+{
+    uint16_t CO2_PPM_Value = 0;
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        T6603_SendReadCMD();
+        T6603_LoadReceiveQueueByteToPacketBlock();
+        CO2_PPM_Value = T6603_getCO2_PPM();
+        CO2_PPM_Value_GlobalData = CO2_PPM_Value;
+        Contiki_etimer_DelayMS(5000); 
+    }
+    PROCESS_END();
+}
 
 PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
 {
     static struct etimer et;
     cJSON *root;char* cJSONout;
     PROCESS_BEGIN();
-    Contiki_etimer_DelayMS(1000);
+    Contiki_etimer_DelayMS(2000);
     while(1)
     {
         root=cJSON_CreateObject();	
@@ -333,10 +360,10 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSON_AddItemToObject(root, "Owner", cJSON_CreateString("admin"));
         
 #ifdef __TERMINAL_ON__
-    cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x03));
+        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x03));
 #else
     #ifdef __TERMINAL_OFF__
-    cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x01));
+        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x01));
     #endif
 #endif
 
@@ -375,10 +402,14 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSON_AddItemToObject(root, "PM10", cJSON_CreateNumber(PM10_GlobalData));
 #endif
 
+#ifdef __T6603_MODULE_ON__
+        cJSON_AddItemToObject(root, "CO2_PPM", cJSON_CreateNumber(CO2_PPM_Value_GlobalData));
+#endif
+
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);
         AssembleProtocolPacketPushSendQueue(0x0001, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
-        Contiki_etimer_DelayMS(1000);
+        Contiki_etimer_DelayMS(5000);
     }
     PROCESS_END();
 }

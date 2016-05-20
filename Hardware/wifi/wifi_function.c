@@ -390,7 +390,7 @@ void ESP8266_STA_TCP_Client(void)
     //配置相关设置  进入透传模式
     IS_WIFI_LOG_DEBUG && PC_Usart("Try to enter Transparent Transmission\r\n");
     while(!ESP8266_TransparentTransmission());
-    IS_WIFI_LOG_DEBUG && PC_Usart("Change into Transparent Transmission\r\n");
+    IS_WIFI_LOG_DEBUG && PC_Usart("Changed into Transparent Transmission\r\n");
 }
 
 

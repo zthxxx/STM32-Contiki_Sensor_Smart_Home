@@ -37,13 +37,13 @@ void UART4_Config(uint32_t BaudRate)
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4, ENABLE);
     
 	/* UART4 GPIO config */
-	/* Configure UART4 Tx (PB.10) as alternate function push-pull */
+	/* Configure UART4 Tx (PC.10) as alternate function push-pull */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_10;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);    
 	
-	/* Configure UART4 Rx (PB.11) as input floating */
+	/* Configure UART4 Rx (PC.11) as input floating */
 	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_11;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
 	GPIO_Init(GPIOC, &GPIO_InitStructure);

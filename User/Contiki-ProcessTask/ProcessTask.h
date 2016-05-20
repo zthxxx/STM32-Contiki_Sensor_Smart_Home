@@ -6,6 +6,9 @@
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
+#include "bsp_usart3.h"
+#include "bsp_uart4.h"
+#include "bsp_uart5.h"
 #include "bsp_SysTick.h"
 #include "dma.h"
 #include "iwdg.h"
@@ -30,6 +33,7 @@
 #include "E30TTLUART.h"
 #include "SDS01.h"
 #include "SHT15.h"
+#include "T6603.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -46,8 +50,9 @@
 //在"CommunicationConfig.h"文件中修改 __TERMINAL_XX__宏定义，选择节点或终端模式
 #ifdef __TERMINAL_ON__
     #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
-    #define __SHT15_MODULE_ON__         //SHT15 精确温湿度传感器模块
+//    #define __SHT15_MODULE_ON__         //SHT15 精确温湿度传感器模块
     #define __WIFI_MODULE_ON__          //WIFI模块开启
+    #define __LED_BLINK_ON__            //LED 闪烁
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列
     #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
@@ -64,6 +69,7 @@
     #define __RC522_MODULE_ON__         //RFID读卡器
     #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
     #define __SHT15_MODULE_ON__         //SHT15 精确温湿度传感器模块
+    #define __T6603_MODULE_ON__         //T6603-5 CO2传感器模块
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
     #endif
 #endif
@@ -87,7 +93,7 @@ PROCESS_NAME(BH1750_Measure_Lumen_process);
 PROCESS_NAME(RC522_Read_Card_process);
 PROCESS_NAME(SDS01_Read_PM_Value_process);
 PROCESS_NAME(SHT15_Read_DATA_Value_process);
-
+PROCESS_NAME(T6603_Read_CO2_PPM_process);
 
 
 #endif

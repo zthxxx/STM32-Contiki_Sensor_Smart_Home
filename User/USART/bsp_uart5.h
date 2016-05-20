@@ -5,8 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "NVIC_CONFIG.H"
-#include "CommunicationProtocol.h"
-
+#include "T6603.h"
 
 void UART5_Config(uint32_t BaudRate);
 void SendUART5OneByte(uint8_t byteData);

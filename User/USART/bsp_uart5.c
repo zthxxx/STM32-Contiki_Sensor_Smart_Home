@@ -107,11 +107,11 @@ void SendUART5BytesBuf(uint8_t* bytesBuf, uint16_t bytesBufLength)
 void UART5_IRQHandler(void)
 {
 	u8 receiveByte = 0;
-	if(USART_GetITStatus(UART5, USART_IT_RXNE) != RESET)  //接收中断(接收到的数据必须是0x0d 0x0a结尾)
+	if(USART_GetITStatus(UART5, USART_IT_RXNE) != RESET)  //接收中断
 	{
         USART_ClearITPendingBit(UART5,USART_IT_RXNE); //清除中断标志
 		receiveByte = USART_ReceiveData(UART5);//(UART5->DR);		//读取接收到的数据
-
+        T6603_PushReceiveByteIntoFIFO(receiveByte);
 	}
 }
 
