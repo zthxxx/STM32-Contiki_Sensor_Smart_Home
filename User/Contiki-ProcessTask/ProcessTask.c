@@ -409,7 +409,7 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);
         AssembleProtocolPacketPushSendQueue(0x0001, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
-        Contiki_etimer_DelayMS(5000);
+        Contiki_etimer_DelayMS(1000);
     }
     PROCESS_END();
 }

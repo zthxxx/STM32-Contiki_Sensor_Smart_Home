@@ -12,7 +12,7 @@ unsigned char SerBuffer[20];
 void RC522_Init(void)
 {
     RC522_GPIO_Config();        //引脚初始化
-    SPI2_Initialization();      //SPI初始化
+    SPI2_Init();      //SPI初始化
     PcdReset();                 //复位模块   
     PcdAntennaOff();            //关闭天线
     PcdAntennaOn();             //打开天线

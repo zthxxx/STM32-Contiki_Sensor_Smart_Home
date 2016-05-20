@@ -22,7 +22,7 @@
 
 #define  	OLED_SCK_PIN					GPIO_Pin_5//对应SLK
 #define		OLED_SDA_PIN					GPIO_Pin_7
-#define     OLED_SPI_CONFIG                 SPI1_Initialization
+#define     OLED_SPI_CONFIG                 SPI1_Init
 /* OLED_WriteByte */
 void OLED_WB(uint8_t data);
 void OLED_DLY_ms(unsigned int ms);

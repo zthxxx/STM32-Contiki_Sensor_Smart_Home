@@ -282,7 +282,7 @@ void OLED_Set_Pos(unsigned char x, unsigned char y)
 /*********************写一位数据到SPI*******************/
 void OLED_WB(uint8_t data)
 {
-    SPI1SendOneByte(data);
+    SPI1_WriteReadOneByte(data);
 	OLED_DLY_us(2);//这个延时是必要的，在STM32f103RC上8M晶振，低于1us会导致显存更新出错，绘屏会花，延时最短是2us（粗略延时）
 }
 

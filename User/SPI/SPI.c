@@ -6,7 +6,7 @@
 /**
 *@brief SPI Initialization
 **/
-void SPI1_Initialization(void)
+void SPI1_Init(void)
 {
     SPI_InitTypeDef  SPI_InitStructure;
     GPIO_InitTypeDef GPIO_InitStructure;
@@ -54,7 +54,7 @@ void SPI1_Initialization(void)
 /**
 *@brief SPI Initialization
 **/
-void SPI2_Initialization(void)
+void SPI2_Init(void)
 {
     SPI_InitTypeDef  SPI_InitStructure;
     GPIO_InitTypeDef GPIO_InitStructure;
@@ -95,7 +95,7 @@ void SPI2_Initialization(void)
     SPI_I2S_ClearITPendingBit(SPI2, SPI_I2S_IT_RXNE);
 }
 
-void SPI1SendOneByte(uint8_t byteData)
+uint8_t SPI1_WriteReadOneByte(uint8_t byteData)
 {
     int count = 0;
     int COUNT_MAX = 50;
@@ -107,7 +107,7 @@ void SPI1SendOneByte(uint8_t byteData)
         if(count>COUNT_MAX)
         {
             count = 0;
-            return;
+            return 0;
         }
     }
     /* 发送字节 */
@@ -119,47 +119,55 @@ void SPI1SendOneByte(uint8_t byteData)
         if(count>COUNT_MAX)
         {
             count = 0;
-            return;
+            return 0;
         }
     }
     /* flush data read during the write */ 
-    SPI_I2S_ReceiveData(SPI1); 
-}
-
-uint8_t SPI1ReceiveOneByte(void)
-{
-    uint8_t receiveByte=0;
-  
-    while (SPI_I2S_GetFlagStatus(SPI1, SPI_I2S_FLAG_RXNE) == RESET);/* Loop while DR register in not emplty */
-    receiveByte = (uint8_t)SPI_I2S_ReceiveData(SPI1);
-    return receiveByte;
-}
-
-
-void SPI2SendOneByte(uint8_t byteData)
-{
-    SPI_I2S_ClearFlag(SPI2, SPI_I2S_FLAG_TXE);
-    SPI_I2S_SendData(SPI2, byteData);    /* Send byte through the SPI peripheral */
-    while (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TXE) == RESET);    /* Loop while DR register in not emplty */
-}
-
-uint8_t SPI2ReceiveOneByte(void)
-{
-    uint8_t receiveByte=0;
-  
-    while (SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_RXNE) == RESET);/* Loop while DR register in not emplty */
-    receiveByte = (uint8_t)SPI_I2S_ReceiveData(SPI2);
-    return receiveByte;
+    return SPI_I2S_ReceiveData(SPI1); 
 }
 
 
 uint8_t SPI2_WriteReadOneByte(uint8_t byteData)
 {
-	while((SPI2->SR&0X02)==0);		//等待发送区空	  
-	SPI2->DR=byteData;	 	//发送一个byte   
-	while((SPI2->SR&0X01)==0);//等待接收完一个byte  
-	return SPI2->DR;          	     //返回收到的数据			
+    int count = 0;
+    int COUNT_MAX = 50;
+    
+     /* 判断发送缓冲是否为空 */ 
+    while(SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_TXE) == RESET)
+    {
+        count++;
+        if(count>COUNT_MAX)
+        {
+            count = 0;
+            return 0;
+        }
+    }
+    /* 发送字节 */
+    SPI_I2S_SendData(SPI2, byteData);  
+    /* 判断接收缓冲是否为空*/
+    while(SPI_I2S_GetFlagStatus(SPI2, SPI_I2S_FLAG_RXNE) == RESET)
+    {
+        count++;
+        if(count>COUNT_MAX)
+        {
+            count = 0;
+            return 0;
+        }
+    }
+    /* flush data read during the write */ 
+    return SPI_I2S_ReceiveData(SPI2); 
 }
+
+
+
+
+//uint8_t SPI2_WriteReadOneByte(uint8_t byteData)
+//{
+//	while((SPI2->SR&0X02)==0);		//等待发送区空	  
+//	SPI2->DR=byteData;	 	//发送一个byte   
+//	while((SPI2->SR&0X01)==0);//等待接收完一个byte  
+//	return SPI2->DR;          	     //返回收到的数据			
+//}
 
 
 /**
@@ -188,7 +196,7 @@ void SPI2_IRQHandler(void)
 {   
     uint8_t SPI_Value;
 
-   int count = 0;
+    int count = 0;
     int COUNT_MAX = 50;
     
      /* 判断发送缓冲是否为空 */ 
@@ -215,25 +223,8 @@ void SPI2_IRQHandler(void)
     }
     /* flush data read during the write */ 
     SPI_Value = SPI_I2S_ReceiveData(SPI2); 
-    
-    switch(SPI_Value)
-    {
-        case 0x01:
-            printf("主机STM32F103VCT6开发板连接成功!\r\n");
-        break;
-        
-        case 0x02:
-            printf("我是STM32F302-NUCLEO开发板!\r\n");
-        break;
-        
-        case 0x03:
-            printf("我在休息，随时可以干活!\r\n");
-        break;
-        
-        case 0x04:
-            printf("收到指令!开始工作中...\r\n");
-        break;
-    }
+    SPI_I2S_ClearITPendingBit(SPI1, SPI_I2S_IT_TXE);
+    SPI_I2S_ClearITPendingBit(SPI1, SPI_I2S_IT_RXNE);
 }
 
 
