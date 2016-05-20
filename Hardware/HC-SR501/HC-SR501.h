@@ -14,10 +14,10 @@
 //Copyright(C) 广州市星翼电子科技有限公司 2009-2019
 //All rights reserved									  
 //////////////////////////////////////////////////////////////////////////////////
-#define HCSR501_GPIO_Pin  GPIO_Pin_5
-#define HCSR501_GPIO_Port GPIOB
+#define HCSR501_GPIO_Pin  GPIO_Pin_1
+#define HCSR501_GPIO_Port GPIOC
 
-#define HCSR501_GPIO_Read() PBin(5)// PB5
+#define HCSR501_GPIO_Read() PCin(1)
 
 
 void HCSR501_Init(void);//初始化

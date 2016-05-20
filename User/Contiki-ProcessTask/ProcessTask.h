@@ -68,7 +68,7 @@
     #define __BH1750_MODULE_ON__        //光照传感器
     #define __RC522_MODULE_ON__         //RFID读卡器
     #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
-    #define __SHT15_MODULE_ON__         //SHT15 精确温湿度传感器模块
+//    #define __SHT15_MODULE_ON__         //SHT15 精确温湿度传感器模块
     #define __T6603_MODULE_ON__         //T6603-5 CO2传感器模块
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
     #endif

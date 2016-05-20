@@ -88,7 +88,7 @@ STM32 驱动HC-SR501 红外热释电传感器模块
 
 1) 由于模块数据不够准确，因此未用中断，仅用查询。
 2) 引脚连接:
-HC-SR501_OUT  <---> STM32_B5
+HC-SR501_OUT  <---> STM32_C1
 HC-SR501_VCC  <---> STM32_5V
 HC-SR501_GND  <---> STM32_GND
 
