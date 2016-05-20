@@ -14,9 +14,10 @@
 void SPI1_Init(void);
 uint8_t SPI1_WriteReadOneByte(uint8_t byteData);
 
-
 void SPI2_Init(void);
 uint8_t SPI2_WriteReadOneByte(uint8_t byteData);
 
+void SPI3_Init(void);
+uint8_t SPI3_WriteReadOneByte(uint8_t byteData);
 
 #endif
