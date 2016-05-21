@@ -30,7 +30,7 @@ void UltrasonicWave_Configuration(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;	
     
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_AFIO, ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA|RCC_APB2Periph_GPIOB|RCC_APB2Periph_AFIO, ENABLE);
 
     GPIO_InitStructure.GPIO_Pin = HCSR04_TRIG_PIN;			//PC8接TRIG
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;		//设为推挽输出模式
