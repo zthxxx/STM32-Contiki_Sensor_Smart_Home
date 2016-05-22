@@ -7,22 +7,17 @@
 #include "stdlib.h"
 #include <string.h>
 #include <stdbool.h>
+#include "CommunicationConfig.h"
+#include "ProtocolQueueManger.h"
+#include "CommunicationDealPacket.h"
 #include "cJSON.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
 #include "FIFO.h"
 #include "E30TTLUART.h"
 
-
-#define PROTOCOL_PACKET_CONSISTENT_LENGTH   15
 #define PROTOCOL_PACKET_HEAD_LENGTH         4
-#define PROTOCOL_PACKET_RESENT_COUNT_MAX    2
-#define PROTOCOL_PACKET_RESENT_TIME_MAX     1
-
-//使用串口1或者2发送  
-//#define sendUartByteBuf   USART1_DMA_Send_Data
-#define sendUartByteBuf   USART2_DMA_Send_Data
-//#define sendUartByteBuf   E30TTLUART_SendBytesData
+#define PROTOCOL_PACKET_CONSISTENT_LENGTH   (11+PROTOCOL_PACKET_HEAD_LENGTH)
 
 
 
@@ -40,7 +35,7 @@ typedef enum FunctionWord_TypeDef
     FunctionWord_Shutdown
 }FunctionWord_TypeDef;
 
-typedef struct PacketBlock
+struct PacketBlock
 {
     uint8_t head[PROTOCOL_PACKET_HEAD_LENGTH];
     uint16_t targetAddress;
@@ -51,35 +46,21 @@ typedef struct PacketBlock
     uint16_t messageDataLength;
     uint8_t* messageData;
     uint8_t messageDataCheckSum;
-}PacketBlock;
-
-
-typedef struct Uint8PacketNode
-{
-    uint8_t* packet;
-    PacketBlock* packetBlock;
-    struct Uint8PacketNode* next;
-    uint16_t index;
-    uint8_t resendCount;
-    uint8_t resendTime;
-}Uint8PacketNode;
-
-typedef struct Uint8PacketQueue
-{
-    Uint8PacketNode* head;
-    Uint8PacketNode* last;   
-}Uint8PacketQueue;
+};
+typedef struct PacketBlock PacketBlock;
 
 
 
-Uint8PacketQueue* CreatUint8PacketQueue(void);
+
+
+extern uint16_t Protocol_PacketSendIndex;
+
 
 void SendUnsentPacketQueue(void);
 void SendUnackedPacketQueue(void);
 void IncreaseUnackedPacketQueueResendTime(void);
-
 void AssembleProtocolPacketPushSendQueue(uint16_t targetAddress, FunctionWord_TypeDef functionWord, uint16_t messageDataLength,uint8_t* messageData);
-void PushReceiveByteDataIntoReceiveFIFO(uint8_t streamByteData);
+uint8_t* ResolvePacketStructIntoBytes(PacketBlock* packetBlock);
 void LoadReceiveQueueByteToPacketBlock(void);
 void DealWithReceivePacketQueue(void);
 

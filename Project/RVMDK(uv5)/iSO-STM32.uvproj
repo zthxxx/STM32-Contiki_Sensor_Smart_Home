@@ -613,11 +613,6 @@
               <FilePath>..\..\Libraries\cJSON\cJSON.c</FilePath>
             </File>
             <File>
-              <FileName>CommunicationProtocol.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\User\CommunicationProtocol\CommunicationProtocol.c</FilePath>
-            </File>
-            <File>
               <FileName>FIFO.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\User\FIFO\FIFO.c</FilePath>
@@ -776,6 +771,31 @@
               <FileName>E30TTLUART.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\Hardware\E30TTL100\E30TTLUART.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>CommunicationProtocol</GroupName>
+          <Files>
+            <File>
+              <FileName>CommunicationProtocol.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\CommunicationProtocol\CommunicationProtocol.c</FilePath>
+            </File>
+            <File>
+              <FileName>CommunicationConfig.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\CommunicationProtocol\CommunicationConfig.c</FilePath>
+            </File>
+            <File>
+              <FileName>ProtocolQueueManger.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\CommunicationProtocol\ProtocolQueueManger.c</FilePath>
+            </File>
+            <File>
+              <FileName>CommunicationDealPacket.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\User\CommunicationProtocol\CommunicationDealPacket.c</FilePath>
             </File>
           </Files>
         </Group>
