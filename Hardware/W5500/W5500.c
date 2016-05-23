@@ -27,12 +27,12 @@ uint8_t UDP_Target_Port[2]={0x7B,0x17};	//UDP(广播)模式,目的主机端口号
 
 Socket socket_0 = {
     0,
-    IP_Addr,
+    {192,168,169,104},
     5000,
-    S0_Target_IP,
+    {192,168,1,105},
     31511,
     TCP_CLIENT,
-    0x00,
+    S_BREAK,
     S_TRANSMITOK,
     &W5500_Socket0_SendPacketQueue,
     false
@@ -553,8 +553,7 @@ void W5500_Init(void)
     printf("W5500 Inited.\r\n");
     if(socket->socket_Mode==TCP_CLIENT)//TCP客户端模式 
     {
-        while(Socket_Connect(socket)!=TRUE);
-        socket->port_State=S_INIT;
+        while(Socket_Connect(socket)!=TRUE)W5500_Delay_ms(5);;
         printf("TCP socket connected.\r\n");
     }
 }
@@ -715,14 +714,16 @@ bool W5500_Socket_Set_Default(Socket* socket)
 uint8_t Socket_Connect(Socket* socket)
 {
 	Write_W5500_SOCK_1Byte(socket->socket_index,Sn_MR,MR_TCP);//设置socket为TCP模式
+    Write_W5500_SOCK_1Byte(socket->socket_index,Sn_CR,CLOSE);//打开不成功,关闭Socket
 	Write_W5500_SOCK_1Byte(socket->socket_index,Sn_CR,OPEN);//打开Socket
-	W5500_Delay_ms(5);//延时5ms
+	W5500_Delay_ms(5);//延时10ms
 	if(Read_W5500_SOCK_1Byte(socket->socket_index,Sn_SR)!=SOCK_INIT)//如果socket打开失败
 	{
 		Write_W5500_SOCK_1Byte(socket->socket_index,Sn_CR,CLOSE);//打开不成功,关闭Socket
 		return FALSE;//返回FALSE(0x00)
 	}
 	Write_W5500_SOCK_1Byte(socket->socket_index,Sn_CR,CONNECT);//设置Socket为Connect模式
+    socket->port_State=S_INIT;
 	return TRUE;//返回TRUE,设置成功
 }
 
@@ -811,12 +812,9 @@ void W5500_Push_Socket0_SendDataIntoFIFO(uint8_t *Socket_SendBuff, uint16_t Data
 {
     Socket* socket = &socket_0;
     Uint8PacketQueuePushStreamData(socket->send_Packet_Queue_Handle, Socket_SendBuff, DataSendLength);
-    if(socket->port_State == (S_INIT|S_CONN))
+    if(socket->packet_Sendding == false)
     {
-        if(socket->packet_Sendding == false)
-        {
-            W5500_Send_Socket_Data(socket);
-        }
+        W5500_Send_Socket_Data(socket);
     }
 }
 
@@ -874,7 +872,7 @@ void W5500_Interrupt_Process(void)
             {
                 Write_W5500_SOCK_1Byte(socket->socket_index,Sn_CR,CLOSE);//关闭端口,等待重新打开连接 
                 Socket_Init(socket);		//指定Socket(0~7)初始化,初始化端口0
-                socket->port_State=0;//网络连接状态0x00,端口连接失败
+                socket->port_State=S_BREAK;//网络连接状态0x00,端口连接失败
             }
             if(IRQ_sign&IR_SEND_OK)//Socket0数据发送完成,可以再次启动S_tx_process()函数发送数据 
             {
@@ -887,7 +885,7 @@ void W5500_Interrupt_Process(void)
             if(IRQ_sign&IR_TIMEOUT)//Socket连接或数据传输超时处理 
             {
                 Write_W5500_SOCK_1Byte(socket->socket_index,Sn_CR,CLOSE);// 关闭端口,等待重新打开连接 
-                socket->port_State=0;//网络连接状态0x00,端口连接失败
+                socket->port_State=S_BREAK;//网络连接状态0x00,端口连接失败
             }
         }
         if(Read_W5500_1Byte(SIR) == 0) 
@@ -905,6 +903,13 @@ bool W5500_Daemon_Process(void)
     if(W5500_Interrupt)//处理W5500中断		
     {
         W5500_Interrupt_Process();//W5500中断处理程序框架
+    }
+    if(socket->port_State == S_BREAK)
+    {
+        if(socket->socket_Mode==TCP_CLIENT)//TCP客户端模式 
+        {
+            while(Socket_Connect(socket)!=TRUE)W5500_Delay_ms(10);
+        }
     }
     if((socket->send_receive_State & S_RECEIVE) == S_RECEIVE)//如果Socket0接收到数据
     {

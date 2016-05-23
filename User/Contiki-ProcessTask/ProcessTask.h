@@ -58,7 +58,7 @@
     #define __LED_BLINK_ON__            //LED 闪烁
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列
-    #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
+//    #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
 #else
     #ifdef __TERMINAL_OFF__
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列

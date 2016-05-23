@@ -241,7 +241,8 @@ extern void Delay_ms(uint32_t d);//延时函数(ms)
 #define UDP_MODE		0x02	//UDP(广播)模式 
 
 /***************----- 端口的运行状态 -----***************/
-//端口0状态记录,1:端口完成初始化,2端口完成连接(可以正常传输数据) 
+//端口0状态记录,1:端口完成初始化,2端口完成连接(可以正常传输数据)
+#define S_BREAK			0x00	//端口完成初始化 
 #define S_INIT			0x01	//端口完成初始化 
 #define S_CONN			0x02	//端口完成连接,可以正常传输数据 
 
@@ -254,9 +255,9 @@ extern void Delay_ms(uint32_t d);//延时函数(ms)
 typedef struct Socket
 {
     uint8_t socket_index;//Socket端口号
-    uint8_t* local_IP;//本机IP地址，这里写指针是方便链接，本质是长度为4的数组
+    uint8_t local_IP[4];//本机IP地址，这里写指针是方便链接，本质是长度为4的数组
     uint16_t local_Port;//本机端口号
-    uint8_t* target_IP;//目标IP地址
+    uint8_t target_IP[4];//目标IP地址
     uint16_t target_Port;//目标端口号
     uint8_t socket_Mode;//端口的运行模, 00H:TCP服务器模式, 01H:TCP客户端模式, 02H:UDP(广播)模式
     uint8_t port_State;//端口状态记录, 01H:端口完成初始化, 02H端口完成连接(可以正常传输数据) 
