@@ -57,7 +57,6 @@
 
 void BSP_Config(void)
 {
-    uint8_t count=100;
     /* ≥ı ºªØ */
     delay_init();
     clock_init();
