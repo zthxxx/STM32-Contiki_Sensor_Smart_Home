@@ -19,6 +19,7 @@
 #include "NVIC_CONFIG.H"
 #include "cJSON.h"
 #include "CommunicationProtocol.h"
+#include "CommunicationConfig.h"
 
 #include "wifi_config.h"
 #include "wifi_function.h"
@@ -74,6 +75,7 @@
     #endif
 #endif
 
+//    #define __CLOCK_TICK_TEST__       //NOP—” ± ±º‰≤‚ ‘
 
 PROCESS_NAME(red_blink_process);
 PROCESS_NAME(green_blink_process);

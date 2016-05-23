@@ -302,11 +302,11 @@ PROCESS_THREAD(clock_test_process, ev, data)
         Delay_NOP_ms(10 * i);                       // 软件延时
         end_count = clock_time();                     // 记录结束timer
         diff = end_count - start_count;               // 计算差值，单位为tick
-        printf("Delayed %u \n%u ticks =~ %u ms\n", 10 * i, diff, diff * 10);
+        printf("Delayed %u \n%u ticks =~ %u ms\n", 10 * i, diff, diff);
         i++;
     }
 
-    printf("Done!\n");
+    printf("\r\nDone!\r\n");
 
     PROCESS_END();
 }

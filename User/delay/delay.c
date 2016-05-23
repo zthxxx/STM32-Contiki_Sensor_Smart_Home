@@ -229,7 +229,7 @@ void delay_ms(u16 nms)
 void Delay_NOP_ms(uint32_t ms)
 {
   uint32_t i;
-  ms = SystemCoreClock/6800 * ms;
+  ms = SystemCoreClock/6000 * ms;
   for(i = 0; i< ms; i++) {
     __NOP;
   }
@@ -239,7 +239,7 @@ void Delay_NOP_ms(uint32_t ms)
 void Delay_NOP_us(uint32_t us)
 {
   uint32_t i;
-  us = SystemCoreClock/6800000 * us;
+  us = SystemCoreClock/6000000 * us;
   for(i = 0; i< us; i++) {
     __NOP;
   }
