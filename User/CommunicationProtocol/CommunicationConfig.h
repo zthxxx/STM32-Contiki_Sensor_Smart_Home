@@ -5,16 +5,18 @@
 #include "CommunicationProtocol.h"
 #include "Uint8PacketQueueManger.h"
 
+
 //配置是节点模式还是终端模式，__TERMINAL_ON__表示终端模式，__TERMINAL_OFF__表示节点模式
-#define __TERMINAL_OFF__
+#define __TERMINAL_ON__
 
 
 //使用配置发送端口
 #ifdef __TERMINAL_ON__
-    #define sendUartByteBuf   USART2_DMA_Send_Data
+//    #define TianProtocolSendBytesDataBuf   USART2_DMA_Send_Data
+    #define TianProtocolSendBytesDataBuf   W5500_Push_Socket0_SendDataIntoFIFO
 #else
     #ifdef __TERMINAL_OFF__
-    #define sendUartByteBuf   E30TTLUART_SendBytesData
+    #define TianProtocolSendBytesDataBuf   E30TTLUART_SendBytesData
     #endif
 #endif
 

@@ -38,6 +38,7 @@
 #include "SDS01.h"
 #include "SHT15.h"
 #include "T6603.h"
+#include "W5500.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -110,17 +111,23 @@ void BSP_Config(void)
 	SDS01_Init();
 #endif
 
+#ifdef __W5500_MODULE_ON__
+    W5500_Init();
+#endif    
+
 #ifdef __WIFI_MODULE_ON__
-    WiFi_Config(); 
+    WiFi_Config();
     ESP8266_STA_TCP_Client();
     ChangeUSART2ReceiveMode();// 关闭串口2空闲中断 使能串口2接收中断 
-#endif    
+#endif  
 
 #ifdef __E30TTLUART_MODULE_ON__
 	E30TTLUART_Init();
     E30TTLUART_MultiCountConfig(0x0000,0x50,DISABLE,3);
     printf("E30-TTL-100 OK.\r\n");
-#endif  
+#endif
+
+
 }
 
 
@@ -198,10 +205,17 @@ int main(void)
     process_start(&CommunicatProtocol_Send_Sensor_Data,NULL);
 #endif
 
+#ifdef __W5500_SEND_TEST_ON__
+    process_start(&W5500_send_test_process,NULL);
+#endif
+
     while (1)
     {
         do
         {
+#ifdef __W5500_MODULE_ON__
+            W5500_Daemon_Process();
+#endif  
         }while (process_run()>0);
     }
 }

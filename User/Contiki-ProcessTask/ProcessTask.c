@@ -21,6 +21,7 @@ PROCESS(RC522_Read_Card_process, "Read card ID and data with RC522 RFID");
 PROCESS(SDS01_Read_PM_Value_process, "Get PM2.5 and PM10 data with SDS01");
 PROCESS(SHT15_Read_DATA_Value_process, "SHT15 read accurate temperature and humidity");
 PROCESS(T6603_Read_CO2_PPM_process, "T6603-5 read CO2 PPM value");
+PROCESS(W5500_send_test_process, "Test W5500 module send data");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -82,6 +83,22 @@ PROCESS_THREAD(wifi_send_test_process, ev, data)
         Contiki_etimer_DelayMS(500);        
         USART2_SendBuff = " 21398416hy";
         SendUSART2BytesBuf(USART2_SendBuff, 11);
+    }
+    PROCESS_END();
+}
+
+PROCESS_THREAD(W5500_send_test_process, ev, data)
+{
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        W5500_Push_Socket0_SendDataIntoFIFO("Hello W5500 is run!\r\n", 21);
+        W5500_Push_Socket0_SendDataIntoFIFO(" Love Live Rewrite Fate/Zreo Angel Beats!\r\n", 43);
+        W5500_Push_Socket0_SendDataIntoFIFO("ABBB1234BB345634BBBBCC\r\n", 24);
+        W5500_Push_Socket0_SendDataIntoFIFO("Kggggg5678ggggggggggPP\r\n", 24);
+        W5500_Push_Socket0_SendDataIntoFIFO("TianTianTianMaoMaoMaoMao\r\n", 26);
+        Contiki_etimer_DelayMS(500);
     }
     PROCESS_END();
 }

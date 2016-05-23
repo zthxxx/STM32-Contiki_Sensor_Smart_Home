@@ -414,7 +414,7 @@ void ESP8266_AP_TCP_Server(void)
 
 
 	PC_Usart("\r\n请输入要创建的WiFi的名称、加密方式和密钥，加密方式的编号为：\
-              \r\n0 = OPEN\
+              \r\n0 = OPEN_PWD\
               \r\n1 = WEP\
               \r\n2 = WPA_PSK\
 	            \r\n3 = WPA2_PSK\
@@ -506,7 +506,7 @@ void ESP8266_StaTcpClient_ApTcpServer(void)
 
 
 	PC_Usart("\r\n请输入要创建的WiFi的名称、加密方式和密钥，加密方式的编号为：\
-						\r\n0 = OPEN\
+						\r\n0 = OPEN_PWD\
 						\r\n1  =WEP\
 						\r\n2 = WPA_PSK\
 						\r\n3 = WPA2_PSK\

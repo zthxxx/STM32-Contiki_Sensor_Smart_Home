@@ -7,6 +7,7 @@
 #include "stdlib.h"
 #include <string.h>
 #include <stdbool.h>
+
 #include "CommunicationConfig.h"
 #include "Uint8PacketQueueManger.h"
 #include "CommunicationDealPacket.h"
@@ -15,6 +16,7 @@
 #include "bsp_usart2.h"
 #include "FIFO.h"
 #include "E30TTLUART.h"
+#include "W5500.h"
 
 #define PROTOCOL_PACKET_HEAD_LENGTH         4
 #define PROTOCOL_PACKET_CONSISTENT_LENGTH   (11+PROTOCOL_PACKET_HEAD_LENGTH)

@@ -35,6 +35,7 @@
 #include "SDS01.h"
 #include "SHT15.h"
 #include "T6603.h"
+#include "W5500.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -50,9 +51,10 @@
 
 //在"CommunicationConfig.h"文件中修改 __TERMINAL_XX__宏定义，选择节点或终端模式
 #ifdef __TERMINAL_ON__
-    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
+//    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
 //    #define __SHT15_MODULE_ON__         //SHT15 精确温湿度传感器模块
-    #define __WIFI_MODULE_ON__          //WIFI模块开启
+//    #define __WIFI_MODULE_ON__          //WIFI模块开启
+    #define __W5500_MODULE_ON__         //W5500模块开启
     #define __LED_BLINK_ON__            //LED 闪烁
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列
@@ -75,7 +77,8 @@
     #endif
 #endif
 
-//    #define __CLOCK_TICK_TEST__       //NOP延时时间测试
+//    #define __CLOCK_TICK_TEST__         //NOP延时时间测试
+//    #define __W5500_SEND_TEST_ON__      //W5500模块发送测试开启
 
 PROCESS_NAME(red_blink_process);
 PROCESS_NAME(green_blink_process);
@@ -96,7 +99,7 @@ PROCESS_NAME(RC522_Read_Card_process);
 PROCESS_NAME(SDS01_Read_PM_Value_process);
 PROCESS_NAME(SHT15_Read_DATA_Value_process);
 PROCESS_NAME(T6603_Read_CO2_PPM_process);
-
+PROCESS_NAME(W5500_send_test_process);
 
 #endif
 

@@ -34,7 +34,7 @@ void SendOneCommunicationPacketNode(Uint8PacketNode* uint8PacketNodePointer)
     protocol_messageDataLength = packet[messageDataLengthPosition];      //长度所在位置
     protocol_messageDataLength += packet[messageDataLengthPosition+1]<<8;
     
-    sendUartByteBuf(packet, protocol_messageDataLength + PROTOCOL_PACKET_CONSISTENT_LENGTH);
+    TianProtocolSendBytesDataBuf(packet, protocol_messageDataLength + PROTOCOL_PACKET_CONSISTENT_LENGTH);
 }
 
 /*发送一整个未发送队列数据

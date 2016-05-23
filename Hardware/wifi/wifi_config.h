@@ -35,7 +35,7 @@ typedef enum{
 	
 
 typedef enum{
-	OPEN = 0,
+	OPEN_PWD = 0,
 	WEP = 1,
 	WPA_PSK = 2,
 	WPA2_PSK = 3,
