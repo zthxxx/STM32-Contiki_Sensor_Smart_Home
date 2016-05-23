@@ -6,6 +6,7 @@
 #include "stm32f10x.h"
 #include "stm32f10x_conf.h"
 #include <string.h>
+#include <stdlib.h>
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
@@ -21,6 +22,7 @@
 #include "timer4_cap.h"
 #include "NVIC_CONFIG.H"
 #include "cJSON.h"
+#include "stm_flash.h"
 #include "CommunicationConfig.h"
 #include "CommunicationProtocol.h"
 
@@ -55,14 +57,16 @@
 
 void BSP_Config(void)
 {
+    uint8_t count=100;
     /* ≥ı ºªØ */
     delay_init();
     clock_init();
-
+    srand(STMFLASH_Read_OneWordData(STM32_FLASH_END_PAGE));
+    STMFLASH_Write_OneWordData(STM32_FLASH_END_PAGE,rand());
     NVIC_Configuration_Init();
     USART1_Config(115200);
     printf("Start Contiki OS\r\n");
-
+    
 #ifdef __LED_BLINK_ON__
     LED_GPIO_Config(); 
 #endif    

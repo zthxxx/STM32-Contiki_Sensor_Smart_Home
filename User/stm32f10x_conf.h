@@ -34,7 +34,7 @@
 #include "stm32f10x_dbgmcu.h"
 #include "stm32f10x_dma.h"
 #include "stm32f10x_exti.h"
-//#include "stm32f10x_flash.h"
+#include "stm32f10x_flash.h"
 //#include "stm32f10x_fsmc.h"
 #include "stm32f10x_gpio.h"
 #include "stm32f10x_i2c.h"

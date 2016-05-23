@@ -29,7 +29,7 @@ Socket socket_0 = {
     0,
     {192,168,169,104},
     5000,
-    {192,168,1,105},
+    {115,159,203,38},
     31511,
     TCP_CLIENT,
     S_BREAK,
@@ -624,6 +624,8 @@ void Socket_Init(Socket* socket)
 	{
 		case 0:
 			//设置端口0的端口号
+            socket->local_Port = ((uint16_t)rand()%65535);
+            printf("W5500 Port: %d\r\n",socket->local_Port);
 			Write_W5500_SOCK_2Byte(socket->socket_index, Sn_PORT, socket->local_Port);
 			//设置端口0目的(远程)端口号
 			Write_W5500_SOCK_2Byte(socket->socket_index, Sn_DPORTR,socket->target_Port);

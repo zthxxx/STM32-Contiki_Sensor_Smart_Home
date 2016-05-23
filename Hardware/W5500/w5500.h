@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include<stdlib.h>
 #include "SPI.h"
 #include "Uint8PacketQueueManger.h"
 

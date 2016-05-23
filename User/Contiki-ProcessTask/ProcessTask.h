@@ -3,6 +3,7 @@
 #include "stm32f10x.h"
 #include "stm32f10x_conf.h"
 #include <string.h>
+#include <stdlib.h>
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
@@ -18,6 +19,7 @@
 #include "timer4_cap.h"
 #include "NVIC_CONFIG.H"
 #include "cJSON.h"
+#include "stm_flash.h"
 #include "CommunicationProtocol.h"
 #include "CommunicationConfig.h"
 
