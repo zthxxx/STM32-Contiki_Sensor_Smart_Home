@@ -18,7 +18,8 @@ uint8_t Phy_Addr[6]={0x0C,0x29,0xAB,0x7C,0x00,0x01};	//物理地址(MAC)
 uint8_t IP_Addr[4]={192,168,169,104};	//本机IP地址 
 
 uint8_t S0_Port[2]={0x13,0x88};	//端口0的端口号(0x1388 5000) 
-uint8_t S0_Target_IP[4]={192,168,1,105};	//端口0目的IP地址 
+//uint8_t S0_Target_IP[4]={192,168,1,105};	//端口0目的IP地址
+uint8_t S0_Target_IP[4]={115,159,203,38};	//端口0目的IP地址
 uint8_t S0_Target_Port[2]={0x7B,0x17};	//端口0目的端口号(0x7B17 31511) 
 
 uint8_t UDP_Target_IPR[4]={192,168,1,105};	//UDP(广播)模式,目的主机IP地址

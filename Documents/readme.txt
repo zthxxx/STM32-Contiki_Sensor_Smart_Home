@@ -13,14 +13,15 @@ STM32 移植使用Contiki系统
 4) 现系统中各任务均为单元测试例程，并未做数据处理及控制。
 5) 使用USART1作为打印调节输出端口。
 6) 终端和节点不同的地方：
-		a.) CommunicationConfig.h 中 #define __TERMINAL_ON__ 位置的宏定义 __TERMINAL_ON__ __TERMINAL_OFF__
+		a.) CommunicationConfig.h 中 #define __TERMINAL_ON__ 位置的宏定义 __TERMINAL_ON__ __TERMINAL_OFF__  配置发送端口与天猫协议的接口
 		b.) bsp_usart3.C 中 USART3_IRQHandler 中是否开启接收无线串口的数据;
 		c.) ProcessTask.h 中所需传感器类型;
 		d.) ProcessTask.C CommunicatProtocol_Send_Sensor_Data 中应用层json的地址 AssembleProtocolPacketPushSendQueue 中设置传输层协议目的地址;
 		e.) CommunicationConfig.c 中 Protocol_LocalhostAddress 设置传输层协议本机地址;
 		f.) main.c 中 E30TTLUART_MultiCountConfig设置链路层本机地址和信道;
-		f.) E30TTLUART.c 中 E30TTLUART_Appoint_Target_Address 中设置链路层目的地址和信道;
-		g.) wifi_config.c 中设置wifi与socket相关数据;
+		g.) E30TTLUART.c 中 E30TTLUART_Appoint_Target_Address 中设置链路层目的地址和信道;
+		h.) wifi_config.c 中设置wifi与socket相关数据;
+        i.) W5500.c 中设置以太网与socket相关数据;
 7) 下载程序使用 STLINK SW模式，占用PA13,PA14引脚。
 8) 以下为各模块接口（具体接口文本在各模块文件夹内）。
 
@@ -183,10 +184,10 @@ STM32 SPI3 驱动 W5500 硬件以太网模块
 
 W5500_RST  <---> STM32_PC2
 W5500_INT  <---> STM32_PC3
-W5500_SCS  <---> STM32_PA15
-W5500_SCK  <---> STM32_PB3
-W5500_MISO <---> STM32_PB4
-W5500_MOSI <---> STM32_PB5
+W5500_SCS  <---> STM32_PA15(SPI3 NSS)
+W5500_SCK  <---> STM32_PB3 (SPI3 SCK)
+W5500_MISO <---> STM32_PB4 (SPI3 MISO)
+W5500_MOSI <---> STM32_PB5 (SPI3 MOSI)
 *************************************************/
 
 
