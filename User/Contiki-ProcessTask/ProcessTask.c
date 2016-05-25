@@ -22,6 +22,7 @@ PROCESS(SDS01_Read_PM_Value_process, "Get PM2.5 and PM10 data with SDS01");
 PROCESS(SHT15_Read_DATA_Value_process, "SHT15 read accurate temperature and humidity");
 PROCESS(T6603_Read_CO2_PPM_process, "T6603-5 read CO2 PPM value");
 PROCESS(W5500_send_test_process, "Test W5500 module send data");
+PROCESS(HX711_read_weight_process, "HX711 read weight gage adc");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -37,6 +38,7 @@ uint32_t CardID_GlobalData;
 float PM2_5_GlobalData;
 float PM10_GlobalData;
 uint16_t CO2_PPM_Value_GlobalData;
+double HX711_Weight_GlobalData = 0.0;
 
 /*******************PROCESS************************/
 
@@ -364,6 +366,21 @@ PROCESS_THREAD(T6603_Read_CO2_PPM_process, ev, data)
     PROCESS_END();
 }
 
+PROCESS_THREAD(HX711_read_weight_process, ev, data)
+{
+    double HX711_Weight = 0.0;
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        Contiki_etimer_DelayMS(100);
+        HX711_Weight = HX711_Read_Weight();
+        HX711_Weight_GlobalData = HX711_Weight;
+        printf("Wegith %lf\r\n",HX711_Weight);
+    }
+    PROCESS_END();
+}
+
 PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
 {
     static struct etimer et;
@@ -421,6 +438,10 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
 
 #ifdef __T6603_MODULE_ON__
         cJSON_AddItemToObject(root, "CO2_PPM", cJSON_CreateNumber(CO2_PPM_Value_GlobalData));
+#endif
+
+#ifdef __HX711_MODULE_ON__
+        cJSON_AddItemToObject(root, "Weight", cJSON_CreateNumber(HX711_Weight_GlobalData));
 #endif
 
         cJSONout = cJSON_PrintUnformatted(root);

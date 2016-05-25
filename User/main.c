@@ -41,6 +41,7 @@
 #include "SHT15.h"
 #include "T6603.h"
 #include "W5500.h"
+#include "HX711.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -87,6 +88,10 @@ void BSP_Config(void)
     
 #ifdef __HCSR501_MODULE_ON__
     HCSR501_Init();
+#endif
+
+#ifdef __HX711_MODULE_ON__
+    HX711_Init();
 #endif
 
 #ifdef __HCSR04_MODULE_ON__
@@ -178,6 +183,10 @@ int main(void)
 
 #ifdef __HCSR501_MODULE_ON__     
     process_start(&HCSR501_Read_Status_process,NULL);
+#endif
+
+#ifdef __HX711_MODULE_ON__     
+    process_start(&HX711_read_weight_process,NULL);
 #endif
 
 #ifdef __T6603_MODULE_ON__

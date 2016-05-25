@@ -16,7 +16,9 @@
         #define TianProtocolSendBytesDataBuf   USART2_DMA_Send_Data
     #else
         #ifdef __W5500_MODULE_ON__
-        #define TianProtocolSendBytesDataBuf   W5500_Push_Socket0_SendDataIntoFIFO
+            #define TianProtocolSendBytesDataBuf   W5500_Push_Socket0_SendDataIntoFIFO
+        #else
+            #define TianProtocolSendBytesDataBuf   USART1_DMA_Send_Data
         #endif
     #endif
 #else

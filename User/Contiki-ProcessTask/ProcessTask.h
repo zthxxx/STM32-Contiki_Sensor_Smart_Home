@@ -38,6 +38,7 @@
 #include "SHT15.h"
 #include "T6603.h"
 #include "W5500.h"
+#include "HX711.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -57,6 +58,7 @@
 //    #define __SHT15_MODULE_ON__         //SHT15 精确温湿度传感器模块
 //    #define __WIFI_MODULE_ON__          //WIFI模块开启
     #define __W5500_MODULE_ON__         //W5500模块开启
+    #define __HX711_MODULE_ON__         //HX711模块开启
     #define __LED_BLINK_ON__            //LED 闪烁
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列
@@ -102,6 +104,7 @@ PROCESS_NAME(SDS01_Read_PM_Value_process);
 PROCESS_NAME(SHT15_Read_DATA_Value_process);
 PROCESS_NAME(T6603_Read_CO2_PPM_process);
 PROCESS_NAME(W5500_send_test_process);
+PROCESS_NAME(HX711_read_weight_process);
 
 #endif
 
