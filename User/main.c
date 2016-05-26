@@ -73,8 +73,10 @@ void BSP_Config(void)
     
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
-    OLED_ShowString(0,0,"SPI OLED");
-    OLED_ShowString(0,16,"Start OK!");
+    OLED_ShowString(0,0,"Weight:");
+    OLED_ShowString(120,0,"g");
+    OLED_ShowString(0,16,"price:");
+    OLED_ShowString(120,16,"Y");
     OLED_Refresh_Gram();//更新显示
 #endif         
     

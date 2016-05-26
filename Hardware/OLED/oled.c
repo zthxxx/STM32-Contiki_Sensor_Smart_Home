@@ -3,10 +3,19 @@
 /*四线SPI:SCL,SDA,REST,D/C***********/
 /*对应接口：PA5,PA7,PA12,PA11********/
 /*测试主板STM32F103RC*8M晶振*********/
-/*源码来源：网络+店家提供源码********/
-/*修改者：陈健***********************/
+/*行列********/
+/*     x
+/*(0,0)----------------------->******/
+/*   y |*****************************/
+/*     |*****************************/
+/*     |*****************************/
+/*     |*****************************/
+/*     |*****************************/
+/*     |*****************************/
+/*    \ /
+/*     |
 /*QQ:369763698***********************/
-/*2014/7/10**************************/
+
 #include "oled.h"
 #include "AsciiLib.h"
 #include "font.h"
@@ -130,6 +139,12 @@ void OLED_Fill(u8 x1,u8 y1,u8 x2,u8 y2,u8 dot)
 	}													    
 	OLED_Refresh_Gram();
 }
+//按字节清空
+void OLED_Fill_Alphabet(uint8_t row_x,uint8_t col_y,uint8_t count)
+{
+    if((row_x >= 16) || (col_y >= 4) || (count + row_x > 16))return;
+    OLED_Fill(row_x * 8, col_y * 16, (row_x + count) * 8, (col_y + 1) * 16, 0);
+}
 /*********************12864初始化***********************/
 void OLED_Init(void)
 {
@@ -237,6 +252,10 @@ void OLED_ShowString(u8 x,u8 y,const u8 *p)
     }
 }   			 
 
+void OLED_ShowAlphabets(uint8_t row_x,uint8_t col_y,uint8_t* alphabets)
+{
+    OLED_ShowString(row_x * 8,col_y * 16,alphabets);
+}
 
 //m^n函数
 u32 mypow(u8 m,u8 n)

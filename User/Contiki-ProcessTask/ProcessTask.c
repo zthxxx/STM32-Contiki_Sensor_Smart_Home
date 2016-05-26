@@ -108,11 +108,17 @@ PROCESS_THREAD(W5500_send_test_process, ev, data)
 PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
 {
     static struct etimer et;
-    static int count;
+    uint8_t count = 0;
+    char num_string[16];
     PROCESS_BEGIN();
     while(1)
     {
-        OLED_ShowNum(0,32,count++,5,16);   
+        sprintf(num_string,"%.1f",HX711_Weight_GlobalData);
+        OLED_ShowAlphabets(7,0,(uint8_t*)num_string); 
+        count = strlen(num_string) + 7;
+        OLED_Fill_Alphabet(count,0,15-count);
+        
+        
         OLED_Refresh_Gram();//更新显示
         Contiki_etimer_DelayMS(500);
     }
@@ -145,7 +151,7 @@ PROCESS_THREAD(SHT15_Read_DATA_Value_process, ev, data)
     u8 err = 0, checksum = 0;
     float humi_val_real = 0.0; 
     float temp_val_real = 0.0;
-    float dew_point = 0.0;
+//    float dew_point = 0.0;
     static struct etimer et;
     
     PROCESS_BEGIN();
@@ -169,7 +175,7 @@ PROCESS_THREAD(SHT15_Read_DATA_Value_process, ev, data)
             else
             {
                 SHT15_Calculate(temp_val, humi_val, &temp_val_real, &humi_val_real); //计算实际的温湿度值
-                dew_point = SHT15_CalcuDewPoint(temp_val_real, humi_val_real);       //计算露点温度
+//                dew_point = SHT15_CalcuDewPoint(temp_val_real, humi_val_real);       //计算露点温度
                 SHT15_AccurateTemperatureGlobalData = temp_val_real;
                 SHT15_AccurateHumidityGlobalData = humi_val_real;
             }
@@ -371,12 +377,17 @@ PROCESS_THREAD(HX711_read_weight_process, ev, data)
     double HX711_Weight = 0.0;
     static struct etimer et;
     PROCESS_BEGIN();
+    
+
     while(1)
     {
-        Contiki_etimer_DelayMS(100);
-        HX711_Weight = HX711_Read_Weight();
+        if(HX711_Get_DAT_Pin_State())
+        {
+            Contiki_etimer_DelayMS(50);
+        }
+        HX711_Weight = HX711_Window_Filter();
+        printf("FLITER!! : %lf\r\n",HX711_Weight);
         HX711_Weight_GlobalData = HX711_Weight;
-        printf("Wegith %lf\r\n",HX711_Weight);
     }
     PROCESS_END();
 }
@@ -447,7 +458,7 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);
         AssembleProtocolPacketPushSendQueue(0x0001, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
-        Contiki_etimer_DelayMS(1000);
+        Contiki_etimer_DelayMS(5000);
     }
     PROCESS_END();
 }
@@ -465,8 +476,7 @@ PROCESS_THREAD(Communication_Protocol_Send_process, ev, data)
         LoadReceiveQueueByteToPacketBlock();
         DealWithReceivePacketQueue();
 //        IncreaseUnackedPacketQueueResendTime();
-        
-        
+
     }
     PROCESS_END();
 }

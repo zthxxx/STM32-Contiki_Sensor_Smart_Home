@@ -2,6 +2,7 @@
 #define __HX711_H
 #include "stm32f10x.h"
 #include "stdbool.h"
+#include <math.h>
 #include "stdint.h"
 #include "stdio.h"
 #include "delay.h"
@@ -22,8 +23,9 @@
 
 void HX711_Init(void);//≥ı ºªØ
 uint32_t HX711_Read_Value(void);
+uint8_t HX711_Get_DAT_Pin_State(void);
 double HX711_Read_Weight(void);
 void HX711_Zero_Offset_Adjust(void);
-
+double HX711_Window_Filter(void);
 
 #endif

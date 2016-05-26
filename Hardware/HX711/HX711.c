@@ -48,6 +48,11 @@ void HX711_SCK_Pulse()
 	HX711_SCK_Low();
 }
 
+uint8_t HX711_Get_DAT_Pin_State()
+{
+    return HX711_Read_DAT_Pin();
+}
+
 uint32_t HX711_Read_Value(void)
 {
 	uint32_t HX711_Value = 0;
@@ -105,3 +110,39 @@ void HX711_Zero_Offset_Adjust()
     weigth /= sample_times;
     HX711_fitting_coefficient[1] -= weigth;
 }
+
+double HX711_Window_Filter()
+{
+    static bool HX711_is_init = false;
+    uint8_t HX711_Slip_Window = 10;
+    static double HX711_Last_Weight_List[10] = {0.0};
+    static uint8_t HX711_value_index = 0;
+    static double HX711_filte_value = 0.0;
+    double HX711_Weight = 0.0;
+    uint8_t count = 0;
+    
+    if(HX711_is_init == false)
+    {
+        for(count = 0;count < HX711_Slip_Window; count++)
+        {
+            HX711_Weight = HX711_Read_Weight();
+            HX711_filte_value += HX711_Weight;
+            HX711_Last_Weight_List[count] = HX711_Weight;
+        }
+        HX711_filte_value /= (float)HX711_Slip_Window;
+        if(fabs(HX711_filte_value) > 1)HX711_filte_value = 0;
+        HX711_is_init = true;
+    }
+    
+    
+    HX711_Weight = HX711_Read_Weight();
+    HX711_filte_value += (HX711_Weight - HX711_Last_Weight_List[HX711_value_index]) / (float)HX711_Slip_Window;
+    HX711_Last_Weight_List[HX711_value_index++] = HX711_filte_value;
+    HX711_value_index = HX711_value_index < HX711_Slip_Window ? HX711_value_index : 0;
+    
+    return HX711_filte_value;
+}
+
+
+
+
