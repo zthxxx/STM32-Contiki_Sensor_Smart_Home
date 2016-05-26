@@ -27,5 +27,5 @@ uint8_t HX711_Get_DAT_Pin_State(void);
 double HX711_Read_Weight(void);
 void HX711_Zero_Offset_Adjust(void);
 double HX711_Window_Filter(void);
-
+double HX711_Window_Weighting_Filter(void);
 #endif

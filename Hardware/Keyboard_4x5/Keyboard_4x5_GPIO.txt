@@ -1,0 +1,16 @@
+
+/*************************************************
+STM32 4x5æÿ’Ûº¸≈Ã
+
+
+Keyboard_row_1  <---> STM32_PB6
+Keyboard_row_2  <---> STM32_PB7
+Keyboard_row_3  <---> STM32_PB8
+Keyboard_row_4  <---> STM32_PB9
+
+Keyboard_col_1  <---> STM32_PB10
+Keyboard_col_2  <---> STM32_PB11
+Keyboard_col_3  <---> STM32_PB12
+Keyboard_col_4  <---> STM32_PB13
+Keyboard_col_5  <---> STM32_PB14
+*************************************************/

@@ -58,13 +58,13 @@
 //    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
 //    #define __SHT15_MODULE_ON__         //SHT15 精确温湿度传感器模块
 //    #define __WIFI_MODULE_ON__          //WIFI模块开启
-//    #define __W5500_MODULE_ON__         //W5500模块开启
     #define __HX711_MODULE_ON__         //HX711模块开启
     #define __OLED_MODULE_ON__          //OLED显示屏
 //    #define __LED_BLINK_ON__            //LED 闪烁
 //    #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
-//    #define __COMMUNICAT_PROTOCOL__     //管理发送队列
-//    #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
+    #define __W5500_MODULE_ON__         //W5500模块开启
+    #define __COMMUNICAT_PROTOCOL__     //管理发送队列
+    #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
 #else
     #ifdef __TERMINAL_OFF__
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列

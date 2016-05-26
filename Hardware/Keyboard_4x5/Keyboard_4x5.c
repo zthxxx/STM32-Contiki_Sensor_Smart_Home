@@ -1,6 +1,6 @@
-#include "HX711.h"
+#include "Keyboard_4x5.h"
 
-double HX711_fitting_coefficient[] = {-0.1351321, 22076.88160693};//ax^2+bx+c     {MSB, ..., LSB}
+double HX711_fitting_coefficient[] = {-0.1342132, 22076.88160693};//ax^2+bx+c     {MSB, ..., LSB}
 	    
 //LED IO≥ı ºªØ
 void HX711_Init(void)
@@ -19,8 +19,6 @@ void HX711_Init(void)
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
 	GPIO_Init(HX711_SCK_Port, &GPIO_InitStructure);
     HX711_Zero_Offset_Adjust();
-    HX711_Window_Filter();
-    HX711_Window_Weighting_Filter();
 }
 
 void HX711_SCK_High()
@@ -115,16 +113,15 @@ void HX711_Zero_Offset_Adjust()
 
 double HX711_Window_Filter()
 {
-    static bool HX711_Window_is_init = false;
-    uint8_t count = 0;
-    uint8_t HX711_Slip_Window = 50;
-    static double HX711_Last_Weight_List[50] = {0.0};
+    static bool HX711_is_init = false;
+    uint8_t HX711_Slip_Window = 10;
+    static double HX711_Last_Weight_List[10] = {0.0};
     static uint8_t HX711_value_index = 0;
     static double HX711_filte_value = 0.0;
     double HX711_Weight = 0.0;
+    uint8_t count = 0;
     
-    
-    if(HX711_Window_is_init == false)
+    if(HX711_is_init == false)
     {
         for(count = 0;count < HX711_Slip_Window; count++)
         {
@@ -134,7 +131,7 @@ double HX711_Window_Filter()
         }
         HX711_filte_value /= (float)HX711_Slip_Window;
         if(fabs(HX711_filte_value) > 1)HX711_filte_value = 0;
-        HX711_Window_is_init = true;
+        HX711_is_init = true;
     }
     
     
@@ -146,44 +143,6 @@ double HX711_Window_Filter()
     return HX711_filte_value;
 }
 
-double HX711_Window_Weighting_Filter()
-{
-    static bool HX711_Window_Weighting_is_init = false;
-    uint8_t count = 0;
-    uint8_t HX711_Slip_Window = 10;
-    static double HX711_Last_Weight = 0.0;
-    static double HX711_Last_Weight_List[10] = {0.0};
-    static uint8_t HX711_value_index = 0;
-    static double HX711_filte_value = 0.0;
-    double HX711_Weight = 0.0;
-    float  HX711_Value_Trust = 0.8;
-    
-    
-    if(HX711_Window_Weighting_is_init == false)
-    {
-        HX711_Last_Weight = HX711_Window_Filter();
-        for(count = 0;count < HX711_Slip_Window; count++)
-        {
-            HX711_Weight = HX711_Window_Filter();
-            HX711_Weight = HX711_Weight * HX711_Value_Trust + HX711_Last_Weight * (1 - HX711_Value_Trust);
-            HX711_Last_Weight = HX711_Weight;
-            HX711_filte_value += HX711_Weight;
-            HX711_Last_Weight_List[count] = HX711_Weight;
-            
-        }
-        HX711_filte_value /= (float)HX711_Slip_Window;
-        HX711_Window_Weighting_is_init = true;
-    }
-    
-    
-    HX711_Weight = HX711_Window_Filter();
-    HX711_Weight = HX711_Weight * HX711_Value_Trust + HX711_Last_Weight * (1 - HX711_Value_Trust);
-    HX711_Last_Weight = HX711_Weight;
-    HX711_filte_value += (HX711_Weight - HX711_Last_Weight_List[HX711_value_index]) / (float)HX711_Slip_Window;
-    HX711_Last_Weight_List[HX711_value_index++] = HX711_filte_value;
-    HX711_value_index = HX711_value_index < HX711_Slip_Window ? HX711_value_index : 0;
-    return HX711_filte_value;
-}
 
 
 

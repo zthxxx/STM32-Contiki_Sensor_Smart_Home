@@ -383,10 +383,10 @@ PROCESS_THREAD(HX711_read_weight_process, ev, data)
     {
         if(HX711_Get_DAT_Pin_State())
         {
-            Contiki_etimer_DelayMS(50);
+            Contiki_etimer_DelayMS(10);
         }
-        HX711_Weight = HX711_Window_Filter();
-        printf("FLITER!! : %lf\r\n",HX711_Weight);
+        HX711_Weight = HX711_Window_Weighting_Filter();
+//        printf("FLITER!! : %lf\r\n",HX711_Weight);
         HX711_Weight_GlobalData = HX711_Weight;
     }
     PROCESS_END();
@@ -458,7 +458,7 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);
         AssembleProtocolPacketPushSendQueue(0x0001, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
-        Contiki_etimer_DelayMS(5000);
+        Contiki_etimer_DelayMS(1000);
     }
     PROCESS_END();
 }
