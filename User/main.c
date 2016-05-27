@@ -42,6 +42,7 @@
 #include "T6603.h"
 #include "W5500.h"
 #include "HX711.h"
+#include "Keyboard_4x5.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -82,6 +83,10 @@ void BSP_Config(void)
     
 #ifdef __DHT11_MODULE_ON__
     DHT11_Init(); 
+#endif   
+ 
+#ifdef __KEYBOARD_MODULE_ON__
+    KEYBOARD_Init();
 #endif
 
 #ifdef __MQ02_MODULE_ON__
@@ -221,6 +226,10 @@ int main(void)
 
 #ifdef __W5500_SEND_TEST_ON__
     process_start(&W5500_send_test_process,NULL);
+#endif
+
+#ifdef __KEYBOARD_MODULE_ON__
+    process_start(&KEYBOARD_Scan_process,NULL);
 #endif
 
     while (1)

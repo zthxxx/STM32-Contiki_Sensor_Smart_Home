@@ -23,6 +23,7 @@ PROCESS(SHT15_Read_DATA_Value_process, "SHT15 read accurate temperature and humi
 PROCESS(T6603_Read_CO2_PPM_process, "T6603-5 read CO2 PPM value");
 PROCESS(W5500_send_test_process, "Test W5500 module send data");
 PROCESS(HX711_read_weight_process, "HX711 read weight gage adc");
+PROCESS(KEYBOARD_Scan_process, "Scan keyboard with contiki os");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -368,6 +369,34 @@ PROCESS_THREAD(T6603_Read_CO2_PPM_process, ev, data)
         CO2_PPM_Value = T6603_getCO2_PPM();
         CO2_PPM_Value_GlobalData = CO2_PPM_Value;
         Contiki_etimer_DelayMS(5000); 
+    }
+    PROCESS_END();
+}
+
+PROCESS_THREAD(KEYBOARD_Scan_process, ev, data)//keyboard scan, follow the typical keyboard scan code
+{
+    static uint8_t Keyboard_Button_Index = 0;
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        Keyboard_Button_Index = KEYBOARD_Read_Button();
+        if(Keyboard_Button_Index == 0)
+        {
+            Contiki_etimer_DelayMS(50);
+            continue;
+        }
+        Contiki_etimer_DelayMS(50);
+        if(KEYBOARD_Read_Button() == Keyboard_Button_Index)
+        {
+            KEYBOARD_Push_Button_IntoQueue(Keyboard_Button_Index);
+            Keyboard_Button_Index = 0;
+        }
+        while(KEYBOARD_Read_Button() != 0)
+        {
+            Contiki_etimer_DelayMS(50);//放开按键
+        }
+        //按键已释放
     }
     PROCESS_END();
 }
