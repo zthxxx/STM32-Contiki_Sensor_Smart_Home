@@ -1,147 +1,193 @@
 #include "Keyboard_4x5.h"
 
-double HX711_fitting_coefficient[] = {-0.1342132, 22076.88160693};//ax^2+bx+c     {MSB, ..., LSB}
-	    
-//LED IO初始化
-void HX711_Init(void)
+Uint8FIFOQueue KEYBOARD_Button_Queue = {NULL, NULL, 0};
+Uint8FIFOQueue* KEYBOARD_Button_QueueHandle = &KEYBOARD_Button_Queue;
+
+GPIO_Pin KEYBOARD_ROW_Pin[] = {KEY_ROW_1_Pin, KEY_ROW_2_Pin, KEY_ROW_3_Pin, KEY_ROW_4_Pin};
+GPIO_TypeDef KEYBOARD_ROW_Port[] = {KEY_ROW_1_Port, KEY_ROW_2_Port, KEY_ROW_3_Port, KEY_ROW_4_Port};
+GPIO_Pin KEYBOARD_COL_Pin[] = {KEY_COL_1_Pin, KEY_COL_2_Pin, KEY_COL_3_Pin, KEY_COL_4_Pin, KEY_COL_5_Pin};
+GPIO_TypeDef KEYBOARD_COL_Port[] = {KEY_COL_1_Port, KEY_COL_2_Port, KEY_COL_3_Port, KEY_COL_4_Port, KEY_COL_5_Port};
+//按键从1开始编码  0表示没有按键 编号行优先  先行后列 
+// [1] [2] [3]
+// [4] [5] [6]
+// [7] [8] [9]
+
+void KEYBOARD_Set_ROW_Output_Low(void)//做为输出口，输出低电平
 {
-    GPIO_InitTypeDef  GPIO_InitStructure;
-
-    RCC_APB2PeriphClockCmd(HX711_RCC_Periph, ENABLE);	 //使能端口时钟
-
-	GPIO_InitStructure.GPIO_Pin = HX711_DAT_Pin;
-	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN_FLOATING;
-	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(HX711_DAT_Port, &GPIO_InitStructure);
+	uint8_t count;
+	GPIO_InitTypeDef  GPIO_InitStructure;
 	
-	GPIO_InitStructure.GPIO_Pin = HX711_SCK_Pin;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
 	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-	GPIO_Init(HX711_SCK_Port, &GPIO_InitStructure);
-    HX711_Zero_Offset_Adjust();
-}
-
-void HX711_SCK_High()
-{
-	GPIO_SetBits(HX711_SCK_Port,HX711_SCK_Pin);
-}
-
-void HX711_SCK_Low()
-{
-	GPIO_ResetBits(HX711_SCK_Port,HX711_SCK_Pin);
-}
-
-void HX711_DAT_High()
-{
-	GPIO_SetBits(HX711_DAT_Port,HX711_DAT_Pin);
-}
-
-uint8_t HX711_Read_DAT_Pin()
-{
-	return GPIO_ReadInputDataBit(HX711_DAT_Port,HX711_DAT_Pin);
-}
-
-void HX711_SCK_Pulse()
-{
-	HX711_SCK_High();
-	HX711_Delay_us(2);
-	HX711_SCK_Low();
-}
-
-uint8_t HX711_Get_DAT_Pin_State()
-{
-    return HX711_Read_DAT_Pin();
-}
-
-uint32_t HX711_Read_Value(void)
-{
-	uint32_t HX711_Value = 0;
-	uint8_t count = 0;
-	uint8_t HX711_Mode = HX711_CHANNEL_A_128;
 	
-	HX711_DAT_High();
-	HX711_SCK_Low();
-	while(HX711_Read_DAT_Pin());
-	HX711_Delay_us(2);
-	
-	for(count = 1; count <= HX711_Default_Shift; count++)
+	for(count = 0;count < sizeof(KEYBOARD_ROW_Pin);count++)
 	{
-		HX711_SCK_Pulse();
-		if(HX711_Read_DAT_Pin())
-		{
-			HX711_Value += 1;
-		}
-		if(count < HX711_Default_Shift)
-		{
-			HX711_Value <<= 1;
-		}
-		HX711_Delay_us(2);
+		GPIO_InitStructure.GPIO_Pin = KEYBOARD_ROW_Pin[count];
+		GPIO_Init(KEYBOARD_ROW_Port[count], &GPIO_InitStructure);
+		GPIO_ResetBits(KEYBOARD_ROW_Port[count], KEYBOARD_ROW_Pin[count]);
 	}
-	for(count = 0; count < HX711_Mode - HX711_Default_Shift; count++)
+}
+
+void KEYBOARD_Set_ROW_Input_IPU(void)//做为输输入口，常高，接入低电平按键变低
+{
+	uint8_t count;
+	GPIO_InitTypeDef  GPIO_InitStructure;
+	
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	
+	for(count = 0;count < sizeof(KEYBOARD_ROW_Pin);count++)
 	{
-		HX711_SCK_Pulse();
-		HX711_Delay_us(2);
-    }
-	return HX711_Value;
+		GPIO_InitStructure.GPIO_Pin = KEYBOARD_ROW_Pin[count];
+		GPIO_Init(KEYBOARD_ROW_Port[count], &GPIO_InitStructure);
+		GPIO_SetBits(KEYBOARD_ROW_Port[count], KEYBOARD_ROW_Pin[count]);
+	}
 }
 
-double HX711_Read_Weight(void)
+void KEYBOARD_Set_COL_Output_Low(void)//做为输出口，输出低电平
 {
-    double weight = 0.0;
-    weight = HX711_fitting_coefficient[0] * ((double)HX711_Read_Value()/100.0) + HX711_fitting_coefficient[1];
-    return weight;
+	uint8_t count;
+	GPIO_InitTypeDef  GPIO_InitStructure;
+	
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	
+	for(count = 0;count < sizeof(KEYBOARD_COL_Pin);count++)
+	{
+		GPIO_InitStructure.GPIO_Pin = KEYBOARD_COL_Pin[count];
+		GPIO_Init(KEYBOARD_COL_Port[count], &GPIO_InitStructure);
+		GPIO_ResetBits(KEYBOARD_COL_Port[count], KEYBOARD_COL_Pin[count]);
+	}
 }
 
-void HX711_Zero_Offset_Adjust()
+void KEYBOARD_Set_COL_Input_IPU(void)//做为输出口，输出低电平
 {
-    uint8_t count;
-    uint8_t sample_times = 20;
-    double weigth = 0.0;
-    
-    for(count = 0;count < 5; count++)
-    {
-        HX711_Read_Weight();  //固定丢弃前面几次
-    }
-    
-    for(count = 0;count < sample_times; count++)
-    {
-        weigth += HX711_Read_Weight();
-    }
-    weigth /= sample_times;
-    HX711_fitting_coefficient[1] -= weigth;
+	uint8_t count;
+	GPIO_InitTypeDef  GPIO_InitStructure;
+	
+	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU;
+	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	
+	for(count = 0;count < sizeof(KEYBOARD_COL_Pin);count++)
+	{
+		GPIO_InitStructure.GPIO_Pin = KEYBOARD_COL_Pin[count];
+		GPIO_Init(KEYBOARD_COL_Port[count], &GPIO_InitStructure);
+		GPIO_SetBits(KEYBOARD_COL_Port[count], KEYBOARD_COL_Pin[count]);
+	}
 }
 
-double HX711_Window_Filter()
+//LED IO初始化
+void KEYBOARD_Init(void)
 {
-    static bool HX711_is_init = false;
-    uint8_t HX711_Slip_Window = 10;
-    static double HX711_Last_Weight_List[10] = {0.0};
-    static uint8_t HX711_value_index = 0;
-    static double HX711_filte_value = 0.0;
-    double HX711_Weight = 0.0;
-    uint8_t count = 0;
-    
-    if(HX711_is_init == false)
-    {
-        for(count = 0;count < HX711_Slip_Window; count++)
-        {
-            HX711_Weight = HX711_Read_Weight();
-            HX711_filte_value += HX711_Weight;
-            HX711_Last_Weight_List[count] = HX711_Weight;
-        }
-        HX711_filte_value /= (float)HX711_Slip_Window;
-        if(fabs(HX711_filte_value) > 1)HX711_filte_value = 0;
-        HX711_is_init = true;
-    }
-    
-    
-    HX711_Weight = HX711_Read_Weight();
-    HX711_filte_value += (HX711_Weight - HX711_Last_Weight_List[HX711_value_index]) / (float)HX711_Slip_Window;
-    HX711_Last_Weight_List[HX711_value_index++] = HX711_filte_value;
-    HX711_value_index = HX711_value_index < HX711_Slip_Window ? HX711_value_index : 0;
-    
-    return HX711_filte_value;
+    RCC_APB2PeriphClockCmd(KEYBOARD_RCC_Periph, ENABLE);	 //使能端口时钟
+	KEYBOARD_Set_ROW_Output_Low();
+	KEYBOARD_Set_COL_Input_IPU();
 }
+
+uint8_t KEYBOARD_Read_ROW(void)
+{
+	uint8_t Keyboard_Row_Value = 0;
+	uint8_t count;
+	KEYBOARD_Set_COL_Output_Low();
+	KEYBOARD_Set_ROW_Input_IPU();
+	for(count = 0;count < sizeof(KEYBOARD_ROW_Pin);count++)
+	{
+		if(GPIO_ReadInputDataBit(KEYBOARD_ROW_Port[count], KEYBOARD_ROW_Pin[count]))
+		{
+			Keyboard_Row_Value |= 0x01 << count;
+		}
+	}
+	return Keyboard_Row_Value;//0000MSB111LSB  低位在右  低几位就表示按键顺序的第几位
+}
+
+uint8_t KEYBOARD_Read_COL(void)
+{
+	uint8_t Keyboard_Col_Value = 0;
+	uint8_t count;
+	KEYBOARD_Set_ROW_Output_Low();
+	KEYBOARD_Set_COL_Input_IPU();
+	for(count = 0;count < sizeof(KEYBOARD_COL_Pin);count++)
+	{
+		if(GPIO_ReadInputDataBit(KEYBOARD_COL_Port[count], KEYBOARD_COL_Pin[count]))
+		{
+			Keyboard_Col_Value |= 0x01 << count;
+		}
+	}
+	return Keyboard_Col_Value;//0000MSB111LSB  低位在右  低几位就表示按键顺序的第几位
+}
+
+
+uint16_t KEYBOARD_Get_Button_Queue_Size(void)
+{
+	return Uint8FIFOGetQueueSize(KEYBOARD_Button_QueueHandle);
+}
+
+void KEYBOARD_Push_Button_IntoQueue(uint8_t Keyboard_Button_Index)
+{
+    Uint8FIFOPush(KEYBOARD_Button_QueueHandle, Keyboard_Button_Index);
+}
+
+uint8_t KEYBOARD_Get_Top_Button(void)
+{
+	if(KEYBOARD_Get_Button_Queue_Size > 0)
+	{
+		return Uint8FIFOPop(KEYBOARD_Button_QueueHandle);
+	}
+	else
+	{
+		return NULL;
+	}
+}
+
+uint8_t KEYBOARD_Read_Button(void)
+{
+	uint8_t Keyboard_Row_Value;
+	uint8_t Keyboard_Col_Value;
+	uint8_t Keyboard_Row_Stand;
+	uint8_t Keyboard_Col_Stand;
+	uint8_t Keyboard_Button_Index = 0; //从1开始到row * col为止的编号
+	uint8_t count;
+	Keyboard_Row_Value = KEYBOARD_Read_ROW();
+	if(Keyboard_Row_Value == 0x00)return;
+	Keyboard_Col_Value = KEYBOARD_Read_COL();
+	Keyboard_Row_Stand = 0x01 << sizeof(KEYBOARD_ROW_Pin) -1;
+	Keyboard_Col_Stand = 0x01 << sizeof(KEYBOARD_COL_Pin) -1;
+	
+	for(count = 0;count < sizeof(KEYBOARD_ROW_Pin);count++)
+	{
+		if(Keyboard_Row_Value & (0x01 << count))break;
+	}
+	if(count == sizeof(KEYBOARD_ROW_Pin))return 0;
+	Keyboard_Button_Index += count * sizeof(KEYBOARD_COL_Pin);
+	
+	for(count = 0;count < sizeof(KEYBOARD_COL_Pin);count++)
+	{
+		if(Keyboard_Col_Value & (0x01 << count))break;
+	}
+	if(count == sizeof(KEYBOARD_COL_Pin))return 0;
+	Keyboard_Button_Index += count + 1;
+	if(Keyboard_Button_Index == 0)return 0;
+	return Keyboard_Button_Index;
+}
+
+void KEYBOARD_Scan_Catch(void)
+{
+	static uint8_t Keyboard_Button_Index = 0;
+	Keyboard_Button_Index = KEYBOARD_Read_Button();
+	if(Keyboard_Button_Index == 0)
+	{
+		return;
+	}
+	KEYBOARD_Delay_ms(20);
+	if(KEYBOARD_Read_Button() == Keyboard_Button_Index)
+	{
+		KEYBOARD_Push_Button_IntoQueue(Keyboard_Button_Index);
+		Keyboard_Button_Index = 0;
+	}
+	while(KEYBOARD_Read_Button() != 0)KEYBOARD_Delay_ms(20);//放开按键
+}
+
+
 
 
 
