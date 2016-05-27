@@ -252,6 +252,11 @@ void OLED_ShowString(u8 x,u8 y,const u8 *p)
     }
 }   			 
 
+void OLED_ShowAlphabet(uint8_t row_x,uint8_t col_y,uint8_t alphabet)
+{
+    OLED_ShowChar(row_x * 8,col_y * 16,alphabet,16,1);
+}
+
 void OLED_ShowAlphabets(uint8_t row_x,uint8_t col_y,uint8_t* alphabets)
 {
     OLED_ShowString(row_x * 8,col_y * 16,alphabets);

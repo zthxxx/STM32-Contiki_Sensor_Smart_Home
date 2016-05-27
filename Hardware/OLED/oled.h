@@ -23,6 +23,9 @@
 #define  	OLED_SCK_PIN					GPIO_Pin_5//对应SLK
 #define		OLED_SDA_PIN					GPIO_Pin_7
 #define     OLED_SPI_CONFIG                 SPI1_Init
+
+#define     OLED_Max_Row    4
+#define     OLED_Max_Col    16
 /* OLED_WriteByte */
 void OLED_WB(uint8_t data);
 void OLED_DLY_ms(unsigned int ms);
@@ -54,6 +57,7 @@ void OLED_Fill_Alphabet(uint8_t row_x,uint8_t col_y,uint8_t count);
 void OLED_ShowChar(u8 x,u8 y,u8 chr,u8 size,u8 mode);
 void OLED_ShowNum(u8 x,u8 y,u32 num,u8 len,u8 size);
 void OLED_ShowString(u8 x,u8 y,const u8 *p);
+void OLED_ShowAlphabet(uint8_t row_x,uint8_t col_y,uint8_t alphabet);
 void OLED_ShowAlphabets(uint8_t row_x,uint8_t col_y,uint8_t* alphabets);
 
 
