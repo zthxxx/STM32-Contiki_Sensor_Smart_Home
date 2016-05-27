@@ -32,8 +32,30 @@ typedef uint16_t GPIO_Pin;
 #define KEY_COL_5_Port 		GPIOB
 
 #define KEYBOARD_RCC_Periph	RCC_APB2Periph_GPIOB
-
 #define KEYBOARD_Delay_ms	Delay_ms
+
+
+
+
+
+//统一虚拟按键码 仿winuser.h
+#define VK_NUMPAD0        0x60
+#define VK_NUMPAD1        0x61
+#define VK_NUMPAD2        0x62
+#define VK_NUMPAD3        0x63
+#define VK_NUMPAD4        0x64
+#define VK_NUMPAD5        0x65
+#define VK_NUMPAD6        0x66
+#define VK_NUMPAD7        0x67
+#define VK_NUMPAD8        0x68
+#define VK_NUMPAD9        0x69
+#define VK_DECIMAL        0x6E
+
+#define VK_CLEAR          0x0C
+#define VK_RETURN         0x0D
+
+
+
 
 void KEYBOARD_Init(void);
 uint16_t KEYBOARD_Get_Button_Queue_Size(void);

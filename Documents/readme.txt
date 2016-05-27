@@ -22,6 +22,7 @@ STM32 移植使用Contiki系统
 		g.) E30TTLUART.c 中 E30TTLUART_Appoint_Target_Address 中设置链路层目的地址和信道;
 		h.) wifi_config.c 中设置wifi与socket相关数据;
         i.) W5500.c 中设置以太网与socket相关数据;
+        j.) stm_flash.h 中设置flash大小;
 7) 下载程序使用 STLINK SW模式，占用PA13,PA14引脚。
 8) 以下为各模块接口（具体接口文本在各模块文件夹内）。
 
