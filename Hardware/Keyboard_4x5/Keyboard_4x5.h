@@ -39,6 +39,10 @@ typedef uint16_t GPIO_Pin;
 
 
 //统一虚拟按键码 仿winuser.h 暂时够用  需要的时候自行添加
+
+#define VK_CLEAR          0x0C
+#define VK_RETURN         0x0D
+
 //定义数据按键0~9 
 #define   VK_0	0x30 
 #define   VK_1	0x31 
@@ -90,10 +94,9 @@ typedef uint16_t GPIO_Pin;
 #define VK_NUMPAD8        0x68
 #define VK_NUMPAD9        0x69
 
-#define VK_DECIMAL        0x6E
+#define VK_DECIMAL        0x70
 
-#define VK_CLEAR          0x0C
-#define VK_RETURN         0x0D
+
 
 
 

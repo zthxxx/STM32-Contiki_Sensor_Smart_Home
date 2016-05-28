@@ -4,6 +4,7 @@
 #include "stm32f10x_conf.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <math.h>
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
@@ -41,6 +42,7 @@
 #include "W5500.h"
 #include "HX711.h"
 #include "Keyboard_4x5.h"
+#include "Steelyard.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -110,5 +112,7 @@ PROCESS_NAME(T6603_Read_CO2_PPM_process);
 PROCESS_NAME(W5500_send_test_process);
 PROCESS_NAME(HX711_read_weight_process);
 PROCESS_NAME(KEYBOARD_Scan_process);
+
+extern process_event_t keyboard_press_event;
 #endif
 

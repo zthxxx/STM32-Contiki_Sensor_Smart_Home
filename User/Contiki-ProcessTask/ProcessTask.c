@@ -27,6 +27,9 @@ PROCESS(KEYBOARD_Scan_process, "Scan keyboard with contiki os");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
+process_event_t keyboard_press_event;
+
+
 float temperatureGlobalData;
 float humidityGlobalData;
 float SHT15_AccurateTemperatureGlobalData;
@@ -456,55 +459,6 @@ PROCESS_THREAD(IWDG_Feed_process, ev, data)
 }
 
 
-PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
-{
-    static struct etimer et;
-    uint8_t count = 0;
-    char num_string[16];
-    PROCESS_BEGIN();
-    while(1)
-    {
-        sprintf(num_string,"%.1f",HX711_Weight_GlobalData);
-        OLED_ShowAlphabets(7,0,(uint8_t*)num_string); 
-        count = strlen(num_string) + 7;
-        OLED_Fill_Alphabet(count,0,15-count);
-        
-        
-        OLED_Refresh_Gram();//更新显示
-        Contiki_etimer_DelayMS(500);
-    }
-    PROCESS_END();
-}
-
-PROCESS_THREAD(KEYBOARD_Scan_process, ev, data)//keyboard scan, follow the typical keyboard scan code
-{
-    static uint8_t Keyboard_Button_Index = 0;
-    static struct etimer et;
-    PROCESS_BEGIN();
-    while(1)
-    {
-        Keyboard_Button_Index = KEYBOARD_Read_Button();
-        if(Keyboard_Button_Index == 0)
-        {
-            Contiki_etimer_DelayMS(50);
-            continue;
-        }
-        Contiki_etimer_DelayMS(50);
-        if(KEYBOARD_Read_Button() == Keyboard_Button_Index)
-        {
-            printf("Key down %d\r\n", Keyboard_Button_Index);
-            KEYBOARD_Push_Button_IntoQueue(Keyboard_Button_Index);
-            Keyboard_Button_Index = 0;
-        }
-        while(KEYBOARD_Read_Button() != 0)
-        {
-            Contiki_etimer_DelayMS(50);//放开按键
-        }
-        //按键已释放
-    }
-    PROCESS_END();
-}
-
 PROCESS_THREAD(HX711_read_weight_process, ev, data)
 {
     double HX711_Weight = 0.0;
@@ -521,9 +475,78 @@ PROCESS_THREAD(HX711_read_weight_process, ev, data)
         HX711_Weight = HX711_Window_Weighting_Filter();
 //        printf("FLITER!! : %lf\r\n",HX711_Weight);
         HX711_Weight_GlobalData = HX711_Weight;
+        Steelyard_CurrentlyWeight = HX711_Weight;
     }
     PROCESS_END();
 }
+
+PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
+{
+    static struct etimer et;
+    uint8_t count = 0;
+    char num_string[16];
+    static uint8_t last_length[2] = {16,16};
+    PROCESS_BEGIN();
+    while(1)
+    {
+        if(Steelyard_Is_Adjust_Coefficient == false)
+        {
+            sprintf(num_string,"%.1f",HX711_Weight_GlobalData);
+            OLED_ShowAlphabets(0,7,(uint8_t*)num_string); 
+            count = strlen(num_string) + 7;
+            if(count < last_length[0])
+            {
+                OLED_Fill_Alphabet(0,count,15-count);
+            }
+            last_length[0] = count;
+            
+            sprintf(num_string,"%.1f",Steelyard_Get_CurrentlyPrice());
+            OLED_ShowAlphabets(1,6,(uint8_t*)num_string); 
+            count = strlen(num_string) + 6;
+            if(count < last_length[1])
+            {
+                OLED_Fill_Alphabet(1,count,15-count);
+            }
+            last_length[1] = count;
+        }
+        
+        OLED_Refresh_Gram();//更新显示
+        Contiki_etimer_DelayMS(500);
+    }
+    PROCESS_END();
+}
+
+PROCESS_THREAD(KEYBOARD_Scan_process, ev, data)//keyboard scan, follow the typical keyboard scan code
+{
+    static uint8_t Keyboard_Button_Index = 0;
+    static struct etimer et;
+    PROCESS_BEGIN();
+    keyboard_press_event = process_alloc_event();
+    while(1)
+    {
+        Keyboard_Button_Index = KEYBOARD_Read_Button();
+        if(Keyboard_Button_Index == 0)
+        {
+            Contiki_etimer_DelayMS(50);
+            continue;
+        }
+        Contiki_etimer_DelayMS(50);
+        if(KEYBOARD_Read_Button() == Keyboard_Button_Index)
+        {
+            printf("Key down %d\r\n", Keyboard_Button_Index);
+            KEYBOARD_Push_Button_IntoQueue(Keyboard_Button_Index);
+            process_post(&Steelyard_Load_Key_process, keyboard_press_event, (void *)Keyboard_Button_Index);
+            Keyboard_Button_Index = 0;
+        }
+        while(KEYBOARD_Read_Button() != 0)
+        {
+            Contiki_etimer_DelayMS(50);//放开按键
+        }
+        //按键已释放
+    }
+    PROCESS_END();
+}
+
 
 
 

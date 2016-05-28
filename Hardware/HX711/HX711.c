@@ -1,6 +1,6 @@
 #include "HX711.h"
 
-double HX711_fitting_coefficient[] = {-0.1351321, 22076.88160693};//ax^2+bx+c     {MSB, ..., LSB}
+double HX711_fitting_coefficient[] = {-0.1339789, 22076.88160693};//ax^2+bx+c     {MSB, ..., LSB}
 	    
 //LED IO初始化
 void HX711_Init(void)
@@ -99,12 +99,10 @@ void HX711_Zero_Offset_Adjust()
     uint8_t count;
     uint8_t sample_times = 20;
     double weigth = 0.0;
-    
     for(count = 0;count < 5; count++)
     {
         HX711_Read_Weight();  //固定丢弃前面几次
     }
-    
     for(count = 0;count < sample_times; count++)
     {
         weigth += HX711_Read_Weight();

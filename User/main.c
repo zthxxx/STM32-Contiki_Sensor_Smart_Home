@@ -7,6 +7,7 @@
 #include "stm32f10x_conf.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
@@ -43,6 +44,7 @@
 #include "W5500.h"
 #include "HX711.h"
 #include "Keyboard_4x5.h"
+#include "Steelyard.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
@@ -75,11 +77,11 @@ void BSP_Config(void)
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
     OLED_ShowAlphabets(0,0,"Weight:");
-    OLED_ShowAlphabets(15,0,"g");
-    OLED_ShowAlphabets(0,1,"Price:");
-    OLED_ShowAlphabets(15,1,"Y");
-    OLED_ShowAlphabets(0,2,"Unit:");
-    OLED_ShowAlphabets(12,2,"Y/Kg");
+    OLED_ShowAlphabets(0,15,"g");
+    OLED_ShowAlphabets(1,0,"Price:");
+    OLED_ShowAlphabets(1,15,"Y");
+    OLED_ShowAlphabets(2,0,"Unit:");
+    OLED_ShowAlphabets(2,12,"Y/Kg");
     OLED_Refresh_Gram();//更新显示
 #endif         
     
@@ -232,6 +234,7 @@ int main(void)
 
 #ifdef __KEYBOARD_MODULE_ON__
     process_start(&KEYBOARD_Scan_process,NULL);
+    process_start(&Steelyard_Load_Key_process,NULL);
 #endif
 
     while (1)

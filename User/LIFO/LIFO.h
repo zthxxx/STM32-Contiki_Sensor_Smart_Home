@@ -22,6 +22,7 @@ Uint8LIFOQueue* CreatUint8LIFOQueue(void);
 void Uint8LIFOPush(Uint8LIFOQueue* uint8LIFOQueueHandle,uint8_t dataByte);
 uint8_t Uint8LIFOPop(Uint8LIFOQueue* uint8LIFOQueueHandle);
 void Uint8LIFOPopToStream(Uint8LIFOQueue* uint8LIFOQueueHandle, uint8_t* uint8BytesStream, uint16_t length);
+uint8_t Uint8LIFO_Query_StackTop(Uint8LIFOQueue* uint8LIFOQueueHandle);
 uint16_t Uint8LIFOGetQueueSize(Uint8LIFOQueue* uint8LIFOQueueHandle);
 
 

@@ -72,6 +72,11 @@ void Uint8LIFOPopToStream(Uint8LIFOQueue* uint8LIFOQueueHandle, uint8_t* uint8By
     }   
 }
 
+uint8_t Uint8LIFO_Query_StackTop(Uint8LIFOQueue* uint8LIFOQueueHandle)
+{
+    if(uint8LIFOQueueHandle->last == NULL)return NULL;
+    return uint8LIFOQueueHandle->last->dataByte;
+}
 
 
 

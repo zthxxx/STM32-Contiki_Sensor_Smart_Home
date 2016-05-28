@@ -409,7 +409,7 @@ void LoadReceiveQueueByteToPacketBlock()
 */
 void DealWithReceivePacketQueue()
 {
-    Uint8PacketNode* uint8PacketNodePointer;
+//    Uint8PacketNode* uint8PacketNodePointer;
     Uint8PacketNode* ReceivedPacketNodePointer;
     PacketBlock* packetBlock;
 //    uint8_t* assembledPacketBuf;
