@@ -1,6 +1,6 @@
 #include "HX711.h"
 
-double HX711_fitting_coefficient[] = {0.915096818615574, -0.319117195016503};//ax^2+bx+c     {MSB, ..., LSB}
+double HX711_fitting_coefficient[] = {-0.915096818615574, -0.319117195016503};//ax^2+bx+c     {MSB, ..., LSB}
 	    
 //LED IO≥ı ºªØ
 void HX711_Init(void)
@@ -109,14 +109,15 @@ void HX711_Zero_Offset_Adjust()
     }
     weigth /= sample_times;
     HX711_fitting_coefficient[1] -= weigth;
+    printf("deviation: %f\r\n",weigth);
 }
 
 double HX711_Window_Filter()
 {
     static bool HX711_Window_is_init = false;
     uint8_t count = 0;
-    uint8_t HX711_Slip_Window = 50;
-    static double HX711_Last_Weight_List[50] = {0.0};
+    uint8_t HX711_Slip_Window_Length = 80;
+    static double HX711_Last_Weight_List[80] = {0.0};
     static uint8_t HX711_value_index = 0;
     static double HX711_filte_value = 0.0;
     double HX711_Weight = 0.0;
@@ -124,22 +125,22 @@ double HX711_Window_Filter()
     
     if(HX711_Window_is_init == false)
     {
-        for(count = 0;count < HX711_Slip_Window; count++)
+        for(count = 0;count < HX711_Slip_Window_Length; count++)
         {
             HX711_Weight = HX711_Read_Weight();
             HX711_filte_value += HX711_Weight;
             HX711_Last_Weight_List[count] = HX711_Weight;
         }
-        HX711_filte_value /= (float)HX711_Slip_Window;
+        HX711_filte_value /= (float)HX711_Slip_Window_Length;
         if(fabs(HX711_filte_value) > 1)HX711_filte_value = 0;
         HX711_Window_is_init = true;
     }
     
     
     HX711_Weight = HX711_Read_Weight();
-    HX711_filte_value += (HX711_Weight - HX711_Last_Weight_List[HX711_value_index]) / (float)HX711_Slip_Window;
-    HX711_Last_Weight_List[HX711_value_index++] = HX711_filte_value;
-    HX711_value_index = HX711_value_index < HX711_Slip_Window ? HX711_value_index : 0;
+    HX711_filte_value += (HX711_Weight - HX711_Last_Weight_List[HX711_value_index]) / (float)HX711_Slip_Window_Length;
+    HX711_Last_Weight_List[HX711_value_index++] = HX711_Weight;
+    HX711_value_index = HX711_value_index < HX711_Slip_Window_Length ? HX711_value_index : 0;
     
     return HX711_filte_value;
 }
@@ -148,9 +149,9 @@ double HX711_Window_Weighting_Filter()
 {
     static bool HX711_Window_Weighting_is_init = false;
     uint8_t count = 0;
-    uint8_t HX711_Slip_Window = 10;
+    uint8_t HX711_Slip_Window_Length = 30;
     static double HX711_Last_Weight = 0.0;
-    static double HX711_Last_Weight_List[10] = {0.0};
+    static double HX711_Last_Weight_List[30] = {0.0};
     static uint8_t HX711_value_index = 0;
     static double HX711_filte_value = 0.0;
     double HX711_Weight = 0.0;
@@ -160,7 +161,7 @@ double HX711_Window_Weighting_Filter()
     if(HX711_Window_Weighting_is_init == false)
     {
         HX711_Last_Weight = HX711_Window_Filter();
-        for(count = 0;count < HX711_Slip_Window; count++)
+        for(count = 0;count < HX711_Slip_Window_Length; count++)
         {
             HX711_Weight = HX711_Window_Filter();
             HX711_Weight = HX711_Weight * HX711_Value_Trust + HX711_Last_Weight * (1 - HX711_Value_Trust);
@@ -169,7 +170,7 @@ double HX711_Window_Weighting_Filter()
             HX711_Last_Weight_List[count] = HX711_Weight;
             
         }
-        HX711_filte_value /= (float)HX711_Slip_Window;
+        HX711_filte_value /= (float)HX711_Slip_Window_Length;
         HX711_Window_Weighting_is_init = true;
     }
     
@@ -177,9 +178,9 @@ double HX711_Window_Weighting_Filter()
     HX711_Weight = HX711_Window_Filter();
     HX711_Weight = HX711_Weight * HX711_Value_Trust + HX711_Last_Weight * (1 - HX711_Value_Trust);
     HX711_Last_Weight = HX711_Weight;
-    HX711_filte_value += (HX711_Weight - HX711_Last_Weight_List[HX711_value_index]) / (float)HX711_Slip_Window;
-    HX711_Last_Weight_List[HX711_value_index++] = HX711_filte_value;
-    HX711_value_index = HX711_value_index < HX711_Slip_Window ? HX711_value_index : 0;
+    HX711_filte_value += (HX711_Weight - HX711_Last_Weight_List[HX711_value_index]) / (float)HX711_Slip_Window_Length;
+    HX711_Last_Weight_List[HX711_value_index++] = HX711_Weight;
+    HX711_value_index = HX711_value_index < HX711_Slip_Window_Length ? HX711_value_index : 0;
     return HX711_filte_value;
 }
 
