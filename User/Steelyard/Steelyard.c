@@ -5,7 +5,7 @@ float Steelyard_CurrentlyWeight = 0.0;
 float Steelyard_Currently_adjustWeight = 0.0;
 float Steelyard_Currently_adjustWeights[20] = {0};
 uint8_t Steelyard_adjustWeight_count = 0;
-float Steelyard_UnitPrice = 1.0;
+float Steelyard_UnitPrice = 0.0;
 static float Steelyard_UnitPrice_Temp = 0.0;
 float Steelyard_CurrentlyPrice = 0.0;
 float Steelyard_TotalPrice = 0.0; 
@@ -47,8 +47,29 @@ Steelyard_Key_Process Steelyard_Key_Dispose_Method[] = {
     Steelyard_Dispose_Control_Key
 };
 
+void Steelyard_Display_Weight(void)
+{
+    OLED_ShowAlphabets(Steelyard_Weight_Row,0,"Weight:");
+    OLED_ShowAlphabets(Steelyard_Weight_Row,15,"g");
+}
 
+void Steelyard_Display_Price(void)
+{
+    OLED_ShowAlphabets(Steelyard_Price_Row,0,"Price:");
+    OLED_ShowAlphabets(Steelyard_Price_Row,15,"Y");
+}
 
+void Steelyard_Display_UnitPrice(void)
+{
+    OLED_ShowAlphabets(Steelyard_UnitPrice_Row,0,"Unit:");
+    OLED_ShowAlphabets(Steelyard_UnitPrice_Row,12,"Y/Kg");
+}
+
+void Steelyard_Display_Total(void)
+{
+    OLED_ShowAlphabets(Steelyard_Total_Row,0,"Total:");
+    OLED_ShowAlphabets(Steelyard_Total_Row,15,"Y");
+}
 
 uint8_t Steelyard_Get_MapVirtualKey(uint8_t key_index)
 //得到虚拟按键映射
@@ -64,18 +85,15 @@ uint8_t Steelyard_Get_Key_Type(uint8_t key_index)
 	return Steelyard_Keyboard_Key_Type_Mapping[key_index];
 }
 
-
-void Steelyard_Display_Char(uint8_t row_x, uint8_t col_y, uint8_t virtual_Key)
-//通过光标位置显示一个字符键
+void Steelyard_Set_Cursor_Position(uint8_t row, uint8_t col)
+//设置光标位置
 {
-    OLED_ShowAlphabet(row_x, col_y, virtual_Key);
-    OLED_Refresh_Gram();
+    cursor_position_row = row;
+    cursor_position_col = col;
 }
-
-void Steelyard_Show_Key_Char(uint8_t virtual_Key)
-//判断是否为字符键并显示
+void Steelyard_Cursor_Shift(void)
+//自动往后移动光标
 {
-    Steelyard_Display_Char(cursor_position_row, cursor_position_col, virtual_Key);
     cursor_position_col++;
     if(cursor_position_col >= OLED_Max_Col)
     {
@@ -86,6 +104,30 @@ void Steelyard_Show_Key_Char(uint8_t virtual_Key)
             cursor_position_row = 0;
         }
     }
+}
+
+void Steelyard_Input_Clear(uint8_t row)
+//清空某行输入，重置光标，重置小数点位，重置输入状态
+{
+    cursor_position_row = row;
+    cursor_position_col = Steelyard_Display_Row_Head_Length[cursor_position_row];
+    cursor_point_deep = 0;
+    OLED_Fill_Alphabet(cursor_position_row, cursor_position_col, OLED_Max_Col - cursor_position_col - Steelyard_Display_Row_Endding_Length[cursor_position_row]);
+    Steelyard_Is_Inputting = false;
+}
+
+void Steelyard_Display_Char(uint8_t row_x, uint8_t col_y, uint8_t virtual_Key)
+//通过光标位置显示一个字符键
+{
+    OLED_ShowAlphabet(row_x, col_y, virtual_Key);
+    OLED_Refresh_Gram();
+}
+
+void Steelyard_Show_Key_Char(uint8_t virtual_Key)
+//通过虚拟键显示对应字符
+{
+    Steelyard_Display_Char(cursor_position_row, cursor_position_col, virtual_Key);
+    Steelyard_Cursor_Shift();
 }
 
 void Steelyard_Push_Mode(uint8_t mode_offset)
@@ -99,6 +141,7 @@ void Steelyard_Push_Mode(uint8_t mode_offset)
 }
 
 void Steelyard_Pop_Mode(void)
+//清除模式，标志出栈并置标志位为false
 {
     if(Uint8LIFOGetQueueSize(Steelyard_Mode_LIFO_Queue_Handle) == 0)
     {
@@ -106,8 +149,6 @@ void Steelyard_Pop_Mode(void)
     }
     *(Steelyard_Signs[Uint8LIFOPop(Steelyard_Mode_LIFO_Queue_Handle)]) = false;
 }
-
-
 
 float Steelyard_Get_CurrentlyPrice(void)
 //获得并设置当前价格
@@ -147,14 +188,9 @@ void Steelyard_Dispose_ValueKey(uint8_t virtual_Key)
         
         case Steelyard_Decimal_Sign:
         {
-            if(Steelyard_Is_Set_UnitPrice)
-            {
-                Steelyard_UnitPrice_Temp = Steelyard_UnitPrice_Temp + ((float)key_value / pow(10, ++cursor_point_deep));
-            }
-            else if(Steelyard_Is_Adjust_Coefficient)
-            {
-                Steelyard_Currently_adjustWeight = Steelyard_Currently_adjustWeight + ((float)key_value / pow(10, ++cursor_point_deep));
-            }
+            float* Steelyard_Input_Operation_Number;
+            Steelyard_Input_Operation_Number = Steelyard_Is_Set_UnitPrice ? &Steelyard_UnitPrice_Temp : &Steelyard_Currently_adjustWeight;            
+            *Steelyard_Input_Operation_Number = *Steelyard_Input_Operation_Number + ((float)key_value / pow(10, ++cursor_point_deep));
         }
         break;
         
@@ -172,7 +208,6 @@ void Steelyard_Dispose_ValueKey(uint8_t virtual_Key)
 
 void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
 {
-//    uint8_t control_offset = virtual_Key - VK_CLEAR;
     uint8_t mode_LIFO_Top;
     if(Uint8LIFOGetQueueSize(Steelyard_Mode_LIFO_Queue_Handle) == 0)
     {
@@ -216,35 +251,23 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                     if(Steelyard_Is_Inputting == true)
                     {
                         Steelyard_Currently_adjustWeights[Steelyard_adjustWeight_count++] = Steelyard_Currently_adjustWeight;
-                        cursor_position_row = 0;
-                        cursor_position_col = Steelyard_Display_Row_Head_Length[cursor_position_row];
-                        cursor_point_deep = 0;
-                        OLED_Fill_Alphabet(cursor_position_row, cursor_position_col, OLED_Max_Col - cursor_position_col - Steelyard_Display_Row_Endding_Length[cursor_position_row]);
+                        Steelyard_Input_Clear(0);
+                        Steelyard_Is_Inputting = true;
                     }
                     if((Steelyard_Is_Inputting == false) || (Steelyard_adjustWeight_count >= (sizeof(Steelyard_Currently_adjustWeights) / sizeof(*Steelyard_Currently_adjustWeights))))
                     {
                         Steelyard_Adjust_Coefficient();
                         Steelyard_Pop_Mode();
                     }
-                    Steelyard_Is_Inputting = false;
                     Steelyard_Currently_adjustWeight = 0;
                 }
                 break;
                 
                 case Steelyard_Accumulation_Sign://此部分代码重复
                 {
-                    char num_string[16];
-                    uint8_t count;
                     static uint8_t last_length = 16;
                     Steelyard_TotalPrice += Steelyard_Get_CurrentlyPrice();
-                    sprintf(num_string,"%.1f",Steelyard_TotalPrice);
-                    OLED_ShowAlphabets(3,7,(uint8_t*)num_string); 
-                    count = strlen(num_string) + 7;
-                    if(count < last_length)
-                    {
-                        OLED_Fill_Alphabet(3,count,15-count);
-                    }
-                    last_length = count;
+                    OLED_ShowFloat(3,7,15, Steelyard_TotalPrice, &last_length);
                     OLED_Refresh_Gram();
                 }
                 break;
@@ -262,11 +285,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                     if(Steelyard_Is_Inputting == true)
                     {
                         Steelyard_UnitPrice_Temp = 0;
-                        cursor_position_row = 2;
-                        cursor_position_col = Steelyard_Display_Row_Head_Length[cursor_position_row];
-                        cursor_point_deep = 0;
-                        OLED_Fill_Alphabet(cursor_position_row, cursor_position_col, OLED_Max_Col - cursor_position_col - Steelyard_Display_Row_Endding_Length[cursor_position_row]);
-                        Steelyard_Is_Inputting = false;
+                        Steelyard_Input_Clear(2);
                     }
                     else
                     {
@@ -276,7 +295,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                 }
                 break;
                 
-                case Steelyard_Decimal_Sign://此部分代码重复
+                case Steelyard_Decimal_Sign:
                 {
                     Steelyard_Pop_Mode();
                     Steelyard_Dispose_Control_Key(virtual_Key);
@@ -288,11 +307,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                     if(Steelyard_Is_Inputting == true)
                     {
                         Steelyard_Currently_adjustWeight = 0;
-                        cursor_position_row = 0;
-                        cursor_position_col = Steelyard_Display_Row_Head_Length[cursor_position_row];
-                        cursor_point_deep = 0;
-                        OLED_Fill_Alphabet(cursor_position_row, cursor_position_col, OLED_Max_Col - cursor_position_col - Steelyard_Display_Row_Endding_Length[cursor_position_row]);
-                        Steelyard_Is_Inputting = false;
+                        Steelyard_Input_Clear(0);
                     }
                     else
                     {
@@ -304,11 +319,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                 case Steelyard_Accumulation_Sign:
                 {
                     Steelyard_TotalPrice = 0;
-                    cursor_position_row = 3;
-                    cursor_position_col = 0;
-                    cursor_point_deep = 0;
-                    OLED_Fill_Alphabet(cursor_position_row, cursor_position_col, OLED_Max_Col);
-                    Steelyard_Is_Inputting = false;
+                    Steelyard_Input_Clear(3);
                     Steelyard_Pop_Mode();
                 }
                 break;
@@ -320,7 +331,6 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
         case VK_Steelyard_Adjust_Zero:
         {
             IWDG_Feed();
-            printf("key adjust 0\r\n");
             HX711_Zero_Offset_Adjust();
             IWDG_Feed();
         }
@@ -365,11 +375,7 @@ void Steelyard_Dispose_Mode_Key(uint8_t virtual_Key)
         case Steelyard_Set_UnitPrice_Sign:
         {
             Steelyard_UnitPrice_Temp = 0;
-            cursor_position_row = 2;
-            cursor_position_col = Steelyard_Display_Row_Head_Length[cursor_position_row];
-            cursor_point_deep = 0;
-            OLED_Fill_Alphabet(cursor_position_row, cursor_position_col, OLED_Max_Col - cursor_position_col - Steelyard_Display_Row_Endding_Length[cursor_position_row]);
-            Steelyard_Is_Inputting = false;
+            Steelyard_Input_Clear(2);
         }
         break;
         
@@ -382,24 +388,15 @@ void Steelyard_Dispose_Mode_Key(uint8_t virtual_Key)
         case Steelyard_Accumulation_Sign:
         {
             Steelyard_TotalPrice = 0;
-            cursor_position_row = 3;
-            cursor_position_col = Steelyard_Display_Row_Head_Length[cursor_position_row];
-            cursor_point_deep = 0;
-            OLED_Fill_Alphabet(cursor_position_row, cursor_position_col, OLED_Max_Col - cursor_position_col - Steelyard_Display_Row_Endding_Length[cursor_position_row]);
-            Steelyard_Is_Inputting = false;
-            OLED_ShowAlphabets(3,0,"Total:");
-            OLED_ShowAlphabets(3,15,"Y");
+            Steelyard_Input_Clear(3);
+            Steelyard_Display_Total();
         }
         break;
         
         case Steelyard_Adjust_Coefficient_Sign:
         {
             Steelyard_Currently_adjustWeight = 0;
-            cursor_position_row = 0;
-            cursor_position_col = Steelyard_Display_Row_Head_Length[cursor_position_row];
-            cursor_point_deep = 0;
-            OLED_Fill_Alphabet(cursor_position_row, cursor_position_col, OLED_Max_Col - cursor_position_col - Steelyard_Display_Row_Endding_Length[cursor_position_row]);
-            Steelyard_Is_Inputting = false;
+            Steelyard_Input_Clear(0);
         }
         break;
     }

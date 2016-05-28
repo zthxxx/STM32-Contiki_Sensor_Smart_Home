@@ -76,12 +76,9 @@ void BSP_Config(void)
     
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
-    OLED_ShowAlphabets(0,0,"Weight:");
-    OLED_ShowAlphabets(0,15,"g");
-    OLED_ShowAlphabets(1,0,"Price:");
-    OLED_ShowAlphabets(1,15,"Y");
-    OLED_ShowAlphabets(2,0,"Unit:");
-    OLED_ShowAlphabets(2,12,"Y/Kg");
+    Steelyard_Display_Weight();
+    Steelyard_Display_Price();
+    Steelyard_Display_UnitPrice();
     OLED_Refresh_Gram();//更新显示
 #endif         
     

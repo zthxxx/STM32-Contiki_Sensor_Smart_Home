@@ -474,42 +474,27 @@ PROCESS_THREAD(HX711_read_weight_process, ev, data)
         }
         HX711_Weight = HX711_Window_Weighting_Filter();
 //        printf("FLITER!! : %lf\r\n",HX711_Weight);
+//        printf("%d\r\n",HX711_Read_Value()/100);
         HX711_Weight_GlobalData = HX711_Weight;
         Steelyard_CurrentlyWeight = HX711_Weight;
     }
     PROCESS_END();
 }
 
+
+
 PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
 {
     static struct etimer et;
-    uint8_t count = 0;
-    char num_string[16];
     static uint8_t last_length[2] = {16,16};
     PROCESS_BEGIN();
     while(1)
     {
         if(Steelyard_Is_Adjust_Coefficient == false)
         {
-            sprintf(num_string,"%.1f",HX711_Weight_GlobalData);
-            OLED_ShowAlphabets(0,7,(uint8_t*)num_string); 
-            count = strlen(num_string) + 7;
-            if(count < last_length[0])
-            {
-                OLED_Fill_Alphabet(0,count,15-count);
-            }
-            last_length[0] = count;
-            
-            sprintf(num_string,"%.1f",Steelyard_Get_CurrentlyPrice());
-            OLED_ShowAlphabets(1,6,(uint8_t*)num_string); 
-            count = strlen(num_string) + 6;
-            if(count < last_length[1])
-            {
-                OLED_Fill_Alphabet(1,count,15-count);
-            }
-            last_length[1] = count;
+            OLED_ShowFloat(0,7,15, HX711_Weight_GlobalData, &last_length[0]);
+            OLED_ShowFloat(1,6,15, Steelyard_Get_CurrentlyPrice(), &last_length[1]);
         }
-        
         OLED_Refresh_Gram();//¸üÐÂÏÔÊ¾
         Contiki_etimer_DelayMS(500);
     }

@@ -57,8 +57,9 @@ void OLED_Fill_Alphabet(uint8_t row_x,uint8_t col_y,uint8_t count);
 void OLED_ShowChar(u8 x,u8 y,u8 chr,u8 size,u8 mode);
 void OLED_ShowNum(u8 x,u8 y,u32 num,u8 len,u8 size);
 void OLED_ShowString(u8 x,u8 y,const u8 *p);
-void OLED_ShowAlphabet(uint8_t row_x,uint8_t col_y,uint8_t alphabet);
-void OLED_ShowAlphabets(uint8_t row_x,uint8_t col_y,uint8_t* alphabets);
-
+void OLED_ShowAlphabet(uint8_t row,uint8_t col,uint8_t alphabet);
+void OLED_ShowAlphabets(uint8_t row,uint8_t col,uint8_t* alphabets);
+void OLED_Show_Head_End_Word(uint8_t row,uint8_t col_head,uint8_t* head,uint8_t col_end,uint8_t* endding);
+void OLED_ShowFloat(uint8_t row, uint8_t col_start, uint8_t col_end, float value, uint8_t* last_length);
 
 #endif

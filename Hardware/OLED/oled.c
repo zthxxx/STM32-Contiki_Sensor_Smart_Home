@@ -262,6 +262,25 @@ void OLED_ShowAlphabets(uint8_t row,uint8_t col,uint8_t* alphabets)
     OLED_ShowString(col * 8,row * 16,alphabets);
 }
 
+void OLED_Show_Head_End_Word(uint8_t row,uint8_t col_head,uint8_t* head,uint8_t col_end,uint8_t* endding)
+{
+    OLED_ShowAlphabets(row,col_head,head);
+    OLED_ShowAlphabets(row,col_end,endding);
+}
+
+void OLED_ShowFloat(uint8_t row, uint8_t col_start, uint8_t col_end, float value, uint8_t* last_length)
+{
+    char num_string[16];
+    uint8_t count;
+    sprintf(num_string,"%.1f",value);
+    OLED_ShowAlphabets(row,col_start,(uint8_t*)num_string); 
+    count = strlen(num_string) + col_start;
+    if(count < *last_length)
+    {
+        OLED_Fill_Alphabet(row,count,col_end-count);
+    }
+    *last_length = count;
+}
 //m^n函数
 u32 mypow(u8 m,u8 n)
 {
