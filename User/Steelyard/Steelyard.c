@@ -3,7 +3,7 @@ PROCESS(Steelyard_Load_Key_process, "Load key and push to input steam");
 
 float Steelyard_CurrentlyWeight = 0.0;
 float Steelyard_Currently_adjustWeight = 0.0;
-float Steelyard_Currently_adjustWeights[20] = {0};
+double Steelyard_Currently_adjustWeights[20][2] = {0};
 uint8_t Steelyard_adjustWeight_count = 0;
 float Steelyard_UnitPrice = 0.0;
 static float Steelyard_UnitPrice_Temp = 0.0;
@@ -22,14 +22,14 @@ bool Steelyard_Is_Accumulation  = false;    //累加
 bool Steelyard_Is_Adjust_Coefficient = false;//手动校准
 bool Steelyard_Is_Inputting     = false;    //正在输入
 
-uint8_t Steelyard_Display_Row_Head_Length[] = {7,6,5,6};
+uint8_t Steelyard_Display_Row_Head_Length[] = {7,6,5,7};
 uint8_t Steelyard_Display_Row_Endding_Length[] = {1,1,4,1};
 bool* Steelyard_Signs[] = {&Steelyard_Is_Decimal, &Steelyard_Is_Set_UnitPrice, &Steelyard_Is_Accumulation, &Steelyard_Is_Adjust_Coefficient, &Steelyard_Is_Inputting};
 
 uint8_t Steelyard_Keyboard_Key_Mapping[] = {NULL,
-	VK_1, VK_2, VK_3, VK_CLEAR,	                VK_Steelyard_Accumulate,
+	VK_7, VK_8, VK_9, VK_CLEAR,	                VK_Steelyard_Accumulate,
 	VK_4, VK_5, VK_6, VK_Steelyard_UnitPrice,	VK_Steelyard_Convert_Unit,
-	VK_7, VK_8, VK_9, VK_Steelyard_Peeling,	    VK_Steelyard_Adjust_Coefficient,
+	VK_1, VK_2, VK_3, VK_Steelyard_Peeling,	    VK_Steelyard_Adjust_Coefficient,
 	VK_0, VK_DECIMAL, VK_RETURN,	            VK_Steelyard_Adjust_Zero,	NULL
 };
 
@@ -67,8 +67,13 @@ void Steelyard_Display_UnitPrice(void)
 
 void Steelyard_Display_Total(void)
 {
-    OLED_ShowAlphabets(Steelyard_Total_Row,0,"Total:");
+    OLED_ShowAlphabets(Steelyard_Total_Row,0,"Total: ");
     OLED_ShowAlphabets(Steelyard_Total_Row,15,"Y");
+}
+void Steelyard_Display_AdjustWeight(void)
+{
+    OLED_ShowAlphabets(Steelyard_Total_Row,0,"Adjust:");
+    OLED_ShowAlphabets(Steelyard_Total_Row,15,"g");
 }
 
 uint8_t Steelyard_Get_MapVirtualKey(uint8_t key_index)
@@ -158,9 +163,14 @@ float Steelyard_Get_CurrentlyPrice(void)
     return Steelyard_CurrentlyPrice;
 }
 
+
 void Steelyard_Adjust_Coefficient(void)
 {
+    double SquarePoor[4];
     IWDG_Feed();
+    LinearRegression((double*)Steelyard_Currently_adjustWeights, Steelyard_adjustWeight_count, &HX711_fitting_coefficient[0], &HX711_fitting_coefficient[1],SquarePoor);
+    printf("ax+b, %f %f\r\n",HX711_fitting_coefficient[0],HX711_fitting_coefficient[1]);
+    HX711_Save_Adjust_Coefficient();
     Steelyard_adjustWeight_count = 0;
 }
 
@@ -246,24 +256,26 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                 }
                 break;
                 
-                case Steelyard_Adjust_Coefficient_Sign://此部分代码重复
+                case Steelyard_Adjust_Coefficient_Sign:
                 {
                     if(Steelyard_Is_Inputting == true)
                     {
-                        Steelyard_Currently_adjustWeights[Steelyard_adjustWeight_count++] = Steelyard_Currently_adjustWeight;
-                        Steelyard_Input_Clear(Steelyard_Adjust_Weight_Row);
-                        Steelyard_Is_Inputting = true;
+                        IWDG_Feed();
+                        Steelyard_Currently_adjustWeights[Steelyard_adjustWeight_count][0] = (double)HX711_Read_Average_Value()/100.0;
+                        Steelyard_Currently_adjustWeights[Steelyard_adjustWeight_count++][1] = Steelyard_Currently_adjustWeight;
                     }
                     if((Steelyard_Is_Inputting == false) || (Steelyard_adjustWeight_count >= (sizeof(Steelyard_Currently_adjustWeights) / sizeof(*Steelyard_Currently_adjustWeights))))
                     {
                         Steelyard_Adjust_Coefficient();
                         Steelyard_Pop_Mode();
+                        OLED_Fill_Alphabet(Steelyard_Adjust_Weight_Row,0,16);
                     }
+                    Steelyard_Input_Clear(Steelyard_Adjust_Weight_Row);
                     Steelyard_Currently_adjustWeight = 0;
                 }
                 break;
                 
-                case Steelyard_Accumulation_Sign://此部分代码重复
+                case Steelyard_Accumulation_Sign:
                 {
                     static uint8_t last_length = 16;
                     Steelyard_TotalPrice += Steelyard_Get_CurrentlyPrice();
@@ -279,7 +291,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
         {
             switch(mode_LIFO_Top)
             {
-                case Steelyard_Set_UnitPrice_Sign://此部分代码重复
+                case Steelyard_Set_UnitPrice_Sign:
                 {
                     Steelyard_UnitPrice_Temp = 0;
                     if(Steelyard_Is_Inputting == true)
@@ -302,7 +314,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                 }
                 break;
                 
-                case Steelyard_Adjust_Coefficient_Sign://此部分代码重复
+                case Steelyard_Adjust_Coefficient_Sign:
                 {
                     if(Steelyard_Is_Inputting == true)
                     {
@@ -312,6 +324,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                     else
                     {
                         Steelyard_Pop_Mode();
+                        OLED_Fill_Alphabet(Steelyard_Adjust_Weight_Row,0,16);
                     }
                 }
                 break;
@@ -320,6 +333,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                 {
                     Steelyard_TotalPrice = 0;
                     Steelyard_Input_Clear(Steelyard_Total_Row);
+                    OLED_Fill_Alphabet(Steelyard_Total_Row, 0, 16);
                     Steelyard_Pop_Mode();
                 }
                 break;
@@ -397,6 +411,7 @@ void Steelyard_Dispose_Mode_Key(uint8_t virtual_Key)
         {
             Steelyard_Currently_adjustWeight = 0;
             Steelyard_Input_Clear(Steelyard_Adjust_Weight_Row);
+            Steelyard_Display_AdjustWeight();
         }
         break;
     }

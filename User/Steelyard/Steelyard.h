@@ -54,7 +54,7 @@ typedef enum {
 #define Steelyard_Price_Row     1
 #define Steelyard_UnitPrice_Row 2
 #define Steelyard_Total_Row     3
-#define Steelyard_Adjust_Weight_Row    0
+#define Steelyard_Adjust_Weight_Row    3
 
 
 //控制按键

@@ -121,13 +121,13 @@ uint16_t STMFLASH_Read_HalfWordData(uint32_t WriteAddr)
 
 void STMFLASH_Write_OneWordData(uint32_t WriteAddr,uint32_t WriteData)
 {
-	STMFLASH_Write(WriteAddr,(uint16_t*)&WriteData,2);//写入一个半字 
+	STMFLASH_Write(WriteAddr,(uint16_t*)&WriteData,2);
 }
 
 uint32_t STMFLASH_Read_OneWordData(uint32_t WriteAddr)
 {
     uint32_t flash_Data;
-	STMFLASH_Read(WriteAddr,(uint16_t*)&flash_Data,2);//写入一个半字 
+	STMFLASH_Read(WriteAddr,(uint16_t*)&flash_Data,2);
     return flash_Data;
 }
 
