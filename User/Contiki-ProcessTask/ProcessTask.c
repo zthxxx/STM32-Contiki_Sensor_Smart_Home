@@ -492,8 +492,8 @@ PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
     {
         if(Steelyard_Is_Adjust_Coefficient == false)
         {
-            OLED_ShowFloat(0,7,15, HX711_Weight_GlobalData, &last_length[0]);
-            OLED_ShowFloat(1,6,15, Steelyard_Get_CurrentlyPrice(), &last_length[1]);
+            OLED_ShowFloat(Steelyard_Weight_Row,7,15, HX711_Weight_GlobalData, &last_length[0]);
+            OLED_ShowFloat(Steelyard_Price_Row,6,15, Steelyard_Get_CurrentlyPrice(), &last_length[1]);
         }
         OLED_Refresh_Gram();//¸üÐÂÏÔÊ¾
         Contiki_etimer_DelayMS(500);

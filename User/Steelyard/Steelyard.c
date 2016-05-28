@@ -251,7 +251,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                     if(Steelyard_Is_Inputting == true)
                     {
                         Steelyard_Currently_adjustWeights[Steelyard_adjustWeight_count++] = Steelyard_Currently_adjustWeight;
-                        Steelyard_Input_Clear(0);
+                        Steelyard_Input_Clear(Steelyard_Adjust_Weight_Row);
                         Steelyard_Is_Inputting = true;
                     }
                     if((Steelyard_Is_Inputting == false) || (Steelyard_adjustWeight_count >= (sizeof(Steelyard_Currently_adjustWeights) / sizeof(*Steelyard_Currently_adjustWeights))))
@@ -267,7 +267,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                 {
                     static uint8_t last_length = 16;
                     Steelyard_TotalPrice += Steelyard_Get_CurrentlyPrice();
-                    OLED_ShowFloat(3,7,15, Steelyard_TotalPrice, &last_length);
+                    OLED_ShowFloat(Steelyard_Total_Row,7,15, Steelyard_TotalPrice, &last_length);
                     OLED_Refresh_Gram();
                 }
                 break;
@@ -285,7 +285,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                     if(Steelyard_Is_Inputting == true)
                     {
                         Steelyard_UnitPrice_Temp = 0;
-                        Steelyard_Input_Clear(2);
+                        Steelyard_Input_Clear(Steelyard_UnitPrice_Row);
                     }
                     else
                     {
@@ -307,7 +307,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                     if(Steelyard_Is_Inputting == true)
                     {
                         Steelyard_Currently_adjustWeight = 0;
-                        Steelyard_Input_Clear(0);
+                        Steelyard_Input_Clear(Steelyard_Adjust_Weight_Row);
                     }
                     else
                     {
@@ -319,7 +319,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                 case Steelyard_Accumulation_Sign:
                 {
                     Steelyard_TotalPrice = 0;
-                    Steelyard_Input_Clear(3);
+                    Steelyard_Input_Clear(Steelyard_Total_Row);
                     Steelyard_Pop_Mode();
                 }
                 break;
@@ -375,7 +375,7 @@ void Steelyard_Dispose_Mode_Key(uint8_t virtual_Key)
         case Steelyard_Set_UnitPrice_Sign:
         {
             Steelyard_UnitPrice_Temp = 0;
-            Steelyard_Input_Clear(2);
+            Steelyard_Input_Clear(Steelyard_UnitPrice_Row);
         }
         break;
         
@@ -388,7 +388,7 @@ void Steelyard_Dispose_Mode_Key(uint8_t virtual_Key)
         case Steelyard_Accumulation_Sign:
         {
             Steelyard_TotalPrice = 0;
-            Steelyard_Input_Clear(3);
+            Steelyard_Input_Clear(Steelyard_Total_Row);
             Steelyard_Display_Total();
         }
         break;
@@ -396,7 +396,7 @@ void Steelyard_Dispose_Mode_Key(uint8_t virtual_Key)
         case Steelyard_Adjust_Coefficient_Sign:
         {
             Steelyard_Currently_adjustWeight = 0;
-            Steelyard_Input_Clear(0);
+            Steelyard_Input_Clear(Steelyard_Adjust_Weight_Row);
         }
         break;
     }
