@@ -15,6 +15,7 @@
 #include "oled.h"
 #include "HX711.h"
 #include "Keyboard_4x5.h"
+#include "Filters.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>

@@ -7,6 +7,7 @@
 #include "stdio.h"
 #include "stm_flash.h"
 #include "delay.h"
+#include "Filters.h"
 
 #define HX711_DAT_Pin  		GPIO_Pin_8
 #define HX711_DAT_Port 		GPIOC
@@ -35,5 +36,4 @@ void HX711_Load_Adjust_Conefficient(void);
 void HX711_Zero_Offset_Adjust(void);
 double HX711_Window_Filter(void);
 double HX711_Window_Weighting_Filter(void);
-int LinearRegression(double *data, int rows, double *a, double *b, double *SquarePoor);
 #endif

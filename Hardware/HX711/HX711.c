@@ -93,18 +93,29 @@ uint32_t HX711_Read_Value(void)
 
 uint32_t HX711_Read_Average_Value(void)
 {
-    uint8_t count;
-    uint8_t sample_times = 30;
-    uint32_t value = 0;
-    for(count = 0;count < 10; count++)
-    {
-        HX711_Read_Value();  //固定丢弃前面几次
-    }
-    for(count = 0;count < sample_times; count++)
-    {
-        value += HX711_Read_Value() / sample_times;
-    }
-    return value;
+    static bool HX711_Window_is_init = false;
+    uint8_t count = 0;
+
+    uint16_t HX711_Slip_Window_Length = 30;
+    static double HX711_Last_Weight_List[30] = {0.0};
+    static uint16_t HX711_value_index = 0;
+    static double HX711_filte_value = 0.0;
+    double HX711_Value;
+
+     if(HX711_Window_is_init == false)
+     {
+         for(count = 0;count < HX711_Slip_Window_Length; count++)
+         {
+             HX711_Value = HX711_Read_Value();
+             HX711_filte_value += HX711_Value;
+             HX711_Last_Weight_List[count] = HX711_Value;
+         }
+         HX711_filte_value /= (float)HX711_Slip_Window_Length;
+         if(fabs(HX711_filte_value) > 1)HX711_filte_value = 0;
+         HX711_Window_is_init = true;
+     }
+    HX711_filte_value = Moving_Average_Filter(HX711_Read_Value(), &HX711_filte_value, HX711_Last_Weight_List, HX711_Slip_Window_Length, &HX711_value_index); 
+    return HX711_filte_value;
 }
 
 double HX711_Read_Weight(void)
@@ -144,112 +155,25 @@ void HX711_Load_Adjust_Conefficient(void)
 
 double HX711_Window_Filter()
 {
-    static bool HX711_Window_is_init = false;
-    uint8_t count = 0;
-    uint8_t HX711_Slip_Window_Length = 80;
+    uint16_t HX711_Slip_Window_Length = 80;
     static double HX711_Last_Weight_List[80] = {0.0};
-    static uint8_t HX711_value_index = 0;
+    static uint16_t HX711_value_index = 0;
     static double HX711_filte_value = 0.0;
-    double HX711_Weight = 0.0;
-    
-    
-    if(HX711_Window_is_init == false)
-    {
-        for(count = 0;count < HX711_Slip_Window_Length; count++)
-        {
-            HX711_Weight = HX711_Read_Weight();
-            HX711_filte_value += HX711_Weight;
-            HX711_Last_Weight_List[count] = HX711_Weight;
-        }
-        HX711_filte_value /= (float)HX711_Slip_Window_Length;
-        if(fabs(HX711_filte_value) > 1)HX711_filte_value = 0;
-        HX711_Window_is_init = true;
-    }
-    
-    
-    HX711_Weight = HX711_Read_Weight();
-    HX711_filte_value += (HX711_Weight - HX711_Last_Weight_List[HX711_value_index]) / (float)HX711_Slip_Window_Length;
-    HX711_Last_Weight_List[HX711_value_index++] = HX711_Weight;
-    HX711_value_index = HX711_value_index < HX711_Slip_Window_Length ? HX711_value_index : 0;
-    
+
+    HX711_filte_value = Moving_Average_Filter(HX711_Read_Weight(), &HX711_filte_value, HX711_Last_Weight_List, HX711_Slip_Window_Length, &HX711_value_index); 
     return HX711_filte_value;
 }
 
 double HX711_Window_Weighting_Filter()
 {
-    static bool HX711_Window_Weighting_is_init = false;
-    uint8_t count = 0;
-    uint8_t HX711_Slip_Window_Length = 30;
-    static double HX711_Last_Weight = 0.0;
-    static double HX711_Last_Weight_List[30] = {0.0};
-    static uint8_t HX711_value_index = 0;
+    uint16_t HX711_Slip_Window_Length = 40;
+    static double HX711_Last_Weight_List[40] = {0.0};
+    static uint16_t HX711_value_index = 0;
     static double HX711_filte_value = 0.0;
-    double HX711_Weight = 0.0;
-    float  HX711_Value_Trust = 0.3;
+    float  HX711_Value_Trust = 0.25;
     
-    
-    if(HX711_Window_Weighting_is_init == false)
-    {
-        HX711_Last_Weight = HX711_Window_Filter();
-        for(count = 0;count < HX711_Slip_Window_Length; count++)
-        {
-            HX711_Weight = HX711_Window_Filter();
-            HX711_Weight = HX711_Weight * HX711_Value_Trust + HX711_Last_Weight * (1 - HX711_Value_Trust);
-            HX711_Last_Weight = HX711_Weight;
-            HX711_filte_value += HX711_Weight;
-            HX711_Last_Weight_List[count] = HX711_Weight;
-            
-        }
-        HX711_filte_value /= (float)HX711_Slip_Window_Length;
-        HX711_Window_Weighting_is_init = true;
-    }
-    
-    
-    HX711_Weight = HX711_Window_Filter();
-    HX711_Weight = HX711_Weight * HX711_Value_Trust + HX711_Last_Weight * (1 - HX711_Value_Trust);
-    HX711_Last_Weight = HX711_Weight;
-    HX711_filte_value += (HX711_Weight - HX711_Last_Weight_List[HX711_value_index]) / (float)HX711_Slip_Window_Length;
-    HX711_Last_Weight_List[HX711_value_index++] = HX711_Weight;
-    HX711_value_index = HX711_value_index < HX711_Slip_Window_Length ? HX711_value_index : 0;
+    HX711_filte_value = Weight_Moving_Average_Filter(HX711_Window_Filter(), &HX711_filte_value, HX711_Value_Trust, HX711_Last_Weight_List, HX711_Slip_Window_Length, &HX711_value_index);
     return HX711_filte_value;
 }
 
-// 求线性回归方程：Y = ax + b
-// dada[rows*2]数组：X, Y；rows：数据行数；a, b：返回回归系数
-// SquarePoor[4]：返回方差分析指标: 回归平方和，剩余平方和，回归平方差，剩余平方差
-// 返回值：1求解成功，0错误
-int LinearRegression(double *data, int rows, double *a, double *b, double *SquarePoor)
-{
-    int m;
-    double *p, Lxx = 0.0, Lxy = 0.0, xa = 0.0, ya = 0.0;
-    if (data == 0 || a == 0 || b == 0 || rows < 1)
-        return 0;
-    for (p = data, m = 0; m < rows; m ++)
-    {
-        xa += *p ++;
-        ya += *p ++;
-    }
-    xa /= rows;                                     // X平均值
-    ya /= rows;                                     // Y平均值
-    for (p = data, m = 0; m < rows; m ++, p += 2)
-    {
-        Lxx += ((*p - xa) * (*p - xa));             // Lxx = Sum((X - Xa)平方)
-        Lxy += ((*p - xa) * (*(p + 1) - ya));       // Lxy = Sum((X - Xa)(Y - Ya))
-    }
-    *a = Lxy / Lxx;                                 // b = Lxy / Lxx
-    *b = ya - *a * xa;                              // a = Ya - b*Xa
-    if (SquarePoor == 0)
-        return 1;
-    // 方差分析
-    SquarePoor[0] = SquarePoor[1] = 0.0;
-    for (p = data, m = 0; m < rows; m ++, p ++)
-    {
-        Lxy = *b + *a * *p ++;
-        SquarePoor[0] += ((Lxy - ya) * (Lxy - ya)); // U(回归平方和)
-        SquarePoor[1] += ((*p - Lxy) * (*p - Lxy)); // Q(剩余平方和)
-    }
-    SquarePoor[2] = SquarePoor[0];                  // 回归方差
-    SquarePoor[3] = SquarePoor[1] / (rows - 2);     // 剩余方差
-    return 1;
-}
 

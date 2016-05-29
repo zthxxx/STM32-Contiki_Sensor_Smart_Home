@@ -22,6 +22,7 @@
 #include "NVIC_CONFIG.H"
 #include "cJSON.h"
 #include "stm_flash.h"
+#include "Filters.h"
 #include "CommunicationProtocol.h"
 #include "CommunicationConfig.h"
 
