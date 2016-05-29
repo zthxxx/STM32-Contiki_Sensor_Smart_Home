@@ -22,7 +22,7 @@ bool Steelyard_Is_Accumulation  = false;    //累加
 bool Steelyard_Is_Adjust_Coefficient = false;//手动校准
 bool Steelyard_Is_Inputting     = false;    //正在输入
 
-uint8_t Steelyard_Display_Row_Head_Length[] = {7,6,5,7};
+uint8_t Steelyard_Display_Row_Head_Length[] = {6,6,6,6};
 uint8_t Steelyard_Display_Row_Endding_Length[] = {1,1,4,1};
 bool* Steelyard_Signs[] = {&Steelyard_Is_Decimal, &Steelyard_Is_Set_UnitPrice, &Steelyard_Is_Accumulation, &Steelyard_Is_Adjust_Coefficient, &Steelyard_Is_Inputting};
 
@@ -49,30 +49,35 @@ Steelyard_Key_Process Steelyard_Key_Dispose_Method[] = {
 
 void Steelyard_Display_Weight(void)
 {
-    OLED_ShowAlphabets(Steelyard_Weight_Row,0,"Weight:");
+    uint8_t str[] = {' '+95,' '+96,' '+97,' '+98,':'};
+    OLED_ShowAlphabets(Steelyard_Weight_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Weight_Row,15,"g");
 }
 
 void Steelyard_Display_Price(void)
 {
-    OLED_ShowAlphabets(Steelyard_Price_Row,0,"Price:");
+    uint8_t str[] = {' '+99,' '+100,' '+101,' '+102,':'};
+    OLED_ShowAlphabets(Steelyard_Price_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Price_Row,15,"Y");
 }
 
 void Steelyard_Display_UnitPrice(void)
 {
-    OLED_ShowAlphabets(Steelyard_UnitPrice_Row,0,"Unit:");
+    uint8_t str[] = {' '+103,' '+104,' '+99,' '+100,':'};
+    OLED_ShowAlphabets(Steelyard_UnitPrice_Row,0,str);
     OLED_ShowAlphabets(Steelyard_UnitPrice_Row,12,"Y/Kg");
 }
 
 void Steelyard_Display_Total(void)
 {
-    OLED_ShowAlphabets(Steelyard_Total_Row,0,"Total: ");
+    uint8_t str[] = {' '+105,' '+106,' '+107,' '+108,':'};
+    OLED_ShowAlphabets(Steelyard_Total_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Total_Row,15,"Y");
 }
 void Steelyard_Display_AdjustWeight(void)
 {
-    OLED_ShowAlphabets(Steelyard_Total_Row,0,"Adjust:");
+    uint8_t str[] = {' '+109,' '+110,' '+111,' '+112,':'};
+    OLED_ShowAlphabets(Steelyard_Total_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Total_Row,15,"g");
 }
 
@@ -279,7 +284,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                 {
                     static uint8_t last_length = 16;
                     Steelyard_TotalPrice += Steelyard_Get_CurrentlyPrice();
-                    OLED_ShowFloat(Steelyard_Total_Row,7,15, Steelyard_TotalPrice, &last_length);
+                    OLED_ShowFloat(Steelyard_Total_Row,Steelyard_Display_Row_Head_Length[Steelyard_Total_Row],15, Steelyard_TotalPrice, &last_length);
                     OLED_Refresh_Gram();
                 }
                 break;
