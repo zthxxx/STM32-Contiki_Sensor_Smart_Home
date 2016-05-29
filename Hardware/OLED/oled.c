@@ -272,7 +272,7 @@ void OLED_ShowFloat(uint8_t row, uint8_t col_start, uint8_t col_end, float value
 {
     char num_string[16];
     uint8_t count;
-    sprintf(num_string,"%.1f",value);
+    sprintf(num_string,"%.2f",value);
     OLED_ShowAlphabets(row,col_start,(uint8_t*)num_string); 
     count = strlen(num_string) + col_start;
     if(count < *last_length)

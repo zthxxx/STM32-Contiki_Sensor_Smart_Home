@@ -1,6 +1,6 @@
 #include "HX711.h"
 
-double HX711_fitting_coefficient[] = {-0.915096818615574, -0.319117195016503};//ax^2+bx+c     {MSB, ..., LSB}
+double HX711_fitting_coefficient[] = {-0.096456, -0.319117195016503};//ax^2+bx+c     {MSB, ..., LSB}
 	    
 //LED IO≥ı ºªØ
 void HX711_Init(void)

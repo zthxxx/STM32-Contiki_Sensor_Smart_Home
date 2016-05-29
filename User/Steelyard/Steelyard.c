@@ -23,7 +23,7 @@ bool Steelyard_Is_Adjust_Coefficient = false;//手动校准
 bool Steelyard_Is_Inputting     = false;    //正在输入
 
 uint8_t Steelyard_Display_Row_Head_Length[] = {6,6,6,6};
-uint8_t Steelyard_Display_Row_Endding_Length[] = {1,1,4,1};
+uint8_t Steelyard_Display_Row_Endding_Length[] = {1,1,3,1};
 bool* Steelyard_Signs[] = {&Steelyard_Is_Decimal, &Steelyard_Is_Set_UnitPrice, &Steelyard_Is_Accumulation, &Steelyard_Is_Adjust_Coefficient, &Steelyard_Is_Inputting};
 
 uint8_t Steelyard_Keyboard_Key_Mapping[] = {NULL,
@@ -65,7 +65,7 @@ void Steelyard_Display_UnitPrice(void)
 {
     uint8_t str[] = {' '+103,' '+104,' '+99,' '+100,':'};
     OLED_ShowAlphabets(Steelyard_UnitPrice_Row,0,str);
-    OLED_ShowAlphabets(Steelyard_UnitPrice_Row,12,"Y/Kg");
+    OLED_ShowAlphabets(Steelyard_UnitPrice_Row,12,"Y/g");
 }
 
 void Steelyard_Display_Total(void)
