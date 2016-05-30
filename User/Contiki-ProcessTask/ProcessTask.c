@@ -24,6 +24,7 @@ PROCESS(T6603_Read_CO2_PPM_process, "T6603-5 read CO2 PPM value");
 PROCESS(W5500_send_test_process, "Test W5500 module send data");
 PROCESS(HX711_read_weight_process, "HX711 read weight gage adc");
 PROCESS(KEYBOARD_Scan_process, "Scan keyboard with contiki os");
+PROCESS(Steelyard_Display_Peeling_Error_process, "Steelyard display peeling error.");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -497,6 +498,20 @@ PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
     }
     PROCESS_END();
 }
+
+
+PROCESS_THREAD(Steelyard_Display_Peeling_Error_process, ev, data)
+{
+    static struct etimer et;
+    PROCESS_BEGIN();
+    Steelyard_Display_Peeling_Overweight();
+    OLED_Refresh_Gram();//¸üÐÂÏÔÊ¾
+    Contiki_etimer_DelayMS(2000);
+    OLED_Fill_Alphabet(Steelyard_Peeling_Overweight_Row,0,16);
+    PROCESS_END();
+}
+
+
 
 PROCESS_THREAD(KEYBOARD_Scan_process, ev, data)//keyboard scan, follow the typical keyboard scan code
 {

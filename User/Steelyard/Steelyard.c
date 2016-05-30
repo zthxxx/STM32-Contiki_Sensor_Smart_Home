@@ -22,7 +22,7 @@ bool Steelyard_Is_Accumulation  = false;    //累加
 bool Steelyard_Is_Adjust_Coefficient = false;//手动校准
 bool Steelyard_Is_Inputting     = false;    //正在输入
 
-uint8_t Steelyard_Display_Row_Head_Length[] = {6,6,6,6};
+uint8_t Steelyard_Display_Row_Head_Length[] = {5,5,5,5};
 uint8_t Steelyard_Display_Row_Endding_Length[] = {1,1,3,1};
 bool* Steelyard_Signs[] = {&Steelyard_Is_Decimal, &Steelyard_Is_Set_UnitPrice, &Steelyard_Is_Accumulation, &Steelyard_Is_Adjust_Coefficient, &Steelyard_Is_Inputting};
 
@@ -49,36 +49,42 @@ Steelyard_Key_Process Steelyard_Key_Dispose_Method[] = {
 
 void Steelyard_Display_Weight(void)
 {
-    uint8_t str[] = {' '+95,' '+96,' '+97,' '+98,':'};
+    uint8_t str[] = {' '+95,' '+96,' '+97,' '+98,':',0};
     OLED_ShowAlphabets(Steelyard_Weight_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Weight_Row,15,"g");
 }
 
 void Steelyard_Display_Price(void)
 {
-    uint8_t str[] = {' '+99,' '+100,' '+101,' '+102,':'};
+    uint8_t str[] = {' '+99,' '+100,' '+101,' '+102,':',0};
     OLED_ShowAlphabets(Steelyard_Price_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Price_Row,15,"Y");
 }
 
 void Steelyard_Display_UnitPrice(void)
 {
-    uint8_t str[] = {' '+103,' '+104,' '+99,' '+100,':'};
+    uint8_t str[] = {' '+103,' '+104,' '+99,' '+100,':',0};
     OLED_ShowAlphabets(Steelyard_UnitPrice_Row,0,str);
-    OLED_ShowAlphabets(Steelyard_UnitPrice_Row,12,"Y/g");
+    OLED_ShowAlphabets(Steelyard_UnitPrice_Row,13,"Y/g");
 }
 
 void Steelyard_Display_Total(void)
 {
-    uint8_t str[] = {' '+105,' '+106,' '+107,' '+108,':'};
+    uint8_t str[] = {' '+105,' '+106,' '+107,' '+108,':',0};
     OLED_ShowAlphabets(Steelyard_Total_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Total_Row,15,"Y");
 }
 void Steelyard_Display_AdjustWeight(void)
 {
-    uint8_t str[] = {' '+109,' '+110,' '+111,' '+112,':'};
+    uint8_t str[] = {' '+109,' '+110,' '+111,' '+112,':',0};
     OLED_ShowAlphabets(Steelyard_Total_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Total_Row,15,"g");
+}
+
+void Steelyard_Display_Peeling_Overweight(void)
+{
+    uint8_t str[] = {' '+113,' '+114,' '+115,' '+116,' '+117,' '+118,' '+95,' '+96,0};
+    OLED_ShowAlphabets(Steelyard_Peeling_Overweight_Row,0,str);
 }
 
 uint8_t Steelyard_Get_MapVirtualKey(uint8_t key_index)
@@ -347,11 +353,30 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
         break;
         
         case VK_Steelyard_Peeling:
+        {
+            IWDG_Feed();
+            if(Steelyard_CurrentlyWeight > Steelyard_Peeling_Limit)
+            {
+                process_start(&Steelyard_Display_Peeling_Error_process,NULL);
+            }else
+            {
+                HX711_Zero_Offset_Adjust();
+            }
+            IWDG_Feed();
+        }
+        break;
+        
         case VK_Steelyard_Adjust_Zero:
         {
             IWDG_Feed();
             HX711_Zero_Offset_Adjust();
             IWDG_Feed();
+        }
+        break;
+        
+        case VK_Steelyard_Convert_Unit:
+        {
+            
         }
         break;
     }

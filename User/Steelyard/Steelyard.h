@@ -56,7 +56,7 @@ typedef enum {
 #define Steelyard_UnitPrice_Row 2
 #define Steelyard_Total_Row     3
 #define Steelyard_Adjust_Weight_Row    3
-
+#define Steelyard_Peeling_Overweight_Row    3
 
 //控制按键
 #define VK_Steelyard_Adjust_Zero	0x0E
@@ -68,7 +68,7 @@ typedef enum {
 #define VK_Steelyard_Accumulate		0x72
 #define VK_Steelyard_Adjust_Coefficient	0x73
 
-
+#define Steelyard_Peeling_Limit     101
 
 typedef void(*Steelyard_Key_Process)(uint8_t key_index);
 
@@ -90,6 +90,7 @@ void Steelyard_Display_Weight(void);
 void Steelyard_Display_Price(void);
 void Steelyard_Display_UnitPrice(void);
 void Steelyard_Display_Total(void);
+void Steelyard_Display_Peeling_Overweight(void);
 
 float Steelyard_Get_CurrentlyPrice(void);
 void Steelyard_Dispose_ValueKey(uint8_t key_index);

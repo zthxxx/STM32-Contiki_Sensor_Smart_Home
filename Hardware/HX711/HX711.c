@@ -111,7 +111,6 @@ uint32_t HX711_Read_Average_Value(void)
              HX711_Last_Weight_List[count] = HX711_Value;
          }
          HX711_filte_value /= (float)HX711_Slip_Window_Length;
-         if(fabs(HX711_filte_value) > 1)HX711_filte_value = 0;
          HX711_Window_is_init = true;
      }
     HX711_filte_value = Moving_Average_Filter(HX711_Read_Value(), &HX711_filte_value, HX711_Last_Weight_List, HX711_Slip_Window_Length, &HX711_value_index); 

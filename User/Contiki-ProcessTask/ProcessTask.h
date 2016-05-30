@@ -113,6 +113,7 @@ PROCESS_NAME(T6603_Read_CO2_PPM_process);
 PROCESS_NAME(W5500_send_test_process);
 PROCESS_NAME(HX711_read_weight_process);
 PROCESS_NAME(KEYBOARD_Scan_process);
+PROCESS_NAME(Steelyard_Display_Peeling_Error_process);
 
 extern process_event_t keyboard_press_event;
 #endif
