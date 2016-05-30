@@ -9,8 +9,8 @@ float Steelyard_UnitPrice = 0.0;
 static float Steelyard_UnitPrice_Temp = 0.0;
 float Steelyard_CurrentlyPrice = 0.0;
 float Steelyard_TotalPrice = 0.0; 
-static uint8_t cursor_position_row = 0;
-static uint8_t cursor_position_col = 0;
+uint8_t cursor_position_row = 0;
+uint8_t cursor_position_col = 0;
 static uint8_t cursor_point_deep = 0;
 
 Uint8LIFOQueue Steelyard_Mode_LIFO_Queue = {NULL, NULL, 0};
@@ -192,6 +192,7 @@ void Steelyard_Set_Cursor_Position(uint8_t row, uint8_t col)
 void Steelyard_Cursor_Shift(void)
 //自动往后移动光标
 {
+    OLED_DrawCursor(cursor_position_row, cursor_position_col, (uint8_t)false);
     cursor_position_col++;
     if(cursor_position_col >= OLED_Max_Col)
     {
@@ -343,6 +344,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                     Steelyard_UnitPrice = Steelyard_UnitPrice_Temp;
                     Steelyard_UnitPrice_Temp = 0;
                     Steelyard_UnitPrice = Steelyard_Convert_Unit_UnitPrice_Method[Steelyard_Unit_index]();
+                    Steelyard_Is_Inputting = false;
                     Steelyard_Pop_Mode();
                 }
                 break;

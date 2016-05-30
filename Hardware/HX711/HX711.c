@@ -144,8 +144,8 @@ void HX711_Load_Adjust_Conefficient(void)
 
 double HX711_Window_Filter()
 {
-    uint16_t HX711_Slip_Window_Length = 80;
-    static double HX711_Last_Weight_List[80] = {0.0};
+    uint16_t HX711_Slip_Window_Length = 100;
+    static double HX711_Last_Weight_List[100] = {0.0};
     static uint16_t HX711_value_index = 0;
     static double HX711_filte_value = 0.0;
 
@@ -155,11 +155,11 @@ double HX711_Window_Filter()
 
 double HX711_Window_Weighting_Filter()
 {
-    uint16_t HX711_Slip_Window_Length = 40;
-    static double HX711_Last_Weight_List[40] = {0.0};
+    uint16_t HX711_Slip_Window_Length = 50;
+    static double HX711_Last_Weight_List[50] = {0.0};
     static uint16_t HX711_value_index = 0;
     static double HX711_filte_value = 0.0;
-    float  HX711_Value_Trust = 0.25;
+    float  HX711_Value_Trust = 0.2;
     
     HX711_filte_value = Weight_Moving_Average_Filter(HX711_Window_Filter(), &HX711_filte_value, HX711_Value_Trust, HX711_Last_Weight_List, HX711_Slip_Window_Length, &HX711_value_index);
     return HX711_filte_value;

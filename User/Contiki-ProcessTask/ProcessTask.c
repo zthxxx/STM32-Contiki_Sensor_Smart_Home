@@ -25,6 +25,7 @@ PROCESS(W5500_send_test_process, "Test W5500 module send data");
 PROCESS(HX711_read_weight_process, "HX711 read weight gage adc");
 PROCESS(KEYBOARD_Scan_process, "Scan keyboard with contiki os");
 PROCESS(Steelyard_Display_Peeling_Error_process, "Steelyard display peeling error.");
+PROCESS(Steelyard_Display_Cursor_process, "Steelyard display cursor blink.");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -525,6 +526,30 @@ PROCESS_THREAD(Steelyard_Display_Peeling_Error_process, ev, data)
     PROCESS_END();
 }
 
+PROCESS_THREAD(Steelyard_Display_Cursor_process, ev, data)
+{
+    static struct etimer et;
+    static bool cursor_status = false;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        if(Steelyard_Is_Inputting)
+        {
+            OLED_DrawCursor(cursor_position_row, cursor_position_col, (uint8_t)cursor_status);
+            cursor_status = !cursor_status;
+        }
+        else
+        {
+            if(cursor_status)
+            {
+                cursor_status = false;
+                OLED_DrawCursor(cursor_position_row, cursor_position_col, (uint8_t)cursor_status);
+            }
+        }
+        Contiki_etimer_DelayMS(500);
+    }
+    PROCESS_END();
+}
 
 
 PROCESS_THREAD(KEYBOARD_Scan_process, ev, data)//keyboard scan, follow the typical keyboard scan code

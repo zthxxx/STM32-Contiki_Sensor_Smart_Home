@@ -197,13 +197,30 @@ void OLED_Init(void)
 void OLED_DrawPoint(u8 x,u8 y,u8 t)
 {
 	u8 pos,bx,temp=0;
-	if(x>127||y>63)return;//³¬³ö·¶Î§ÁË.
+	if(x>127||y>63)return;
 	pos=7-y/8;
 	bx=y%8;
 	temp=1<<(7-bx);
 	if(t)OLED_GRAM[x][pos]|=temp;
 	else OLED_GRAM[x][pos]&=~temp;	    
 }
+
+//画点 
+//x:0~127
+//y:0~63
+//t:1 填充 0,清空				   
+void OLED_DrawCursor(uint8_t row,uint8_t col,uint8_t display)
+{
+    uint8_t x = col * 8;
+    uint8_t y = row * 16;
+    uint8_t count;
+    for(count = 0;count < 16;count++)
+    {
+        OLED_DrawPoint(x, y + count, display);
+    }
+}
+
+
 
 //在指定位置显示一个字符,包括部分字符
 //x:0~127

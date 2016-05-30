@@ -52,6 +52,7 @@ void OLED_Refresh_Gram(void);
 							   		    
 void OLED_Init(void);
 void OLED_DrawPoint(u8 x,u8 y,u8 t);
+void OLED_DrawCursor(uint8_t row,uint8_t col,uint8_t display);
 void OLED_Fill(u8 x1,u8 y1,u8 x2,u8 y2,u8 dot);
 void OLED_CLS(void);
 void OLED_Fill_Alphabet(uint8_t row_x,uint8_t col_y,uint8_t count);

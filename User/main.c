@@ -234,6 +234,7 @@ int main(void)
 #ifdef __KEYBOARD_MODULE_ON__
     process_start(&KEYBOARD_Scan_process,NULL);
     process_start(&Steelyard_Load_Key_process,NULL);
+    process_start(&Steelyard_Display_Cursor_process,NULL);
 #endif
 
     while (1)

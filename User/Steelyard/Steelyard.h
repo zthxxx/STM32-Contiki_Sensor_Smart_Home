@@ -77,6 +77,9 @@ typedef float(*Steelyard_Convert_Unit_UnitPrice)(void);
 typedef void(*Steelyard_Convert_Unit_Display)(void);
 
 
+extern uint8_t cursor_position_row;
+extern uint8_t cursor_position_col;
+
 extern float Steelyard_CurrentlyWeight;
 extern float Steelyard_UnitPrice;
 extern float Steelyard_CurrentlyPrice;
