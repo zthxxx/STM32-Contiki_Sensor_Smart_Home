@@ -93,28 +93,18 @@ uint32_t HX711_Read_Value(void)
 
 double HX711_Read_Average_Value(void)
 {
-    static bool HX711_Window_is_init = false;
-    uint8_t count = 0;
-
-    uint16_t HX711_Slip_Window_Length = 30;
-    static double HX711_Last_Weight_List[30] = {0.0};
-    static uint16_t HX711_value_index = 0;
-    static double HX711_filte_value = 0.0;
-    double HX711_Value;
-
-     if(HX711_Window_is_init == false)
-     {
-         for(count = 0;count < HX711_Slip_Window_Length; count++)
-         {
-             HX711_Value = (double)HX711_Read_Value();
-             HX711_filte_value += HX711_Value;
-             HX711_Last_Weight_List[count] = HX711_Value;
-         }
-         HX711_filte_value /= (float)HX711_Slip_Window_Length;
-         HX711_Window_is_init = true;
-     }
-    HX711_filte_value = Moving_Average_Filter((double)HX711_Read_Value(), &HX711_filte_value, HX711_Last_Weight_List, HX711_Slip_Window_Length, &HX711_value_index); 
-    return HX711_filte_value;
+    uint8_t count;
+    uint8_t sample_times = 30;
+    uint32_t value = 0;
+    for(count = 0;count < 10; count++)
+    {
+        HX711_Read_Value();
+    }
+    for(count = 0;count < sample_times; count++)
+    {
+        value += HX711_Read_Value() / sample_times;
+    }
+    return value;
 }
 
 double HX711_Read_Weight(void)
