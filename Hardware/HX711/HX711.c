@@ -91,7 +91,7 @@ uint32_t HX711_Read_Value(void)
 	return HX711_Value;
 }
 
-uint32_t HX711_Read_Average_Value(void)
+double HX711_Read_Average_Value(void)
 {
     static bool HX711_Window_is_init = false;
     uint8_t count = 0;
@@ -106,14 +106,14 @@ uint32_t HX711_Read_Average_Value(void)
      {
          for(count = 0;count < HX711_Slip_Window_Length; count++)
          {
-             HX711_Value = HX711_Read_Value();
+             HX711_Value = (double)HX711_Read_Value();
              HX711_filte_value += HX711_Value;
              HX711_Last_Weight_List[count] = HX711_Value;
          }
          HX711_filte_value /= (float)HX711_Slip_Window_Length;
          HX711_Window_is_init = true;
      }
-    HX711_filte_value = Moving_Average_Filter(HX711_Read_Value(), &HX711_filte_value, HX711_Last_Weight_List, HX711_Slip_Window_Length, &HX711_value_index); 
+    HX711_filte_value = Moving_Average_Filter((double)HX711_Read_Value(), &HX711_filte_value, HX711_Last_Weight_List, HX711_Slip_Window_Length, &HX711_value_index); 
     return HX711_filte_value;
 }
 

@@ -28,7 +28,7 @@ extern double HX711_fitting_coefficient[2];
 
 void HX711_Init(void);//≥ı ºªØ
 uint32_t HX711_Read_Value(void);
-uint32_t HX711_Read_Average_Value(void);
+double HX711_Read_Average_Value(void);
 uint8_t HX711_Get_DAT_Pin_State(void);
 double HX711_Read_Weight(void);
 void HX711_Save_Adjust_Coefficient(void);
