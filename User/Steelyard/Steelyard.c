@@ -48,6 +48,22 @@ Steelyard_Key_Process Steelyard_Key_Dispose_Method[] = {
     Steelyard_Dispose_Mode_Key,
     Steelyard_Dispose_Control_Key
 };
+Steelyard_Convert_Unit_Weight Steelyard_Convert_Unit_Weight_Method[] = {
+    Steelyard_UnitWeight_gramme,
+    Steelyard_UnitWeight_liang
+};
+
+Steelyard_Convert_Unit_UnitPrice Steelyard_Convert_Unit_UnitPrice_Method[] = {
+    Steelyard_UnitPrice_gramme,
+    Steelyard_UnitPrice_liang
+};
+
+
+Steelyard_Convert_Unit_Display Steelyard_Convert_Unit_Display_Method[] = {
+    Steelyard_Display_UnitWeight_gramme,
+    Steelyard_Display_UnitWeight_liang
+};
+
 
 void Steelyard_Display_Start_Animation(void)
 {
@@ -105,8 +121,52 @@ void Steelyard_Display_AdjustWeight(void)
 
 void Steelyard_Display_Peeling_Overweight(void)
 {
-    uint8_t str[] = {' '+113,' '+114,' '+115,' '+116,' '+117,' '+118,' '+95,' '+96,0};//"去皮超重"
-    OLED_ShowAlphabets(Steelyard_Peeling_Overweight_Row,0,str);
+    uint8_t str[] = {' '+113,' '+114,' '+115,' '+116,' '+117,' '+118,' '+95,' '+96,'!',0};//"去皮超重"
+    OLED_ShowAlphabets(Steelyard_Peeling_Overweight_Row,4,str);
+}
+
+float Steelyard_UnitWeight_gramme(float weight_g)
+{
+    return weight_g;
+}
+
+float Steelyard_UnitWeight_liang(float weight_g)
+{
+    return weight_g / 50.0;
+}
+
+float Steelyard_UnitPrice_gramme(void)
+{
+    return Steelyard_UnitPrice;
+}
+
+float Steelyard_UnitPrice_liang(void)
+{
+    return Steelyard_UnitPrice / 50.0;
+}
+
+void Steelyard_Display_UnitWeight_gramme(void)
+{
+    OLED_ShowAlphabets(Steelyard_Weight_Row,15,"g");
+    Steelyard_Display_Row_Endding_Length[Steelyard_Weight_Row] = 1;
+    Steelyard_Input_Clear(Steelyard_Weight_Row);
+    
+    OLED_ShowAlphabets(Steelyard_UnitPrice_Row,13,"Y/g");
+    Steelyard_Display_Row_Endding_Length[Steelyard_UnitPrice_Row] = 3;
+    Steelyard_Input_Clear(Steelyard_UnitPrice_Row);
+}
+
+void Steelyard_Display_UnitWeight_liang(void)
+{
+    uint8_t str_liang[] = {' '+ 139, ' '+ 140, 0};
+    uint8_t str_liang_uint[] = {'Y', '/', ' '+ 139, ' '+ 140, 0};
+    OLED_ShowAlphabets(Steelyard_Weight_Row,14,str_liang);
+    Steelyard_Display_Row_Endding_Length[Steelyard_Weight_Row] = 2;
+    Steelyard_Input_Clear(Steelyard_Weight_Row);
+    
+    OLED_ShowAlphabets(Steelyard_UnitPrice_Row,12,str_liang_uint);
+    Steelyard_Display_Row_Endding_Length[Steelyard_UnitPrice_Row] = 4;
+    Steelyard_Input_Clear(Steelyard_UnitPrice_Row);
 }
 
 uint8_t Steelyard_Get_MapVirtualKey(uint8_t key_index)
@@ -266,6 +326,10 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
             case Steelyard_Adjust_Coefficient_Sign:
                 if((virtual_Key != VK_CLEAR) && (virtual_Key != VK_RETURN))return;
             break;
+            
+            case Steelyard_Accumulation_Sign:
+                if(virtual_Key == VK_Steelyard_Convert_Unit)return;
+            break;
         }
     }
     switch(virtual_Key)
@@ -278,6 +342,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                 {
                     Steelyard_UnitPrice = Steelyard_UnitPrice_Temp;
                     Steelyard_UnitPrice_Temp = 0;
+                    Steelyard_UnitPrice = Steelyard_Convert_Unit_UnitPrice_Method[Steelyard_Unit_index]();
                     Steelyard_Pop_Mode();
                 }
                 break;
@@ -311,7 +376,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
                 case Steelyard_Accumulation_Sign:
                 {
                     static uint8_t last_length = 16;
-                    Steelyard_TotalPrice += Steelyard_Get_CurrentlyPrice();
+                    Steelyard_TotalPrice += Steelyard_CurrentlyPrice;
                     OLED_ShowFloat(Steelyard_Total_Row,Steelyard_Display_Row_Head_Length[Steelyard_Total_Row],15, Steelyard_TotalPrice, &last_length);
                     OLED_Refresh_Gram();
                 }
@@ -398,7 +463,8 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
         
         case VK_Steelyard_Convert_Unit:
         {
-            Steelyard_Unit_index = Steelyard_Unit_index >= Steelyard_Unit_Index_Max ? 0 : Steelyard_Unit_Index_Max + 1;
+            Steelyard_Unit_index = Steelyard_Unit_index >= Steelyard_Unit_Index_Max ? 0 : Steelyard_Unit_index + 1;
+            Steelyard_Convert_Unit_Display_Method[Steelyard_Unit_index]();
         }
         break;
     }

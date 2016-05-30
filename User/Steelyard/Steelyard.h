@@ -72,7 +72,10 @@ typedef enum {
 #define Steelyard_Peeling_Limit     101
 
 typedef void(*Steelyard_Key_Process)(uint8_t key_index);
-typedef float(*Steelyard_Convert_Unit)(uint8_t key_index);
+typedef float(*Steelyard_Convert_Unit_Weight)(float weight);
+typedef float(*Steelyard_Convert_Unit_UnitPrice)(void);
+typedef void(*Steelyard_Convert_Unit_Display)(void);
+
 
 extern float Steelyard_CurrentlyWeight;
 extern float Steelyard_UnitPrice;
@@ -85,20 +88,33 @@ extern bool Steelyard_Is_Accumulation;
 extern bool Steelyard_Is_Adjust_Coefficient;
 extern bool Steelyard_Is_Inputting;
 
+extern uint8_t Steelyard_Unit_index;
 extern uint8_t Steelyard_Display_Row_Head_Length[];
 extern uint8_t Steelyard_Display_Row_Endding_Length[];
+extern Steelyard_Convert_Unit_Weight Steelyard_Convert_Unit_Weight_Method[];
+extern Steelyard_Convert_Unit_UnitPrice Steelyard_Convert_Unit_UnitPrice_Method[];
+extern Steelyard_Convert_Unit_Display Steelyard_Convert_Unit_Display_Method[];
 
+void Steelyard_Input_Clear(uint8_t row);
 void Steelyard_Display_Start_Animation(void);
 void Steelyard_Display_Weight(void);
 void Steelyard_Display_Price(void);
 void Steelyard_Display_UnitPrice(void);
 void Steelyard_Display_Total(void);
 void Steelyard_Display_Peeling_Overweight(void);
+void Steelyard_Display_UnitWeight_gramme(void);
+void Steelyard_Display_UnitWeight_liang(void);
 
 float Steelyard_Get_CurrentlyPrice(void);
 void Steelyard_Dispose_ValueKey(uint8_t key_index);
 void Steelyard_Dispose_Mode_Key(uint8_t key_index);
 void Steelyard_Dispose_Control_Key(uint8_t key_index);
+
+float Steelyard_UnitWeight_gramme(float weight_g);
+float Steelyard_UnitWeight_liang(float weight_g);
+float Steelyard_UnitPrice_gramme(void);
+float Steelyard_UnitPrice_liang(void);
+    
 
 PROCESS_NAME(Steelyard_Load_Key_process);
 
