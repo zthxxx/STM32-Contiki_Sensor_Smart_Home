@@ -68,9 +68,11 @@ typedef enum {
 #define VK_Steelyard_Accumulate		0x72
 #define VK_Steelyard_Adjust_Coefficient	0x73
 
+#define Steelyard_Unit_Index_Max    1
 #define Steelyard_Peeling_Limit     101
 
 typedef void(*Steelyard_Key_Process)(uint8_t key_index);
+typedef float(*Steelyard_Convert_Unit)(uint8_t key_index);
 
 extern float Steelyard_CurrentlyWeight;
 extern float Steelyard_UnitPrice;
@@ -86,6 +88,7 @@ extern bool Steelyard_Is_Inputting;
 extern uint8_t Steelyard_Display_Row_Head_Length[];
 extern uint8_t Steelyard_Display_Row_Endding_Length[];
 
+void Steelyard_Display_Start_Animation(void);
 void Steelyard_Display_Weight(void);
 void Steelyard_Display_Price(void);
 void Steelyard_Display_UnitPrice(void);

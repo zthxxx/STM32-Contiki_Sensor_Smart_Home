@@ -22,6 +22,8 @@ bool Steelyard_Is_Accumulation  = false;    //累加
 bool Steelyard_Is_Adjust_Coefficient = false;//手动校准
 bool Steelyard_Is_Inputting     = false;    //正在输入
 
+uint8_t Steelyard_Unit_index    = 0;        //当前单位
+
 uint8_t Steelyard_Display_Row_Head_Length[] = {5,5,5,5};
 uint8_t Steelyard_Display_Row_Endding_Length[] = {1,1,3,1};
 bool* Steelyard_Signs[] = {&Steelyard_Is_Decimal, &Steelyard_Is_Set_UnitPrice, &Steelyard_Is_Accumulation, &Steelyard_Is_Adjust_Coefficient, &Steelyard_Is_Inputting};
@@ -47,43 +49,63 @@ Steelyard_Key_Process Steelyard_Key_Dispose_Method[] = {
     Steelyard_Dispose_Control_Key
 };
 
+void Steelyard_Display_Start_Animation(void)
+{
+    uint8_t head[] = {'2','0','1','6',' '+119,' '+120,'T','I',' '+121,' '+122,0};//"2016年TI杯"
+    uint8_t middle[] = {' '+123,' '+124,' '+125,' '+126,' '+127,' '+128,' '+129,' '+130,' '+133,' '+134,' '+123,' '+124,' '+135,' '+136,0};//"大学生电设大赛"
+    uint8_t endding[] = {' '+129,' '+130,' '+131,' '+132,' '+137,' '+138,0};//"电子秤"
+    
+    OLED_ShowAlphabets(0,3,head);
+    OLED_Refresh_Gram();
+    Delay_ms(1000);
+    
+    OLED_ShowAlphabets(1,1,middle);
+    OLED_Refresh_Gram();
+    Delay_ms(1000);
+    
+    OLED_ShowAlphabets(2,5,endding);
+    OLED_Refresh_Gram();
+    Delay_ms(2000);
+    OLED_CLS();
+}
+
 void Steelyard_Display_Weight(void)
 {
-    uint8_t str[] = {' '+95,' '+96,' '+97,' '+98,':',0};
+    uint8_t str[] = {' '+95,' '+96,' '+97,' '+98,':',0};//"重量"
     OLED_ShowAlphabets(Steelyard_Weight_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Weight_Row,15,"g");
 }
 
 void Steelyard_Display_Price(void)
 {
-    uint8_t str[] = {' '+99,' '+100,' '+101,' '+102,':',0};
+    uint8_t str[] = {' '+99,' '+100,' '+101,' '+102,':',0};//"价额"
     OLED_ShowAlphabets(Steelyard_Price_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Price_Row,15,"Y");
 }
 
 void Steelyard_Display_UnitPrice(void)
 {
-    uint8_t str[] = {' '+103,' '+104,' '+99,' '+100,':',0};
+    uint8_t str[] = {' '+103,' '+104,' '+99,' '+100,':',0};//"单价"
     OLED_ShowAlphabets(Steelyard_UnitPrice_Row,0,str);
     OLED_ShowAlphabets(Steelyard_UnitPrice_Row,13,"Y/g");
 }
 
 void Steelyard_Display_Total(void)
 {
-    uint8_t str[] = {' '+105,' '+106,' '+107,' '+108,':',0};
+    uint8_t str[] = {' '+105,' '+106,' '+107,' '+108,':',0};//"总计"
     OLED_ShowAlphabets(Steelyard_Total_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Total_Row,15,"Y");
 }
 void Steelyard_Display_AdjustWeight(void)
 {
-    uint8_t str[] = {' '+109,' '+110,' '+111,' '+112,':',0};
+    uint8_t str[] = {' '+109,' '+110,' '+111,' '+112,':',0};//"校准"
     OLED_ShowAlphabets(Steelyard_Total_Row,0,str);
     OLED_ShowAlphabets(Steelyard_Total_Row,15,"g");
 }
 
 void Steelyard_Display_Peeling_Overweight(void)
 {
-    uint8_t str[] = {' '+113,' '+114,' '+115,' '+116,' '+117,' '+118,' '+95,' '+96,0};
+    uint8_t str[] = {' '+113,' '+114,' '+115,' '+116,' '+117,' '+118,' '+95,' '+96,0};//"去皮超重"
     OLED_ShowAlphabets(Steelyard_Peeling_Overweight_Row,0,str);
 }
 
@@ -376,7 +398,7 @@ void Steelyard_Dispose_Control_Key(uint8_t virtual_Key)
         
         case VK_Steelyard_Convert_Unit:
         {
-            
+            Steelyard_Unit_index = Steelyard_Unit_index >= Steelyard_Unit_Index_Max ? 0 : Steelyard_Unit_Index_Max + 1;
         }
         break;
     }

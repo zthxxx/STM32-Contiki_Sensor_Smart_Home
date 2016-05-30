@@ -77,6 +77,7 @@ void BSP_Config(void)
     
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
+    Steelyard_Display_Start_Animation();
     Steelyard_Display_Weight();
     Steelyard_Display_Price();
     Steelyard_Display_UnitPrice();
