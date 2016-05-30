@@ -56,7 +56,7 @@ PROCESS_THREAD(red_blink_process, ev, data)
         Contiki_etimer_DelayMS(500);
         GPIO_SetBits(GPIOA, GPIO_Pin_8);
         Contiki_etimer_DelayMS(500);
-        if(HX711_Weight_GlobalData > 500)GPIO_ResetBits(GPIOA, GPIO_Pin_8);
+        if(HX711_Weight_GlobalData > 501)GPIO_ResetBits(GPIOA, GPIO_Pin_8);
     }
     PROCESS_END();
 }
