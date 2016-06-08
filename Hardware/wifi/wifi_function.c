@@ -366,11 +366,11 @@ void ESP8266_STA_TCP_Client(void)
 {
 	IS_WIFI_LOG_DEBUG && PC_Usart("\r\nESP8266 WiFi Module Start.\r\n");     //打印测试例程提示信息
     IS_WIFI_LOG_DEBUG && PC_Usart("Try to enter command mode.\r\n");
-    while(!ESP8266_Cmd ("AT", "OK", NULL, 100))//进入AT命令模式
+    do
     {
         ESP8266_Usart("+++");
         Delay_ms (50) ;
-    }       
+    }while(!ESP8266_Cmd ("AT", "OK", NULL, 100));//进入AT命令模式
     IS_WIFI_LOG_DEBUG && PC_Usart("AT command is OK.\r\n");
     
     if(ESP8266_Cmd ("AT+CIFSR","+CIFSR:STAIP,\"0.0.0.0\"",NULL,250))
