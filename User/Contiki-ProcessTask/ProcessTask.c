@@ -6,8 +6,8 @@ PROCESS(green_blink_process, "Green Blink");
 PROCESS(IWDG_Feed_process, "Timing to feed dog");
 PROCESS(clock_test_process, "Test system delay");
 PROCESS(cJSON_test_process, "Test cJSON Lib");
-PROCESS(Communication_Protocol_Send_process, "Communication Protocol Send packet data");
-PROCESS(CommunicatProtocol_Send_Sensor_Data, "Communication Protocol Send packet data");
+PROCESS(Communication_Protocol_Send_process, "Communication protocol send packet serviced");
+PROCESS(CommunicatProtocol_Send_Sensor_Data, "Communication protocol send sensor data");
 
 
 PROCESS(wifi_send_test_process, "Wifi module send data test");

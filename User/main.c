@@ -48,17 +48,17 @@
 
 //#define __CJSON_LIB_TEST__          //cJSON lib 输出测试
 //#define __CLOCK_TICK_TEST__         //NOP 与 TCIK 数量测试
-//#define __WIFI_MODULE_ON__          //WIFI模块开启
+#define __WIFI_MODULE_ON__          //WIFI模块开启
 //#define __WIFI_MODULE_TEST__        //WIFI模块开启后测试
 #define __COMMUNICAT_PROTOCOL__     //管理发送队列
-#define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
-#define __OLED_MODULE_ON__          //OLED显示屏
-#define __DHT11_MODULE_ON__         //温湿度传感器
-#define __MQ02_MODULE_ON__          //烟雾传感器
-#define __HCSR501_MODULE_ON__       //红外热释电人体传感器
-#define __HCSR04_MODULE_ON__        //超声波测距模块
-#define __BH1750_MODULE_ON__        //光照传感器
-#define __RC522_MODULE_ON__         //RFID读卡器
+//#define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
+//#define __OLED_MODULE_ON__          //OLED显示屏
+//#define __DHT11_MODULE_ON__         //温湿度传感器
+//#define __MQ02_MODULE_ON__          //烟雾传感器
+//#define __HCSR501_MODULE_ON__       //红外热释电人体传感器
+//#define __HCSR04_MODULE_ON__        //超声波测距模块
+//#define __BH1750_MODULE_ON__        //光照传感器
+//#define __RC522_MODULE_ON__         //RFID读卡器
 #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
 
 

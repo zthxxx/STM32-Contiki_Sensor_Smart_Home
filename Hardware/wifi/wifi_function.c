@@ -124,7 +124,7 @@ bool ESP8266_JoinAP(char * pSSID, char * pPassWord)
 {
 	char cCmd [120];
 	sprintf(cCmd, "AT+CWJAP=\"%s\",\"%s\"", pSSID, pPassWord);
-	return ESP8266_Cmd(cCmd, "OK", NULL, 700);
+	return ESP8266_Cmd(cCmd, "OK", NULL, 1000);
 }
 
 /*
@@ -142,7 +142,7 @@ bool ESP8266_STAJoinTCP(char * ip, char * port)
 
 	sprintf(cCmd, "AT+CIPSTART=\"TCP\",\"%s\",%s", ip, port);
 	
-	return ESP8266_Cmd(cCmd, "OK", "ALREADY CONNECTED", 420);
+	return ESP8266_Cmd(cCmd, "OK", "ALREADY CONNECTED", 1000);
 	
 }
 
