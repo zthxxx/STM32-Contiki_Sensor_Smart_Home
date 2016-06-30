@@ -5,22 +5,31 @@
 #include "CommunicationProtocol.h"
 #include "ProtocolQueueManger.h"
 
+//配置是节点模式还是终端模式，__TERMINAL_ON__表示终端模式，__TERMINAL_OFF__表示节点模式
+#define __TERMINAL_ON__
 
 
+
+//使用配置发送端口  
+//#define sendUartByteBuf   USART1_DMA_Send_Data
+#ifdef __TERMINAL_ON__
+    #define sendUartByteBuf   USART2_DMA_Send_Data
+#else
+    #ifdef __TERMINAL_OFF__
+    #define sendUartByteBuf   E30TTLUART_SendBytesData
+    #endif
+#endif
+
+
+
+//配置重发次数与超时时间
 #define PROTOCOL_PACKET_RESENT_COUNT_MAX    2
 #define PROTOCOL_PACKET_RESENT_TIME_MAX     1
-
-//使用串口1或者2发送  
-//#define sendUartByteBuf   USART1_DMA_Send_Data
-//#define sendUartByteBuf   USART2_DMA_Send_Data
-#define sendUartByteBuf   E30TTLUART_SendBytesData
-
-
 
 extern const uint16_t Protocol_LoopbackAddress;
 extern const uint16_t Protocol_LocalhostAddress;
 extern const uint16_t Protocol_BroadcastAddress;
-extern const uint16_t Protocol_DefaultGatewayAddress;
+extern const uint16_t Protocol_GatewayAddress;
 
 
 

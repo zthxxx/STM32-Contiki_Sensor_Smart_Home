@@ -104,8 +104,8 @@ PROCESS_THREAD(DHT11_Read_Data_process, ev, data)
     while(1)
     {
         DHT11_Read_Data(&temperature,&temperature0,&humidity,&humidity0);
-        temperatureGlobalData = (float)temperature+(float)temperature0*0.01;
-        humidityGlobalData = (float)humidity+(float)humidity0*0.01;
+        temperatureGlobalData = (float)temperature+(float)temperature0*0.1;
+        humidityGlobalData = (float)humidity+(float)humidity0*0.1;
         
 //        printf("temperature: %.2f°„C  humidity: %.2f \r\n",(float)temperature+(float)temperature0*0.01,(float)humidity+(float)humidity0*0.01);	
         Contiki_etimer_DelayMS(500);
@@ -279,6 +279,7 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSON_AddItemToObject(root, "Device", cJSON_CreateString("Sensor via ContikiOS"));
         cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0xFFFF));
         cJSON_AddItemToObject(root, "InfoType", cJSON_CreateString("Data"));
+        
         cJSON_AddItemToObject(root, "Temperature", cJSON_CreateNumber(temperatureGlobalData));
         cJSON_AddItemToObject(root, "Humidity", cJSON_CreateNumber(humidityGlobalData));
         cJSON_AddItemToObject(root, "SmogPercentage", cJSON_CreateNumber(smogPercentageGlobalData));
@@ -289,8 +290,8 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);	
-        AssembleProtocolPacketPushSendQueue(0x0000, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
-        Contiki_etimer_DelayMS(300);
+        AssembleProtocolPacketPushSendQueue(0x0001, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
+        Contiki_etimer_DelayMS(1000);
     }
     PROCESS_END();
 }
@@ -308,7 +309,7 @@ PROCESS_THREAD(Communication_Protocol_Send_process, ev, data)
         DealWithReceivePacketQueue();
 //        IncreaseUnackedPacketQueueResendTime();
         
-        Contiki_etimer_DelayMS(60);
+        Contiki_etimer_DelayMS(100);
     }
     PROCESS_END();
 }

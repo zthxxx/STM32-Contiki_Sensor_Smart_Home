@@ -398,7 +398,7 @@ void DealWithReceivePacketQueue()
         packetBlock = ReceivedPacketNodePointer->packetBlock;
         if(packetBlock)
         {
-            if(packetBlock->sourceAddress == Protocol_LocalhostAddress)
+            if((packetBlock->targetAddress == Protocol_LocalhostAddress) || (packetBlock->targetAddress == Protocol_BroadcastAddress))
             {
                 if(packetBlock->functionWord == FunctionWord_Acknowledgement)
                 {
