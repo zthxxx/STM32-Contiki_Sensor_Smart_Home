@@ -3,15 +3,15 @@
 #include "sys.h" 	    	   		  
 
 #define I2C_ANALOG_SDA_GPIO_Port    GPIOC
-#define I2C_ANALOG_SDA_GPIO_Pin     GPIO_Pin_11
+#define I2C_ANALOG_SDA_GPIO_Pin     GPIO_Pin_4
 
 #define I2C_ANALOG_SCL_GPIO_Port    GPIOC
-#define I2C_ANALOG_SCL_GPIO_Pin     GPIO_Pin_12
+#define I2C_ANALOG_SCL_GPIO_Pin     GPIO_Pin_5
 
 //IO操作函数	 
-#define I2C_SCL    PCout(12) //SCL
-#define I2C_SDA    PCout(11) //SDA	 
-#define SDA_Read   PCin(11)  //输入SDA 
+#define I2C_SCL    PCout(5) //SCL
+#define I2C_SDA    PCout(4) //SDA
+#define SDA_Read   PCin(4)  //输入SDA
 
 //IIC所有操作函数
 void I2C_Analog_Port_Init(void);                //初始化IIC的IO口				 

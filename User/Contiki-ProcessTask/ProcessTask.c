@@ -276,9 +276,10 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
     {
         root=cJSON_CreateObject();	
         
-        cJSON_AddItemToObject(root, "Device", cJSON_CreateString("Sensor via ContikiOS"));
-        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0xFFFF));
+//        cJSON_AddItemToObject(root, "Device", cJSON_CreateString("Sensor via ContikiOS"));
+        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x01));
         cJSON_AddItemToObject(root, "InfoType", cJSON_CreateString("Data"));
+        cJSON_AddItemToObject(root, "Owner", cJSON_CreateString("admin"));
         
         cJSON_AddItemToObject(root, "Temperature", cJSON_CreateNumber(temperatureGlobalData));
         cJSON_AddItemToObject(root, "Humidity", cJSON_CreateNumber(humidityGlobalData));
