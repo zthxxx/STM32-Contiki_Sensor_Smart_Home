@@ -195,7 +195,7 @@ PROCESS_THREAD(SDS01_Read_PM_Value_process, ev, data)
         PM10_Value = SDS01_getPM10_Value();
         PM2_5_GlobalData = PM2_5_Value;
         PM10_GlobalData = PM10_Value;
-        Contiki_etimer_DelayMS(3000);
+        Contiki_etimer_DelayMS(2000);
     }
     PROCESS_END();
 }

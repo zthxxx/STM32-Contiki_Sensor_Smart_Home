@@ -52,7 +52,7 @@ void SDS01_LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
                 SDS01_packet_node->packetHead = Uint8FIFOPop(uint8FIFOQueueHandle);//获取最新值
                 isHeadAllEqual=true;
                 if(SDS01_packet_node->packetHead != SDS01_Protocol_HeadData)isHeadAllEqual=false;
-                if(isHeadAllEqual)continue;
+                if(isHeadAllEqual)break;
             }
         }
         if(Uint8FIFOGetQueueSize(uint8FIFOQueueHandle) < SDS01_PROTOCOL_PACKET_LENGTH - sizeof(SDS01_Protocol_HeadData)) return;
@@ -65,9 +65,9 @@ void SDS01_LoadQueueByteToPacketBlock(Uint8FIFOQueue* uint8FIFOQueueHandle)
         SDS01_packet_node->ID_ByteHigh = Uint8FIFOPop(uint8FIFOQueueHandle);
         SDS01_packet_node->checkSum = Uint8FIFOPop(uint8FIFOQueueHandle);
         SDS01_packet_node->packetEndding = Uint8FIFOPop(uint8FIFOQueueHandle);
+        isHeadAllEqual = false;
         if((SDS01_packet_node->checkSum != SDS01_CalculatePacketCheckSum(SDS01_packet_node)) || (SDS01_packet_node->packetEndding != SDS01_Protocol_EnddingData))
         {
-            isHeadAllEqual = false;
             printf("Bad SDS01 packet check\r\n");
             continue;
         }
