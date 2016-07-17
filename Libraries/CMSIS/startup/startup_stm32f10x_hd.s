@@ -261,6 +261,7 @@ Default_Handler PROC
                 EXPORT  DMA2_Channel3_IRQHandler   [WEAK]
                 EXPORT  DMA2_Channel4_5_IRQHandler [WEAK]
 
+
 WWDG_IRQHandler
 PVD_IRQHandler
 TAMPER_IRQHandler

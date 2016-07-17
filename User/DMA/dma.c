@@ -25,6 +25,7 @@ void MYDMA_Config(DMA_Channel_TypeDef* Channel_x,u32 PeripheralBaseAddr,u32 Memo
 {
     DMA_InitTypeDef DMA_InitStructure;
  	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);	                //使能DMA传输
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2, ENABLE);	                //使能DMA传输
     DMA_DeInit(Channel_x);                                          //将DMA的通道1寄存器重设为缺省值
 	DMA_InitStructure.DMA_PeripheralBaseAddr = PeripheralBaseAddr;  //DMA外设基地址
 	DMA_InitStructure.DMA_MemoryBaseAddr = MemoryBaseAddr;  		//DMA内存基地址
@@ -76,7 +77,10 @@ void USART3_TXD_DMA_Enable(u16 bufferSize)
  	MYDMA_Enable(USART3_TX_DMA_Channel,bufferSize);//DMA通道的DMA缓存的大小
 }
 
-
+void UART4_TXD_DMA_Enable(u16 bufferSize)
+{
+ 	MYDMA_Enable(UART4_TX_DMA_Channel,bufferSize);//DMA通道的DMA缓存的大小
+}
 
 
 

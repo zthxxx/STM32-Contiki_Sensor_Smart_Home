@@ -10,6 +10,7 @@
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
 #include "bsp_usart3.h"
+#include "bsp_uart4.h"
 #include "bsp_SysTick.h"
 #include "dma.h"
 #include "iwdg.h"
@@ -191,7 +192,6 @@ int main(void)
 #ifdef __COMMUNICAT_PROTOCOL_SENSOR_DATA__     
     process_start(&CommunicatProtocol_Send_Sensor_Data,NULL);
 #endif
-    
 
     while (1)
     {
