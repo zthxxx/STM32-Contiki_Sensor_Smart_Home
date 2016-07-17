@@ -301,13 +301,13 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSON_AddItemToObject(root, "InfoType", cJSON_CreateString("Data"));
         cJSON_AddItemToObject(root, "Owner", cJSON_CreateString("admin"));
         
-        cJSON_AddItemToObject(root, "Temperature", cJSON_CreateNumber(temperatureGlobalData));
-        cJSON_AddItemToObject(root, "Humidity", cJSON_CreateNumber(humidityGlobalData));
-        cJSON_AddItemToObject(root, "SmogPercentage", cJSON_CreateNumber(smogPercentageGlobalData));
-        cJSON_AddItemToObject(root, "BodyStatus", cJSON_CreateBool(someoneStatusGlobalData));
-        cJSON_AddItemToObject(root, "WaveDistance", cJSON_CreateNumber(distanceGlobalData));
-        cJSON_AddItemToObject(root, "LightIntensity", cJSON_CreateNumber(lightIntensityGlobalData));
-        cJSON_AddItemToObject(root, "CardID", cJSON_CreateNumber(CardID_GlobalData));
+//        cJSON_AddItemToObject(root, "Temperature", cJSON_CreateNumber(temperatureGlobalData));
+//        cJSON_AddItemToObject(root, "Humidity", cJSON_CreateNumber(humidityGlobalData));
+//        cJSON_AddItemToObject(root, "SmogPercentage", cJSON_CreateNumber(smogPercentageGlobalData));
+//        cJSON_AddItemToObject(root, "BodyStatus", cJSON_CreateBool(someoneStatusGlobalData));
+//        cJSON_AddItemToObject(root, "WaveDistance", cJSON_CreateNumber(distanceGlobalData));
+//        cJSON_AddItemToObject(root, "LightIntensity", cJSON_CreateNumber(lightIntensityGlobalData));
+//        cJSON_AddItemToObject(root, "CardID", cJSON_CreateNumber(CardID_GlobalData));
         cJSON_AddItemToObject(root, "PM2_5", cJSON_CreateNumber(PM2_5_GlobalData));
         cJSON_AddItemToObject(root, "PM10", cJSON_CreateNumber(PM10_GlobalData));
         

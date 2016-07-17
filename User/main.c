@@ -53,6 +53,9 @@
     #define __WIFI_MODULE_ON__          //WIFI模块开启
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
+    
+    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
+    #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
 #else
     #ifdef __TERMINAL_OFF__
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列
@@ -65,7 +68,7 @@
     #define __BH1750_MODULE_ON__        //光照传感器
     #define __RC522_MODULE_ON__         //RFID读卡器
     #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
-    #define __SDS01_MODULE_ON__    //E30无线串口模块
+    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
     #endif
 #endif
 
@@ -195,7 +198,7 @@ int main(void)
     process_start(&RC522_Read_Card_process,NULL);
 #endif
 
-#ifdef __RC522_MODULE_ON__
+#ifdef __SDS01_MODULE_ON__
 	process_start(&SDS01_Read_PM_Value_process,NULL);
 #endif
 
