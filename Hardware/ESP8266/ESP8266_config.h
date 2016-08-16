@@ -1,9 +1,10 @@
-#ifndef __WIFI_CONFIG_H
-#define	__WIFI_CONFIG_H
+#ifndef __ESP8266_CONFIG_H
+#define	__ESP8266_CONFIG_H
 
 
 #include "stm32f10x.h"
 #include <stdbool.h>
+#include "ESP8266_Wifi_link_Config.h"
 
 #if defined ( __CC_ARM   )
 #pragma anon_unions
@@ -84,12 +85,5 @@ void WiFi_Config( void );
 void NVIC_Configuration( void );
 void ESP8266_WIFI_GPIO_Config( void );
 
-extern bool IS_WIFI_LOG_DEBUG;
-extern char WIFI_SSID_NAME[];
-extern char WIFI_PASSWORD[];
-extern char TCP_SERVER_IPADDRESS[];
-extern char TCP_SERVER_PORT[];
-extern char TCP_CILENT_IPADDRESS[];
-extern char TCP_CILENT_PORT[];
 
 #endif    /* __WIFI_CONFIG_H */

@@ -23,8 +23,8 @@
 #include "CommunicationProtocol.h"
 #include "CommunicationConfig.h"
 
-#include "wifi_config.h"
-#include "wifi_function.h"
+#include "ESP8266_config.h"
+#include "ESP8266_function.h"
 #include "oled.h"
 #include "dht11.h"
 #include "adc.h"
@@ -53,14 +53,18 @@
 
 //在"CommunicationConfig.h"文件中修改 __TERMINAL_XX__宏定义，选择节点或终端模式
 #ifdef __TERMINAL_ON__
-//    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
-//    #define __SHT15_MODULE_ON__         //SHT15 精确温湿度传感器模块
-//    #define __WIFI_MODULE_ON__          //WIFI模块开启
-    #define __W5500_MODULE_ON__         //W5500模块开启
     #define __LED_BLINK_ON__            //LED 闪烁
-    #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
+    #define __OLED_MODULE_ON__          //OLED显示屏
+    #define __DHT11_MODULE_ON__         //温湿度传感器
+    #define __MQ02_MODULE_ON__          //烟雾传感器
+    #define __HCSR501_MODULE_ON__       //红外热释电人体传感器
+    #define __BH1750_MODULE_ON__        //光照传感器
+    
+    #define __WIFI_MODULE_ON__          //WIFI模块开启
+//    #define __W5500_MODULE_ON__         //W5500模块开启
+//    #define __E30TTLUART_MODULE_ON__    //E30无线串口模块
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列
-//    #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
+    #define __COMMUNICAT_PROTOCOL_SENSOR_DATA__  //通过JSON发送所有数据
 #else
     #ifdef __TERMINAL_OFF__
     #define __COMMUNICAT_PROTOCOL__     //管理发送队列

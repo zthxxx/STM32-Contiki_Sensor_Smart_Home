@@ -1,11 +1,11 @@
-#ifndef __WIFI_FUNCTION_H
-#define	__WIFI_FUNCTION_H 
+#ifndef __ESP8266_FUNCTION_H
+#define	__ESP8266_FUNCTION_H 
 
 
 #include "stm32f10x.h"
 #include <stdbool.h>
 #include "bsp_SysTick.h"
-#include "wifi_config.h"
+#include "ESP8266_config.h"
 
 
 #define     ESP8266_Usart( fmt, ... )           USART2_printf ( USART2, fmt, ##__VA_ARGS__ ) 

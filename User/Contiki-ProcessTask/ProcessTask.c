@@ -377,10 +377,10 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSON_AddItemToObject(root, "Owner", cJSON_CreateString("admin"));
         
 #ifdef __TERMINAL_ON__
-        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x03));
+        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x01));
 #else
     #ifdef __TERMINAL_OFF__
-        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x01));
+        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x02));
     #endif
 #endif
 
@@ -426,7 +426,7 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSONout = cJSON_PrintUnformatted(root);
         cJSON_Delete(root);
         AssembleProtocolPacketPushSendQueue(0x0001, FunctionWord_Data, strlen(cJSONout), (uint8_t*)cJSONout);
-        Contiki_etimer_DelayMS(1000);
+        Contiki_etimer_DelayMS(2500);
     }
     PROCESS_END();
 }

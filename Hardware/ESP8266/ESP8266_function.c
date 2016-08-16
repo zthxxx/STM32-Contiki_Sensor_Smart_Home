@@ -1,5 +1,5 @@
-#include "wifi_function.h"
-#include "wifi_config.h"
+#include "ESP8266_function.h"
+#include "ESP8266_config.h"
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"

@@ -1,6 +1,6 @@
 #include <stdarg.h>
 #include "SPI.h"
-#include "wifi_config.h"
+#include "ESP8266_config.h"
 
 
 /**

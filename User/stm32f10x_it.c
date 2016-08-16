@@ -28,8 +28,8 @@
 #include <stdio.h>
 #include <string.h>
 #include "bsp_usart2.h"
-#include "wifi_config.h"
-#include "wifi_function.h"
+#include "ESP8266_config.h"
+#include "ESP8266_function.h"
 #include "bsp_SysTick.h"
 
 

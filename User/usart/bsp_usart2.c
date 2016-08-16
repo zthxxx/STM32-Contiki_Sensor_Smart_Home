@@ -3,7 +3,7 @@
 **********************************************************************************/
 #include <stdarg.h>
 #include "bsp_usart2.h"
-#include "wifi_config.h"
+#include "ESP8266_config.h"
 
 USART2_Receive_Handler USART2ReceiveHandler;
 

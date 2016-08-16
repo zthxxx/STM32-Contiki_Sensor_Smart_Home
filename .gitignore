@@ -20,3 +20,4 @@ JLinkLog.txt
 Output/
 Listing/
 Project/RVMDK(uv5)/*.uvgui.*
+ESP8266_Wifi_link_Config.c

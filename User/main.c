@@ -26,8 +26,8 @@
 #include "CommunicationConfig.h"
 #include "CommunicationProtocol.h"
 
-#include "wifi_config.h"
-#include "wifi_function.h"
+#include "ESP8266_config.h"
+#include "ESP8266_function.h"
 #include "oled.h"
 #include "dht11.h"
 #include "adc.h"
