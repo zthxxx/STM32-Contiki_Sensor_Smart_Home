@@ -13,7 +13,7 @@ void E30TTLUART_Init(void)
 {	 
  	GPIO_InitTypeDef  GPIO_InitStructure;
  	
- 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	 //使能PB端口时钟
+ 	RCC_APB2PeriphClockCmd(E30TTLUART_M0_RCC_Periph | E30TTLUART_M1_RCC_Periph | E30TTLUART_AUX_RCC_Periph, ENABLE);	 //使能PB端口时钟
  	GPIO_InitStructure.GPIO_Pin = E30TTLUART_M0_Pin;
  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //推挽输出
  	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;

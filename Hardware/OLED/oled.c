@@ -29,13 +29,13 @@ void OLED_GPIO_Config( void )
     GPIO_InitTypeDef GPIO_InitStructure;
     
     /* DC <--> PB0   RST <--> PB10 */
-    RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOC, ENABLE);
+    RCC_APB2PeriphClockCmd(OLED_RST_RCC_Periph, ENABLE);
     GPIO_InitStructure.GPIO_Pin = OLED_RST_PIN;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
     GPIO_Init(OLED_RST_PORT, &GPIO_InitStructure);
     
-    RCC_APB2PeriphClockCmd( RCC_APB2Periph_GPIOB, ENABLE);
+    RCC_APB2PeriphClockCmd(OLED_DC_RCC_Periph, ENABLE);
     GPIO_InitStructure.GPIO_Pin = OLED_DC_PIN;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;

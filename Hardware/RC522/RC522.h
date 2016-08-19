@@ -148,9 +148,10 @@ void iccardcode(void);
 
 #define RC522_NSS_GPIO_Port     GPIOB
 #define RC522_NSS_GPIO_Pin      GPIO_Pin_1
-
+#define RC522_NSS_RCC_Periph    RCC_APB2Periph_GPIOB
 #define RC522_RST_GPIO_Port     GPIOB
 #define RC522_RST_GPIO_Pin      GPIO_Pin_2
+#define RC522_RST_RCC_Periph    RCC_APB2Periph_GPIOB
 
 #define SET_SPI_CS  GPIO_SetBits(RC522_NSS_GPIO_Port, RC522_NSS_GPIO_Pin)
 #define CLR_SPI_CS  GPIO_ResetBits(RC522_NSS_GPIO_Port, RC522_NSS_GPIO_Pin)

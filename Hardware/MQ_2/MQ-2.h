@@ -3,8 +3,9 @@
 #include "sys.h"
 #include "adc.h"
 
-#define MQ02_AO_GPIO_Pin        GPIO_Pin_0
 #define MQ02_AO_GPIO_Port       GPIOA
+#define MQ02_AO_GPIO_Pin        GPIO_Pin_0
+#define MQ02_AO_RCC_Periph      RCC_APB2Periph_GPIOA
 #define MQ02_ADC_CHANNEL        ADC_Channel_0
 
 

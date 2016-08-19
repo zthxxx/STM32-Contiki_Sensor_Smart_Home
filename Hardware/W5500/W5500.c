@@ -54,9 +54,8 @@ void W5500_GPIO_Configuration(void)
 	GPIO_InitTypeDef  GPIO_InitStructure;
 	EXTI_InitTypeDef  EXTI_InitStructure;	
 
-   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA | RCC_APB2Periph_GPIOB
-                | RCC_APB2Periph_GPIOC | RCC_APB2Periph_GPIOD
-                | RCC_APB2Periph_AFIO, ENABLE); 
+   RCC_APB2PeriphClockCmd(W5500_SCS_RCC_Periph | W5500_RST_RCC_Periph
+                | W5500_INT_RCC_Periph | RCC_APB2Periph_AFIO, ENABLE); 
 	/* W5500_RST“˝Ω≈≥ı ºªØ≈‰÷√(PC5) */
 	GPIO_InitStructure.GPIO_Pin  = W5500_RST_PIN;
 	GPIO_InitStructure.GPIO_Speed=GPIO_Speed_10MHz;

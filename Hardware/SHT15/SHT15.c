@@ -24,7 +24,7 @@ void SHT15_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;        
     //初始化SHT15引脚时钟
-    RCC_APB2PeriphClockCmd(SHT15_AHB2_CLK ,ENABLE);
+    RCC_APB2PeriphClockCmd(SHT15_RCC_Periph ,ENABLE);
             
     //DATA 推挽输出        
     GPIO_InitStructure.GPIO_Pin = SHT15_DATA_PIN;

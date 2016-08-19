@@ -47,9 +47,9 @@ PROCESS_THREAD(red_blink_process, ev, data)
     while(1)
     {
         Contiki_etimer_DelayMS(500);
-        GPIO_SetBits(GPIOA, GPIO_Pin_8);
+        LED_Red_Off();
         Contiki_etimer_DelayMS(500);
-        GPIO_ResetBits(GPIOA, GPIO_Pin_8);
+        LED_Red_On();
     }
     PROCESS_END();
 }
@@ -61,9 +61,9 @@ PROCESS_THREAD(green_blink_process, ev, data)
     while(1)
     {        
         Contiki_etimer_DelayMS(200);
-        GPIO_SetBits(GPIOD, GPIO_Pin_2);
+        LED_Green_Off();
         Contiki_etimer_DelayMS(200);
-        GPIO_ResetBits(GPIOD, GPIO_Pin_2);
+        LED_Green_On();
     }
     PROCESS_END();
 }

@@ -15,7 +15,7 @@
 enum {TEMP, HUMI};
 
 /* GPIO相关宏定义 */
-#define SHT15_AHB2_CLK        RCC_APB2Periph_GPIOA
+#define SHT15_RCC_Periph      RCC_APB2Periph_GPIOA
 #define SHT15_DATA_PIN        GPIO_Pin_12
 #define SHT15_SCK_PIN         GPIO_Pin_11
 #define SHT15_DATA_PORT       GPIOA

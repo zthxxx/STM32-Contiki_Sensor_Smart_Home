@@ -10,12 +10,14 @@
 
 #define     OLED_RST_PORT                   GPIOC
 #define     OLED_RST_PIN                    GPIO_Pin_0
+#define     OLED_RST_RCC_Periph             RCC_APB2Periph_GPIOC
 
 #define     OLED_RST_L                      GPIO_ResetBits(OLED_RST_PORT, OLED_RST_PIN)
 #define     OLED_RST_H                      GPIO_SetBits(OLED_RST_PORT, OLED_RST_PIN)
 
 #define     OLED_DC_PORT                    GPIOB
 #define     OLED_DC_PIN                     GPIO_Pin_0
+#define     OLED_DC_RCC_Periph              RCC_APB2Periph_GPIOB
 
 #define	    OLED_DC_L                       GPIO_ResetBits(OLED_DC_PORT, OLED_DC_PIN);
 #define     OLED_DC_H                       GPIO_SetBits(OLED_DC_PORT, OLED_DC_PIN);

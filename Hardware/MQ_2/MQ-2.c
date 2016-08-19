@@ -11,7 +11,7 @@ void MQ02_GPIO_Config()
 {
     GPIO_InitTypeDef GPIO_InitStructure;
 
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE );	  //使能ADC1通道时钟
+	RCC_APB2PeriphClockCmd(MQ02_AO_RCC_Periph, ENABLE );	  //使能ADC1通道时钟
  
 	//PA1 作为模拟通道输入引脚                         
 	GPIO_InitStructure.GPIO_Pin = MQ02_AO_GPIO_Pin;

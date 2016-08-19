@@ -18,16 +18,16 @@
 void DHT11_Out()
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
-	GPIO_InitStructure.GPIO_Pin = DHT11_GPIO_Pin;
+	GPIO_InitStructure.GPIO_Pin = DHT11_Data_Pin;
  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //推挽输出
- 	GPIO_Init(DHT11_GPIO_Port, &GPIO_InitStructure);				 //初始化IO口
+ 	GPIO_Init(DHT11_Data_Port, &GPIO_InitStructure);				 //初始化IO口
 }
 void DHT11_IN()
 {
 	GPIO_InitTypeDef  GPIO_InitStructure;
-	GPIO_InitStructure.GPIO_Pin = DHT11_GPIO_Pin;
+	GPIO_InitStructure.GPIO_Pin = DHT11_Data_Pin;
  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IPU; 		 //推挽输出
- 	GPIO_Init(DHT11_GPIO_Port, &GPIO_InitStructure);				 //初始化IO口
+ 	GPIO_Init(DHT11_Data_Port, &GPIO_InitStructure);				 //初始化IO口
 }
 void DHT11_Rst(void)	   
 {                 
@@ -127,14 +127,13 @@ uint8_t DHT11_Init(void)
 {	 
  	GPIO_InitTypeDef  GPIO_InitStructure;
  	
- 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);	 //使能PB端口时钟
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);	 //使能PB端口时钟
- 	GPIO_InitStructure.GPIO_Pin = DHT11_GPIO_Pin;				 //PB11端口配置
+	RCC_APB2PeriphClockCmd(DHT11_Data_RCC_Periph, ENABLE);	 //使能PB端口时钟
+ 	GPIO_InitStructure.GPIO_Pin = DHT11_Data_Pin;				 //PB11端口配置
  	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP; 		 //推挽输出
  	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
- 	GPIO_Init(DHT11_GPIO_Port, &GPIO_InitStructure);				 //初始化IO口
+ 	GPIO_Init(DHT11_Data_Port, &GPIO_InitStructure);				 //初始化IO口
     
- 	GPIO_SetBits(DHT11_GPIO_Port,DHT11_GPIO_Pin);						 //PB11 输出高	
+ 	GPIO_SetBits(DHT11_Data_Port,DHT11_Data_Pin);						 //PB11 输出高	
     return 1;
 //	DHT11_Rst();  //复位DHT11
 //	return DHT11_Check();//等待DHT11的回应

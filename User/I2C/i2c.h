@@ -4,10 +4,10 @@
 
 #define I2C_ANALOG_SDA_GPIO_Port    GPIOC
 #define I2C_ANALOG_SDA_GPIO_Pin     GPIO_Pin_4
-
+#define I2C_ANALOG_SDA_RCC_Periph   RCC_APB2Periph_GPIOC
 #define I2C_ANALOG_SCL_GPIO_Port    GPIOC
 #define I2C_ANALOG_SCL_GPIO_Pin     GPIO_Pin_5
-
+#define I2C_ANALOG_SCL_RCC_Periph   RCC_APB2Periph_GPIOC
 //IO²Ù×÷º¯Êý	 
 #define I2C_SCL    PCout(5) //SCL
 #define I2C_SDA    PCout(4) //SDA

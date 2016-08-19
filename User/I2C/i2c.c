@@ -5,7 +5,7 @@
 void I2C_Analog_Port_Init(void)
 {					     
 	GPIO_InitTypeDef GPIO_InitStructure;
-	RCC_APB2PeriphClockCmd(	RCC_APB2Periph_GPIOC, ENABLE );	
+	RCC_APB2PeriphClockCmd(I2C_ANALOG_SDA_RCC_Periph | I2C_ANALOG_SCL_RCC_Periph, ENABLE );	
 	   
 	GPIO_InitStructure.GPIO_Pin = I2C_ANALOG_SDA_GPIO_Pin;
 	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP ;   //ÍÆÍìÊä³ö

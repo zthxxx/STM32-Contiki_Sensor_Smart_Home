@@ -24,7 +24,7 @@ void RC522_Init(void)
 void RC522_GPIO_Config(void)
 {
     GPIO_InitTypeDef GPIO_InitStructure;
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
+    RCC_APB2PeriphClockCmd(RC522_NSS_RCC_Periph | RC522_RST_RCC_Periph, ENABLE);
     
     GPIO_InitStructure.GPIO_Pin = RC522_NSS_GPIO_Pin;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;

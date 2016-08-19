@@ -11,12 +11,15 @@
 
 #define E30TTLUART_M0_Port GPIOB
 #define E30TTLUART_M0_Pin  GPIO_Pin_8
+#define E30TTLUART_M0_RCC_Periph RCC_APB2Periph_GPIOB
 
 #define E30TTLUART_M1_Port GPIOB
 #define E30TTLUART_M1_Pin  GPIO_Pin_9
+#define E30TTLUART_M1_RCC_Periph RCC_APB2Periph_GPIOB
 
 #define E30TTLUART_AUX_Port GPIOB
 #define E30TTLUART_AUX_Pin  GPIO_Pin_7
+#define E30TTLUART_AUX_RCC_Periph RCC_APB2Periph_GPIOB
 
 ////IO²Ù×÷º¯Êý											   
 #define	E30TTLUART_M0_OUT    PBout(8)
