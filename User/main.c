@@ -144,8 +144,8 @@ int main(void)
     autostart_start(autostart_processes);
     
 #ifdef __LED_BLINK_ON__
-    process_start(&red_blink_process,NULL);
-    process_start(&green_blink_process,NULL);
+//    process_start(&red_blink_process,NULL);
+//    process_start(&green_blink_process,NULL);
 #endif    
 
 #ifdef __CJSON_LIB_TEST__

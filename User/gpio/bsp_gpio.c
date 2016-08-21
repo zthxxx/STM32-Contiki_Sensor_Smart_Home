@@ -6,6 +6,24 @@
   
 #include "bsp_gpio.h"   
 
+
+
+LightLamp lamps[2] = {
+    {
+        0, 
+        "Red", 
+        0, 
+        LED_Red_On,
+        LED_Red_Off
+    }, 
+    {
+        1, 
+        "Green", 
+        0, 
+        LED_Green_On,
+        LED_Green_Off
+    }
+};
  /**
   * @brief  ≥ı ºªØGPIO
   * @param  Œﬁ

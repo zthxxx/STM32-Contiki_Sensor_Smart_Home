@@ -12,6 +12,17 @@
 #define LED_Green_Pin   GPIO_Pin_2
 #define LED_Green_RCC_Periph RCC_APB2Periph_GPIOD
 
+
+typedef struct LightLamp
+{
+    uint8_t SwitchIndex;
+    char* DisplayName;
+    uint8_t LightStatus;
+    void (*LightOn)(void);
+    void (*LightOff)(void);
+}LightLamp;
+
+extern LightLamp lamps[];
 void LED_GPIO_Config(void);
 void LED_Red_On(void);
 void LED_Red_Off(void);

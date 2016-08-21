@@ -236,6 +236,9 @@ void ReceiveUSART2PacketDelegate(void)                	//串口中断服务程序
         USART_ClearITPendingBit(USART2,USART_IT_RXNE); //清除中断标志
 		receiveByte = USART_ReceiveData(USART2);//(USART1->DR);		//读取接收到的数据
 //        sendUart1OneByte(receiveByte);
+#ifdef __TERMINAL_ON__
+        PushTianProtocolReceiveByteIntoFIFO(receiveByte);
+#endif
 	}
 }
 

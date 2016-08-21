@@ -8,7 +8,8 @@
 #include "NVIC_CONFIG.H"
 #include "bsp_usart1.h"
 #include "dma.h"
-
+#include "CommunicationProtocol.h"
+#include "CommunicationConfig.h"
 
 typedef void (*USART2_Receive_Handler)(void);
 extern USART2_Receive_Handler USART2ReceiveHandler;

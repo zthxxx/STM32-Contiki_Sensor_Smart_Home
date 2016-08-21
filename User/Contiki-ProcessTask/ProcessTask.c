@@ -377,10 +377,10 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSON_AddItemToObject(root, "Owner", cJSON_CreateString("admin"));
         
 #ifdef __TERMINAL_ON__
-        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x01));
+        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x02));
 #else
     #ifdef __TERMINAL_OFF__
-        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x02));
+        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x03));
     #endif
 #endif
 

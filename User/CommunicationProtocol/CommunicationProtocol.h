@@ -27,11 +27,12 @@ typedef enum FunctionWord_TypeDef
 { 
     FunctionWord_Null           = 0x00,
     FunctionWord_Handshake      = 0xF0,
-    FunctionWord_Acknowledgement, 
+    FunctionWord_Acknowledgement= 0xF1, 
     FunctionWord_RegisterDevice,
     FunctionWord_Dormant,
     FunctionWord_StartUP,
     FunctionWord_Data,
+    FunctionWord_SetProperty,
     FunctionWord_Logout,
     FunctionWord_Reboot,
     FunctionWord_Shutdown
