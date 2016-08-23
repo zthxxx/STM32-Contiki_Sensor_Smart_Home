@@ -72,8 +72,10 @@ void BSP_Config(void)
     
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
-    OLED_ShowString(0,0,"SPI OLED");
-    OLED_ShowString(0,16,"Start OK!");
+    OLED_ShowString(3 * 8,0,"Smart Home");
+    OLED_ShowString(0,1 * 16,"Tempe:");OLED_ShowString(14 * 8,1 * 16,"`C");
+    OLED_ShowString(0,2 * 16,"Humid:");OLED_ShowString(15 * 8,2 * 16,"%");
+    OLED_ShowString(0,3 * 16,"Light:");OLED_ShowString(13 * 8,3 * 16,"Lux");
     OLED_Refresh_Gram();//更新显示
 #endif         
     
@@ -148,6 +150,10 @@ int main(void)
 //    process_start(&green_blink_process,NULL);
 #endif    
 
+#ifdef __LED_BLINK_ON__
+      process_start(&Beep_alert_process,NULL);
+#endif    
+    
 #ifdef __CJSON_LIB_TEST__
     process_start(&cJSON_test_process,NULL);
 #endif

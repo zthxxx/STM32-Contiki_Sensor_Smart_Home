@@ -22,6 +22,7 @@ PROCESS(SDS01_Read_PM_Value_process, "Get PM2.5 and PM10 data with SDS01");
 PROCESS(SHT15_Read_DATA_Value_process, "SHT15 read accurate temperature and humidity");
 PROCESS(T6603_Read_CO2_PPM_process, "T6603-5 read CO2 PPM value");
 PROCESS(W5500_send_test_process, "Test W5500 module send data");
+PROCESS(Beep_alert_process, "Beep alert process");
 
 AUTOSTART_PROCESSES(&etimer_process,&IWDG_Feed_process);
 
@@ -68,6 +69,23 @@ PROCESS_THREAD(green_blink_process, ev, data)
     PROCESS_END();
 }
 
+PROCESS_THREAD(Beep_alert_process, ev, data)
+{
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {   
+        if(beep_flag)
+        {
+            Beep_On();
+        }
+        Contiki_etimer_DelayMS(500);
+        Beep_Off();
+        Contiki_etimer_DelayMS(500);
+    }
+    PROCESS_END();
+}
+
 PROCESS_THREAD(wifi_send_test_process, ev, data)
 {
     uint8_t *USART2_SendBuff;
@@ -110,9 +128,17 @@ PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
     PROCESS_BEGIN();
     while(1)
     {
-        OLED_ShowNum(0,32,count++,5,16);   
+#ifdef __DHT11_MODULE_ON__
+        OLED_ShowNum(6 * 8,1 * 16, (int)temperatureGlobalData,log10(temperatureGlobalData) + 2,16); 
+        OLED_ShowNum(6 * 8,2 * 16, (int)humidityGlobalData,log10(humidityGlobalData) + 2,16); 
+#endif
+        
+#ifdef __BH1750_MODULE_ON__
+        OLED_ShowNum(6 * 8,3 * 16, (int)lightIntensityGlobalData,log10(lightIntensityGlobalData) + 2,16);
+#endif
+        
         OLED_Refresh_Gram();//¸üÐÂÏÔÊ¾
-        Contiki_etimer_DelayMS(500);
+        Contiki_etimer_DelayMS(2000);
     }
     PROCESS_END();
 }
