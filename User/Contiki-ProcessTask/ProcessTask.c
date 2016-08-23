@@ -316,6 +316,8 @@ PROCESS_THREAD(RC522_Read_Card_process, ev, data)
     uint8_t CardClassAndIDBuf[4];
     uint32_t CardID;
     static uint32_t LastCardID;
+    const uint32_t PermitCardID[] = {1};
+    static uint16_t count = 0;
     static struct etimer et;
     PROCESS_BEGIN();
     while(1)
@@ -338,6 +340,19 @@ PROCESS_THREAD(RC522_Read_Card_process, ev, data)
                 {
                     LastCardID = CardID;
                     CardID_GlobalData = CardID;
+                    printf("CardID: %d\r\n", CardID);
+                    for(count = 0; count < sizeof(PermitCardID) / sizeof(*PermitCardID); count++)
+                    {
+                        if(CardID == PermitCardID[count])
+                        {
+                            Gate_On();
+                            LED_Red_On();
+                            Contiki_etimer_DelayMS(2000);       
+                            Gate_Off();
+                            LED_Red_Off();
+                            break;
+                        }
+                    }
                 }
             }
             else
@@ -407,7 +422,7 @@ PROCESS_THREAD(T6603_Read_CO2_PPM_process, ev, data)
         T6603_LoadReceiveQueueByteToPacketBlock();
         CO2_PPM_Value = T6603_getCO2_PPM();
         CO2_PPM_Value_GlobalData = CO2_PPM_Value;
-        if(CO2_PPM_Value_GlobalData > 1500)
+        if(CO2_PPM_Value_GlobalData > 2200)
         {
             SetBeepAlertSource(CO2_AlertSource);
         }else
@@ -433,7 +448,7 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         cJSON_AddItemToObject(root, "Owner", cJSON_CreateString("admin"));
         
 #ifdef __TERMINAL_ON__
-        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x02));
+        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x04));
 #else
     #ifdef __TERMINAL_OFF__
         cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x03));
