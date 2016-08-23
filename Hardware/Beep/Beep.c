@@ -40,4 +40,15 @@ void Beep_Off(void)
 {
     GPIO_SetBits(Beep_Port, Beep_Pin);
 }
+
+void SetBeepAlertSource(uint8_t alertSource)
+{
+    beep_flag |= 0x0001 << alertSource;
+}
+
+void ResetBeepAlertSource(uint8_t alertSource)
+{
+    beep_flag &= ~(uint16_t)(0x0001 << alertSource);
+}
+
 /*********************************************END OF FILE**********************/

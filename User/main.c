@@ -69,7 +69,11 @@ void BSP_Config(void)
     
 #ifdef __LED_BLINK_ON__
     LED_GPIO_Config(); 
-#endif    
+#endif
+
+#ifdef __Beep_MODULE_ON__
+    Beep_GPIO_Config(); 
+#endif   
     
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
@@ -151,7 +155,7 @@ int main(void)
 //    process_start(&green_blink_process,NULL);
 #endif    
 
-#ifdef __LED_BLINK_ON__
+#ifdef __Beep_MODULE_ON__
       process_start(&Beep_alert_process,NULL);
 #endif    
     

@@ -124,17 +124,16 @@ PROCESS_THREAD(W5500_send_test_process, ev, data)
 PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
 {
     static struct etimer et;
-    static int count;
     PROCESS_BEGIN();
     while(1)
     {
 #ifdef __DHT11_MODULE_ON__
-        OLED_ShowNum(6 * 8,1 * 16, (int)temperatureGlobalData,log10(temperatureGlobalData) + 2,16); 
-        OLED_ShowNum(6 * 8,2 * 16, (int)humidityGlobalData,log10(humidityGlobalData) + 2,16); 
+        OLED_ShowNum(6 * 8,1 * 16, (int)temperatureGlobalData,5,16); 
+        OLED_ShowNum(6 * 8,2 * 16, (int)humidityGlobalData,5,16); 
 #endif
         
 #ifdef __BH1750_MODULE_ON__
-        OLED_ShowNum(6 * 8,3 * 16, (int)lightIntensityGlobalData,log10(lightIntensityGlobalData) + 2,16);
+        OLED_ShowNum(6 * 8,3 * 16, (int)lightIntensityGlobalData,5,16);
 #endif
         
         OLED_Refresh_Gram();//¸üÐÂÏÔÊ¾
@@ -156,6 +155,14 @@ PROCESS_THREAD(DHT11_Read_Data_process, ev, data)
         DHT11_Read_Data(&temperature,&temperature0,&humidity,&humidity0);
         temperatureGlobalData = (float)temperature+(float)temperature0*0.1;
         humidityGlobalData = (float)humidity+(float)humidity0*0.1;
+        
+        if(temperatureGlobalData > 40)
+        {
+            SetBeepAlertSource(TemperatureAlertSource);
+        }else
+        {
+            ResetBeepAlertSource(TemperatureAlertSource);
+        }
         
 //        printf("temperature: %.2f¡ãC  humidity: %.2f \r\n",(float)temperature+(float)temperature0*0.01,(float)humidity+(float)humidity0*0.01);	
         Contiki_etimer_DelayMS(500);
@@ -266,6 +273,13 @@ PROCESS_THREAD(BH1750_Measure_Lumen_process, ev, data)
         Contiki_etimer_DelayMS(500);
         lightIntensity = BH1750_GetLumen();
         lightIntensityGlobalData = lightIntensity;
+        if(lightIntensityGlobalData > 3000)
+        {
+            SetBeepAlertSource(LightAlertSource);
+        }else
+        {
+            ResetBeepAlertSource(LightAlertSource);
+        }
     }
     PROCESS_END();
 }
@@ -283,6 +297,14 @@ PROCESS_THREAD(SDS01_Read_PM_Value_process, ev, data)
         PM10_Value = SDS01_getPM10_Value();
         PM2_5_GlobalData = PM2_5_Value;
         PM10_GlobalData = PM10_Value;
+        if(PM2_5_GlobalData > 110)
+        {
+            SetBeepAlertSource(PM2_5_AlertSource);
+        }else
+        {
+            ResetBeepAlertSource(PM2_5_AlertSource);
+        }
+        
         Contiki_etimer_DelayMS(2000);
     }
     PROCESS_END();
@@ -385,6 +407,14 @@ PROCESS_THREAD(T6603_Read_CO2_PPM_process, ev, data)
         T6603_LoadReceiveQueueByteToPacketBlock();
         CO2_PPM_Value = T6603_getCO2_PPM();
         CO2_PPM_Value_GlobalData = CO2_PPM_Value;
+        if(CO2_PPM_Value_GlobalData > 1500)
+        {
+            SetBeepAlertSource(CO2_AlertSource);
+        }else
+        {
+            ResetBeepAlertSource(CO2_AlertSource);
+        }
+        
         Contiki_etimer_DelayMS(5000); 
     }
     PROCESS_END();
