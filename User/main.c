@@ -41,6 +41,7 @@
 #include "SHT15.h"
 #include "T6603.h"
 #include "W5500.h"
+#include "Beep.h"
 
 #include "contiki-conf.h"
 #include <stdint.h>
