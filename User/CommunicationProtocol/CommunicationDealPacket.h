@@ -1,6 +1,7 @@
 #ifndef __COMMUNICATION_DEAL_PACKET_H__
 #define __COMMUNICATION_DEAL_PACKET_H__
-
+#include <stdio.h>
+#include <string.h>
 #include "cJSON.h"
 #include "CommunicationProtocol.h"
 #include "Uint8PacketQueueManger.h"

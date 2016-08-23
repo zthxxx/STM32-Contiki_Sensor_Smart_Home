@@ -446,14 +446,8 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
         root=cJSON_CreateObject();	
         cJSON_AddItemToObject(root, "InfoType", cJSON_CreateString("Data"));
         cJSON_AddItemToObject(root, "Owner", cJSON_CreateString("admin"));
-        
-#ifdef __TERMINAL_ON__
-        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x04));
-#else
-    #ifdef __TERMINAL_OFF__
-        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(0x03));
-    #endif
-#endif
+
+        cJSON_AddItemToObject(root, "Address", cJSON_CreateNumber(Protocol_LocalhostAddress));
 
 #ifdef __DHT11_MODULE_ON__
         cJSON_AddItemToObject(root, "Temperature", cJSON_CreateNumber(temperatureGlobalData));

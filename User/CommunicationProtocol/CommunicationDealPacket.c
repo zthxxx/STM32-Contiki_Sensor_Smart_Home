@@ -1,6 +1,22 @@
 #include "CommunicationDealPacket.h"
 
-
+void ControlSwitch(char* switchType, uint16_t switchIndex, uint16_t statusSet)
+{
+    if(strcmp(switchType,"Light")==0)
+    {
+        if(statusSet)
+        {
+            lamps[switchIndex].LightOn();
+        }else
+        {
+            lamps[switchIndex].LightOff();
+        }
+    }
+    else if(strcmp(switchType,"Slider")==0)
+    {
+        printf("Slider\r\n");
+    }
+}
 
 /*对数据块进行处理
 *
@@ -26,6 +42,7 @@ void DealWithReceivePacketBlock(PacketBlock* packetBlock)
             cJSON * SwitchSet; 
             char* infoType;
             char* onwer;
+            char* switchType;
             uint16_t address;
             uint16_t switchIndex;
             uint16_t statusSet;
@@ -36,18 +53,13 @@ void DealWithReceivePacketBlock(PacketBlock* packetBlock)
             onwer = cJSON_GetObjectItem(root,"Owner")->valuestring;
             address = cJSON_GetObjectItem(root,"Address")->valueint;
             SwitchSet = cJSON_GetObjectItem(root,"SwitchSet");
+            switchType = cJSON_GetObjectItem(SwitchSet,"SwitchType")->valuestring;
             switchIndex = cJSON_GetObjectItem(SwitchSet,"SwitchIndex")->valueint;
             statusSet = cJSON_GetObjectItem(SwitchSet,"StatusSet")->valueint;
-//            printf("%s - %s - %d - %d - %d \r\n", infoType, onwer, address, switchIndex, statusSet);
-            if(address == Protocol_LocalhostAddress)
+            if((strcmp(infoType,"Setting")==0) && (address == Protocol_LocalhostAddress))
             {
-                if(statusSet)
-                {
-                    lamps[switchIndex].LightOn();
-                }else
-                {
-                    lamps[switchIndex].LightOff();
-                }
+//                printf("%s - %s - %d - %s - %d - %d \r\n", infoType, onwer, address, switchType, switchIndex, statusSet);
+                ControlSwitch(switchType, switchIndex, statusSet);
             }
             cJSON_Delete(root);        
         }

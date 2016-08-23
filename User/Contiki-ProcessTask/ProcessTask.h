@@ -56,14 +56,14 @@
 //在"CommunicationConfig.h"文件中修改 __TERMINAL_XX__宏定义，选择节点或终端模式
 #ifdef __TERMINAL_ON__
     #define __LED_BLINK_ON__            //LED 闪烁
-//    #define __OLED_MODULE_ON__          //OLED显示屏
+    #define __OLED_MODULE_ON__          //OLED显示屏
     #define __DHT11_MODULE_ON__         //温湿度传感器
     #define __MQ02_MODULE_ON__          //烟雾传感器
 //    #define __HCSR501_MODULE_ON__       //红外热释电人体传感器
-    #define __RC522_MODULE_ON__         //RFID读卡器
-    #define __T6603_MODULE_ON__         //T6603-5 CO2传感器模块
-//    #define __BH1750_MODULE_ON__        //光照传感器
-//    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
+//    #define __RC522_MODULE_ON__         //RFID读卡器
+//    #define __T6603_MODULE_ON__         //T6603-5 CO2传感器模块
+    #define __BH1750_MODULE_ON__        //光照传感器
+    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
 //    #define __Beep_MODULE_ON__          //蜂鸣器报警模块开启
     #define __WIFI_MODULE_ON__          //WIFI模块开启
 //    #define __W5500_MODULE_ON__         //W5500模块开启
