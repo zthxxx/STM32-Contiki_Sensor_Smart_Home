@@ -7,6 +7,7 @@
 #include "Uint8PacketQueueManger.h"
 #include "CommunicationConfig.h"
 #include "bsp_gpio.h"
+#include "PWM.h"
 
 typedef struct PacketBlock PacketBlock;
 void DealWithReceivePacketBlock(PacketBlock* packetBlock);

@@ -23,6 +23,7 @@
 #include "NVIC_CONFIG.H"
 #include "cJSON.h"
 #include "stm_flash.h"
+#include "PWM.h"
 #include "CommunicationConfig.h"
 #include "CommunicationProtocol.h"
 
@@ -65,6 +66,8 @@ void BSP_Config(void)
     STMFLASH_Write_OneWordData(STM32_FLASH_END_PAGE,rand());
     NVIC_Configuration_Init();
     USART1_Config(115200);
+    TIM1_PWM_Init();
+    TIM1_CH1_PWM_Init();
     printf("Start Contiki OS\r\n");
     
 #ifdef __LED_BLINK_ON__

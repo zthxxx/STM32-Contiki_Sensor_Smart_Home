@@ -15,6 +15,7 @@ void ControlSwitch(char* switchType, uint16_t switchIndex, uint16_t statusSet)
     else if(strcmp(switchType,"Slider")==0)
     {
         printf("Slider\r\n");
+        Set_TIM1_CH1_Percentage(statusSet);
     }
 }
 
