@@ -439,8 +439,8 @@ void DealWithReceivePacketQueue()
 //                    uint8PacketNodePointer->resendCount = PROTOCOL_PACKET_RESENT_COUNT_MAX;
 //                    Uint8PacketQueuePush(UnackedPacketQueueHandle, uint8PacketNodePointer);
                     
-                    packetBlock = ReceivedPacketNodePointer->packetBlock;
-                    ReceivedPacketNodePointer->packetBlock = NULL;
+//                    packetBlock = ReceivedPacketNodePointer->packetBlock;
+//                    ReceivedPacketNodePointer->packetBlock = NULL;
                     DealWithReceivePacketBlock(packetBlock); 
                 }
             }

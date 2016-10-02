@@ -2,6 +2,7 @@
 
 void ControlSwitch(char* switchType, uint16_t switchIndex, uint16_t statusSet)
 {
+    static uint16_t count = 0;
     if(strcmp(switchType,"Light")==0)
     {
         if(statusSet)
@@ -14,7 +15,7 @@ void ControlSwitch(char* switchType, uint16_t switchIndex, uint16_t statusSet)
     }
     else if(strcmp(switchType,"Slider")==0)
     {
-        printf("Slider\r\n");
+        printf("Slider %d\r\n", count++);
         Set_TIM1_CH1_Percentage(statusSet);
     }
 }
@@ -69,7 +70,7 @@ void DealWithReceivePacketBlock(PacketBlock* packetBlock)
         default:
             free(packetBlock->messageData);
             packetBlock->messageData = NULL;
-            free(packetBlock);
+//            free(packetBlock);
         break;
     }
 }

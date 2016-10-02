@@ -124,6 +124,7 @@ PROCESS_THREAD(W5500_send_test_process, ev, data)
 PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
 {
     static struct etimer et;
+    static uint32_t count = 0;
     PROCESS_BEGIN();
     while(1)
     {
@@ -135,9 +136,9 @@ PROCESS_THREAD(OLED_Show_Increment_process, ev, data)
 #ifdef __BH1750_MODULE_ON__
         OLED_ShowNum(6 * 8,3 * 16, (int)lightIntensityGlobalData,5,16);
 #endif
-        
+        OLED_ShowNum(11 * 8,0,count++,5,16);  
         OLED_Refresh_Gram();//¸üÐÂÏÔÊ¾
-        Contiki_etimer_DelayMS(2000);
+        Contiki_etimer_DelayMS(1000);
     }
     PROCESS_END();
 }

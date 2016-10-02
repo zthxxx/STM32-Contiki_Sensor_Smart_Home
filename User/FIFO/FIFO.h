@@ -2,7 +2,9 @@
 #define __FIFO_H	 
 #include "sys.h"
 #include <string.h>
+#include "stdio.h"
 #include "stdlib.h"
+
 
 typedef struct Uint8FIFONODE
 {

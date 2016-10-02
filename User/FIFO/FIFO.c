@@ -20,6 +20,10 @@ void Uint8FIFOPush(Uint8FIFOQueue* uint8FIFOQueueHandle,uint8_t dataByte)
     Uint8FIFO *newNode;
     if(!uint8FIFOQueueHandle)return;
     newNode = (Uint8FIFO*)malloc(sizeof(Uint8FIFO));
+    if(newNode == NULL)
+    {
+        return;
+    }
     newNode->dataByte = dataByte;
     newNode->next = NULL;
     if(uint8FIFOQueueHandle->head == NULL)

@@ -64,7 +64,7 @@
 //    #define __RC522_MODULE_ON__         //RFID读卡器
 //    #define __T6603_MODULE_ON__         //T6603-5 CO2传感器模块
     #define __BH1750_MODULE_ON__        //光照传感器
-    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
+//    #define __SDS01_MODULE_ON__         //SDS01 PM2.5 PM10 传感器模块
 //    #define __Beep_MODULE_ON__          //蜂鸣器报警模块开启
     #define __WIFI_MODULE_ON__          //WIFI模块开启
 //    #define __W5500_MODULE_ON__         //W5500模块开启

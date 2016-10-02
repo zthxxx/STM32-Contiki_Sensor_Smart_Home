@@ -10,7 +10,6 @@
 void TIM1_PWM_Config(uint16_t TIM_Period,uint16_t TIM_Prescaler)//自动重装周期值  预分频值
 {
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-	TIM_OCInitTypeDef  TIM_OCInitStructure;
 
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
 

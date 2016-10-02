@@ -7,6 +7,7 @@
 #include "stm32f10x_conf.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "bsp_gpio.h"
 #include "bsp_usart1.h"
 #include "bsp_usart2.h"
@@ -69,7 +70,6 @@ void BSP_Config(void)
     TIM1_PWM_Init();
     TIM1_CH1_PWM_Init();
     printf("Start Contiki OS\r\n");
-    
 #ifdef __LED_BLINK_ON__
     LED_GPIO_Config(); 
 #endif
@@ -80,7 +80,7 @@ void BSP_Config(void)
     
 #ifdef __OLED_MODULE_ON__
     OLED_Init(); //初始化OLED模块使用的接口和外设
-    OLED_ShowString(3 * 8,0,"Smart Home");
+    OLED_ShowString(0 * 8,0,"Smart Home");
     OLED_ShowString(0,1 * 16,"Tempe:");OLED_ShowString(14 * 8,1 * 16,"`C");
     OLED_ShowString(0,2 * 16,"Humid:");OLED_ShowString(15 * 8,2 * 16,"%");
     OLED_ShowString(0,3 * 16,"Light:");OLED_ShowString(13 * 8,3 * 16,"Lux");
