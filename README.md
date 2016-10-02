@@ -22,14 +22,14 @@
 ### 必要说明
 ----------------------
 
-1. 本项目基于本团队原型 [**智能家居**](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home) 项目， 因此会有上述服务器端，
-        智能家居项目大概架构是采集各传感器数据，上传到云端储存和分析，通过**web**及**webapp**提供GUI。
-        因为智能家居项目所设计架构本身就是为了满足后续使用的通用性，
-        因此本项目中是直接把**应变片**及**HX711**一起看作**称重传感器**，挂载到智能家居整体系统的传感器组件下，
-        并裁剪其他传感器，只保留 **WIFI / 以太网** 模块及 **OLED** 显示模块；
-        称重数据上传服务器，把web界面做为称重**数据可视化及调试**界面。
-2. 本说明着重讲解**下位机程序架构**，硬件只叙述模块接口，不过多涉及硬件架构；
-3. 云服务器端请参见 [**物联网多终端平台**](https://github.com/zthxxx/python-flask-IoT_Sensor_Web) 项目；
+1. 本项目基于本团队原型 [**智能家居**](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home) 项目， 因此会有上述服务器端， 
+        智能家居项目大概架构是采集各传感器数据，上传到云端储存和分析，通过**web**及**webapp**提供GUI。 
+        因为智能家居项目所设计架构本身就是为了满足后续使用的通用性， 
+        因此本项目中是直接把**应变片**及**HX711**一起看作**称重传感器**，挂载到智能家居整体系统的传感器组件下， 
+        并裁剪其他传感器，只保留 **WIFI / 以太网** 模块及 **OLED** 显示模块； 
+        称重数据上传服务器，把web界面做为称重**数据可视化及调试**界面。 
+2. 本说明着重讲解**下位机程序架构**，硬件只叙述模块接口，不过多涉及硬件架构； 
+3. 云服务器端请参见 [**物联网多终端平台**](https://github.com/zthxxx/python-flask-IoT_Sensor_Web) 项目； 
 
 
 ### 开发环境
@@ -48,20 +48,20 @@
 ### 文件结构
 ----------------------
 
->  **./**  项目主目录
->  ├── **Documents**  说明文档文件夹，包含声明，更新日志，lssues
->  │
->  ├── **Hardware**   外围挂接设备驱动文件夹，各外设驱动打包在内各自独立文件夹中
->  │
->  ├── **Libraries**  库文件夹，包含STM32库依赖、第三方C库
->  │
->  ├── **Listing**    编译链接生成文件夹
->  │
->  ├── **Output**     编译输出文件夹
->  │
->  ├── **Project**    项目工程文件夹
->  │
->  └── **User**       用户文件夹，包含各Contiki系统、内设驱动，各内设驱动打包在内各自独立文件夹中
+>  **./**  项目主目录 
+>  ├── **Documents**  说明文档文件夹，包含声明，更新日志，lssues 
+>  │ 
+>  ├── **Hardware**   外围挂接设备驱动文件夹，各外设驱动打包在内各自独立文件夹中 
+>  │ 
+>  ├── **Libraries**  库文件夹，包含STM32库依赖、第三方C库 
+>  │ 
+>  ├── **Listing**    编译链接生成文件夹 
+>  │ 
+>  ├── **Output**     编译输出文件夹 
+>  │ 
+>  ├── **Project**    项目工程文件夹 
+>  │ 
+>  └── **User**       用户文件夹，包含各Contiki系统、内设驱动，各内设驱动打包在内各自独立文件夹中 
 
 
 
@@ -71,14 +71,14 @@
 * **始终仅将 USART1 做为 DEBUG 调试打印端口**
 * **下载程序**与在线仿真使用 ST-LINK / JLINK **SWD接口**
 * **Flash大小配置文件**:  
-    ./User/STM_FLASH/stm_flash.h 中 **STM32_FLASH_SIZE** 配置对应芯片 Flash ROM 大小 (**！必要！**)
+    ./User/STM_FLASH/stm_flash.h 中 **STM32_FLASH_SIZE** 配置对应芯片 Flash ROM 大小 (**！必要！**) 
     Flash 最后一页头4个字节做为随机数种子存放位置
 * **WIFI连接配置文件**(雾):  ./Hardware/ESP8266/ESP8266_Wifi_link_Config.c
 * **以太网连接配置文件**:  ./Hardware/W5500/W5500.c
 * **键盘按键配置文件**:  
-    ./Hardware/Keyboard_4x5/Keyboard_4x5.c 实体按键与虚拟按键映射
-    ./Hardware/Keyboard_4x5/Keyboard_4x5.h 按键大小及引脚、系统虚拟按键定义
-* **传感器裁剪**:   ./User/Contiki-ProcessTask/ProcessTask.h 中，
+    ./Hardware/Keyboard_4x5/Keyboard_4x5.c 实体按键与虚拟按键映射 
+    ./Hardware/Keyboard_4x5/Keyboard_4x5.h 按键大小及引脚、系统虚拟按键定义 
+* **传感器裁剪**:   ./User/Contiki-ProcessTask/ProcessTask.h 中， 
     `__TERMINAL_ON__` 与 `__TERMINAL_OFF__` 宏定义间裁剪所需传感器
 * **传输层配置**: 
     本项目中传感网内及传感网连接服务器间传输层均使用此套自定义协议
