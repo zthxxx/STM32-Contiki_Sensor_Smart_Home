@@ -1,19 +1,19 @@
 ## 2016TI杯四川区电设省赛-电子称说明
 ----------------------------------------------------------------------------------------
-==STM32== ==Contiki== ==HX711== ==电子称==
+`STM32` `Contiki` `HX711` `电子称`
 
 [![Build Status](https://travis-ci.org/zthxxx/STM32-Contiki_Sensor_Smart_Home.svg?branch=master)](https://travis-ci.org/zthxxx/STM32-Contiki_Sensor_Smart_Home)
 [![Code Climate](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home/badges/gpa.svg)](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home)
 [![Test Coverage](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home/badges/coverage.svg)](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home/coverage)
 
-> Here's how you use `STM32-2016_NUEDC_TI_electronic_scale` to download a video from [this web page](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/tree/competition):
+> Here's how you use **`STM32-2016_NUEDC_TI_electronic_scale`** to download a video from [this web page](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/tree/competition):
 
 
 ### 项目简介
 ----------------------
 
 -  本项目为  2016年第八届TI杯[**全国大学生电子设计竞赛**](http://www.nuedc.com.cn) 四川赛区 **D题-简易电子称** 的参赛作品
--  开发团队为来自西华大学的 ==**WNCG 团队**==
+-  开发团队为来自西华大学的 **`WNCG 团队`**
 -  此作品在参赛评选中获得 **省一等奖**
 -  作品总共分为三个主要部分，分别为硬件端、下位机软件端、云服务器端
 -  以下将从下位机软件系统进行较为详细的说明
@@ -151,25 +151,18 @@
 
 #### 程序规划流程图
 
-
-![系统流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/blob/competition/Documents/resource/images/系统流程图.png)
-
-![互交业务流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/blob/competition/Documents/resource/images/互交业务流程图.png)
-
-![测重流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/blob/competition/Documents/resource/images/测重流程图.png)
-
-![按键流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/blob/competition/Documents/resource/images/按键流程图.png)
-
-
----------------------------------------------------
-
-
-
-
-
-
-
-
+  
+  
+![系统流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/raw/competition/Documents/resource/images/系统流程图.png)
+  
+  
+![互交业务流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/raw/competition/Documents/resource/images/互交业务流程图.png)
+  
+  
+![测重流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/raw/competition/Documents/resource/images/测重流程图.png)
+  
+  
+![按键流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/raw/competition/Documents/resource/images/按键流程图.png)
 
 
 
