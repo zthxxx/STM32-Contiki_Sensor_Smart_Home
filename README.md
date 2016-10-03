@@ -6,7 +6,7 @@
 [![Code Climate](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home/badges/gpa.svg)](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home)
 [![Test Coverage](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home/badges/coverage.svg)](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home/coverage)
 
-> Here's how you use **`STM32-2016_NUEDC_TI_electronic_scale`** to download a video from [this web page](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/tree/competition):
+> Here's how you get and download **`STM32-2016_NUEDC_TI_electronic_scale`** project from [this web page](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/tree/competition):
 
 
 ### 项目简介
@@ -66,34 +66,34 @@
 * **始终仅将 USART1 做为 DEBUG 调试打印端口**
 * **下载程序**与在线仿真使用 ST-LINK / JLINK **SWD接口**
 * **Flash大小配置文件**:  
-    ./User/STM_FLASH/stm_flash.h 中 **STM32_FLASH_SIZE** 配置对应芯片 Flash ROM 大小 (**！必要！**)   
-    Flash 最后一页头4个字节做为随机数种子存放位置  
+    　./User/STM_FLASH/stm_flash.h 中 **STM32_FLASH_SIZE** 配置对应芯片 Flash ROM 大小 (**！必要！**)   
+    　Flash 最后一页头4个字节做为随机数种子存放位置  
 * **WIFI连接配置文件**(雾):  ./Hardware/ESP8266/ESP8266_Wifi_link_Config.c
 * **以太网连接配置文件**:  ./Hardware/W5500/W5500.c
 * **键盘按键配置文件**:   
-    ./Hardware/Keyboard_4x5/Keyboard_4x5.c 实体按键与虚拟按键映射  
-    ./Hardware/Keyboard_4x5/Keyboard_4x5.h 按键大小及引脚、系统虚拟按键定义  
+    　./Hardware/Keyboard_4x5/Keyboard_4x5.c 实体按键与虚拟按键映射  
+    　./Hardware/Keyboard_4x5/Keyboard_4x5.h 按键大小及引脚、系统虚拟按键定义  
 * **传感器裁剪**:   ./User/Contiki-ProcessTask/ProcessTask.h 中，  
-    `__TERMINAL_ON__` 与 `__TERMINAL_OFF__` 宏定义间裁剪所需传感器  
+    　`__TERMINAL_ON__` 与 `__TERMINAL_OFF__` 宏定义间裁剪所需传感器  
 * **传输层配置**:   
     本项目中传感网内及传感网连接服务器间传输层均使用此套自定义协议  
     协议规范请参见 [传感物联网数据包协议格式](./Documents/传感物联网数据包协议格式.docx)  
     * 协议地址:  
-        ./User/CommunicationProtocol/CommunicationConfig.c 中设置本机传输层默认地址  
-        ./User/Contiki-ProcessTask/ProcessTask.c 文件中 `CommunicatProtocol_Send_Sensor_Data()` 函数调用 `AssembleProtocolPacketPushSendQueue()` 处配置传输层默认向上发送地址  
+        　./User/CommunicationProtocol/CommunicationConfig.c 中设置本机传输层默认地址  
+        　./User/Contiki-ProcessTask/ProcessTask.c 文件中 `CommunicatProtocol_Send_Sensor_Data()` 函数调用 `AssembleProtocolPacketPushSendQueue()` 处配置传输层默认向上发送地址  
     * 协议通信出口:  
-        ./User/CommunicationProtocol/CommunicationConfig.h 中 `TianProtocolSendBytesDataBuf` 定义处设置默认通信出口设备  
+        　./User/CommunicationProtocol/CommunicationConfig.h 中 `TianProtocolSendBytesDataBuf` 定义处设置默认通信出口设备  
     * 超时与重发:  
-         ./User/CommunicationProtocol/CommunicationConfig.h 配置重发次数与超时时间  
+         　./User/CommunicationProtocol/CommunicationConfig.h 配置重发次数与超时时间  
 * **传感网链路层配置**:  
     传感网链路层指下位机各终端和节点之间互相组成的网络，  
     目前传感网链路层主要使用 E30TTL100 模块传输，  
     在 ./Hardware/E30TTL100/E30TTLUART.c 中:  
     * 目标默认地址与信道:  
-        `E30TTLUART_Appoint_Target_Address` 与 `E30TTLUART_Appoint_Target_Channel` 定义处分别设置对目标的默认地址与信道  
+        　`E30TTLUART_Appoint_Target_Address` 与 `E30TTLUART_Appoint_Target_Channel` 定义处分别设置对目标的默认地址与信道  
     * 本机地址与信道与工作模式:  
-        `E30TTLUART_Config()` 与 `E30TTLUART_MultiCountConfig()` 函数调用处设置本机地址信道与是否点对点模式  
-        此两函数通常在初始化模块处被调用 (本项目中模块初始化在 main.c `BSP_Config()` 中)  
+        　`E30TTLUART_Config()` 与 `E30TTLUART_MultiCountConfig()` 函数调用处设置本机地址信道与是否点对点模式  
+        　此两函数通常在初始化模块处被调用 (本项目中模块初始化在 main.c `BSP_Config()` 中)  
 * **对服务器链路层配置**:  
     传感网连接服务器链路层必定使用互联网模块 ESP8266 WIFI 模块、 W5500 硬件以太网模块，  
     因此对服务器链路层配置本质就是以上互联网模块驱动中对连接服务器的 Socket 配置  
@@ -148,18 +148,24 @@
 
 
 #### 程序规划流程图  
+##### 系统流程图
 
   
   
 ![系统流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/raw/competition/Documents/resource/images/系统流程图.png)
-  
-  
+
+##### 部分关键进程详细流程图
+　  
+　  
+
 ![互交业务流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/raw/competition/Documents/resource/images/互交业务流程图.png)
-  
-  
+　  
+　  
+
 ![测重流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/raw/competition/Documents/resource/images/测重流程图.png)
-  
-  
+　  
+　  
+
 ![按键流程图](https://github.com/zthxxx/STM32-Contiki_Sensor_Smart_Home/raw/competition/Documents/resource/images/按键流程图.png)
 
 
