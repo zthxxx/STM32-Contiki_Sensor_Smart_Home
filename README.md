@@ -2,7 +2,7 @@
 ----------------------------------------------------------------------------------------
 `STM32` `Contiki` `HX711` `电子称`
 
-[![Build Status](https://travis-ci.org/zthxxx/STM32-Contiki_Sensor_Smart_Home.svg?branch=master)](https://travis-ci.org/zthxxx/STM32-Contiki_Sensor_Smart_Home)
+[![Build Status](https://travis-ci.org/zthxxx/STM32-Contiki_Sensor_Smart_Home.svg?branch=competition)](https://travis-ci.org/zthxxx/STM32-Contiki_Sensor_Smart_Home)
 [![Code Climate](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home/badges/gpa.svg)](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home)
 [![Test Coverage](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home/badges/coverage.svg)](https://codeclimate.com/github/zthxxx/STM32-Contiki_Sensor_Smart_Home/coverage)
 
