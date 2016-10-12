@@ -51,9 +51,6 @@
     　Flash 最后一页头4个字节做为随机数种子存放位置  
 * **WIFI连接配置文件**:  ./Hardware/ESP8266/ESP8266_Wifi_link_Config.c
 * **以太网连接配置文件**:  ./Hardware/W5500/W5500.c
-* **键盘按键配置文件**:   
-    　./Hardware/Keyboard_4x5/Keyboard_4x5.c 实体按键与虚拟按键映射  
-    　./Hardware/Keyboard_4x5/Keyboard_4x5.h 按键大小及引脚、系统虚拟按键定义  
 * **传感器裁剪**:   ./User/Contiki-ProcessTask/ProcessTask.h 中，  
     　`__TERMINAL_ON__` 与 `__TERMINAL_OFF__` 宏定义间裁剪所需传感器  
 * **传输层配置**:   

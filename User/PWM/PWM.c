@@ -7,7 +7,7 @@
 #include "PWM.h"   
 
 
-void TIM1_PWM_Config(uint16_t TIM_Period,uint16_t TIM_Prescaler)//自动重装周期值  预分频值
+void TIM1_PWM_Config(uint16_t TIM_Period,uint16_t TIM_Prescaler)//自动重装周期值  预分频值(减1才是真实值)
 {
 	TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
 
@@ -26,7 +26,7 @@ void TIM1_PWM_Config(uint16_t TIM_Period,uint16_t TIM_Prescaler)//自动重装周期值
 }
 void TIM1_PWM_Init(void)
 {
-	TIM1_PWM_Config(1000,360);
+	TIM1_PWM_Config(1000,36-1);
 }
 void TIM1_CH1_PWM_Init(void)
 {
