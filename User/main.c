@@ -66,7 +66,7 @@ void BSP_Config(void)
     srand(STMFLASH_Read_OneWordData(STM32_FLASH_END_PAGE));
     STMFLASH_Write_OneWordData(STM32_FLASH_END_PAGE,rand());
     NVIC_Configuration_Init();
-    USART1_Config(115200);
+    USART1_Config(921600);
     TIM1_PWM_Init();
     TIM1_CH1_PWM_Init();
     printf("Start Contiki OS\r\n");
@@ -154,8 +154,8 @@ int main(void)
     autostart_start(autostart_processes);
     
 #ifdef __LED_BLINK_ON__
-//    process_start(&red_blink_process,NULL);
-//    process_start(&green_blink_process,NULL);
+    process_start(&red_blink_process,NULL);
+    process_start(&green_blink_process,NULL);
 #endif    
 
 #ifdef __Beep_MODULE_ON__
@@ -167,6 +167,7 @@ int main(void)
 #endif
     
 #ifdef __COMMUNICAT_PROTOCOL__
+    process_start(&Communication_Protocol_Load_process,NULL);
     process_start(&Communication_Protocol_Send_process,NULL);
 #endif  
         

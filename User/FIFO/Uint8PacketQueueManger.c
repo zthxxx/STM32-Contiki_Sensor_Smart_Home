@@ -26,6 +26,7 @@ Uint8PacketQueue* CreatUint8PacketQueue(Uint8PacketNode* (*CreatUint8PacketNode)
 */
 void Uint8PacketQueuePush(Uint8PacketQueue* Uint8PacketQueueHandle,Uint8PacketNode* uint8PacketNodePointer)
 {
+    if(!uint8PacketNodePointer || !Uint8PacketQueueHandle)return;
     if(Uint8PacketQueueHandle->head == NULL)
     {
         Uint8PacketQueueHandle->head = uint8PacketNodePointer;
@@ -76,7 +77,7 @@ Uint8PacketNode* SetUint8PacketNodeLength(Uint8PacketNode* uint8PacketNodePointe
 void Uint8PacketQueuePushBlock(Uint8PacketQueue* Uint8PacketQueueHandle,void* packetBlock)
 {
     Uint8PacketNode* uint8PacketNodePointer;
-    if(!Uint8PacketQueueHandle)return;
+    if(!Uint8PacketQueueHandle || !packetBlock)return;
     uint8PacketNodePointer = Uint8PacketQueueHandle->CreatUint8PacketNode(NULL, packetBlock);
     Uint8PacketQueuePush(Uint8PacketQueueHandle, uint8PacketNodePointer);
 }
@@ -90,8 +91,9 @@ void Uint8PacketQueuePushBlock(Uint8PacketQueue* Uint8PacketQueueHandle,void* pa
 void Uint8PacketQueuePushStreamData(Uint8PacketQueue* Uint8PacketQueueHandle,uint8_t* packet,uint16_t packetLength)
 {
     Uint8PacketNode* uint8PacketNodePointer;
-    if(!Uint8PacketQueueHandle)return;
+    if(!Uint8PacketQueueHandle || !packet)return;
     uint8PacketNodePointer = Uint8PacketQueueHandle->CreatUint8PacketNode(packet, NULL);
+    if(!uint8PacketNodePointer)return;
     SetUint8PacketNodeLength(uint8PacketNodePointer, packetLength);
     Uint8PacketQueuePush(Uint8PacketQueueHandle, uint8PacketNodePointer);
 }
@@ -144,7 +146,7 @@ void FreePacketNoedItem(Uint8PacketNode* uint8PacketNodePointer)
 */
 void DeletPacketQueueCurrentItem(Uint8PacketQueue* PacketQueueHandle, Uint8PacketNode** uint8PacketNodePointer, Uint8PacketNode** uint8PacketNodePreviousPointer)
 {
-    if(!*uint8PacketNodePointer)return;
+    if(!PacketQueueHandle || !*uint8PacketNodePointer)return;
     if(!*uint8PacketNodePreviousPointer)         //上一项不存在  相当于为头节点
     {
         *uint8PacketNodePreviousPointer = *uint8PacketNodePointer;
@@ -176,6 +178,7 @@ void DeletPacketQueueConditionalItem(Uint8PacketQueue* PacketQueueHandle, bool (
 {
     Uint8PacketNode* uint8PacketNodePointer = NULL;
     Uint8PacketNode* uint8PacketNodePreviousPointer = NULL;
+    if(!PacketQueueHandle || !PacketQueueItemCondition)return;
     uint8PacketNodePointer = PacketQueueHandle->head;
     
     while(uint8PacketNodePointer)

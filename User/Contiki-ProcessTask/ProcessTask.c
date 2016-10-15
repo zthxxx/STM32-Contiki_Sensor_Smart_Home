@@ -7,6 +7,7 @@ PROCESS(IWDG_Feed_process, "Timing to feed dog");
 PROCESS(clock_test_process, "Test system delay");
 PROCESS(cJSON_test_process, "Test cJSON Lib");
 PROCESS(Communication_Protocol_Send_process, "Communication protocol send packet serviced");
+PROCESS(Communication_Protocol_Load_process, "Communication protocol load bytes to packet serviced");
 PROCESS(CommunicatProtocol_Send_Sensor_Data, "Communication protocol send sensor data");
 
 
@@ -497,6 +498,18 @@ PROCESS_THREAD(CommunicatProtocol_Send_Sensor_Data, ev, data)
     PROCESS_END();
 }
 
+PROCESS_THREAD(Communication_Protocol_Load_process, ev, data)
+{
+    static struct etimer et;
+    PROCESS_BEGIN();
+    while(1)
+    {
+        Contiki_etimer_DelayMS(10);
+        LoadReceiveQueueByteToPacketBlock();
+        DealWithReceivePacketQueue();
+    }
+    PROCESS_END();
+}
 
 PROCESS_THREAD(Communication_Protocol_Send_process, ev, data)
 {
@@ -507,14 +520,12 @@ PROCESS_THREAD(Communication_Protocol_Send_process, ev, data)
         Contiki_etimer_DelayMS(100);
         SendUnsentPacketQueue();
         SendUnackedPacketQueue();
-        LoadReceiveQueueByteToPacketBlock();
-        DealWithReceivePacketQueue();
 //        IncreaseUnackedPacketQueueResendTime();
-        
-        
     }
     PROCESS_END();
 }
+
+
 
 PROCESS_THREAD(IWDG_Feed_process, ev, data)
 {
