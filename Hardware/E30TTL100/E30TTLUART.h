@@ -1,6 +1,5 @@
 #ifndef __E30TTLUART_H
 #define __E30TTLUART_H
-#include "sys.h"   
 #include "bsp_usart3.h"
 
 #define E30TTLUART_SendOneByte          SendUSART3OneByte

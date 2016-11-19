@@ -4,7 +4,7 @@
 Uint8PacketQueue UnsentPacketQueue = {NULL, NULL, CreatTianProtocolUint8PacketNode, FreeTianProtocolPacketNoedItem};
 Uint8PacketQueue UnackedPacketQueue = {NULL, NULL, CreatTianProtocolUint8PacketNode, FreeTianProtocolPacketNoedItem};
 Uint8PacketQueue ReceivedPacketQueue = {NULL, NULL, CreatTianProtocolUint8PacketNode, FreeTianProtocolPacketNoedItem};
-Uint8FIFOQueue   TianMaoProtocolReceiveBytesFIFOQueue;
+Uint8FIFOQueue   TianMaoProtocolReceiveBytesFIFOQueue = {NULL, NULL, 0};
 
 Uint8PacketQueue* UnsentPacketQueueHandle = &UnsentPacketQueue;
 Uint8PacketQueue* UnackedPacketQueueHandle = &UnackedPacketQueue;

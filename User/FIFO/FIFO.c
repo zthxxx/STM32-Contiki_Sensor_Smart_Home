@@ -41,10 +41,7 @@ uint8_t Uint8FIFOPop(Uint8FIFOQueue* uint8FIFOQueueHandle)
     Uint8FIFO *headNode;
     uint8_t dataByte = 0;
     if(!uint8FIFOQueueHandle)return NULL;
-    if(uint8FIFOQueueHandle->head == NULL)
-    {
-        return NULL;
-    }
+    if(!(uint8FIFOQueueHandle->head))return NULL;
     headNode = uint8FIFOQueueHandle->head;
     dataByte = headNode->dataByte;
     uint8FIFOQueueHandle->head = uint8FIFOQueueHandle->head->next;

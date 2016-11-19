@@ -162,8 +162,8 @@ E30TTLUART_GND  <---> STM32_GNG
 /*************************************************
 STM32 UART4驱动SDS01 PM2.5传感器模块
 
-SDS01_TXD <---> STM32_PC11
-SDS01_RXD <---> STM32_PC10
+SDS01_TXD <---> STM32_PC11(USART4_RXD)
+SDS01_RXD <---> STM32_PC10(USART4_TXD)
 SDS01_VCC <---> STM32_5V
 SDS01_GND <---> STM32_GND
 *************************************************/
